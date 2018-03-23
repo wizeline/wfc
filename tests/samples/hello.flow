@@ -1,0 +1,3 @@
+dialog say_hay do
+	say "hi"
+done
