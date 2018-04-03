@@ -65,7 +65,7 @@ And you'll get a new file `hello.json` with this contents:
 }
 ```
 
-For more details about Wizeline Flow, see the [language reference][lang-fef]
+For more details about Wizeline Flow, see the [language reference][lang-ref]
 
 [wfc-zip]: docs/img/wfc-zip-package.png
 [lang-ref]: docs/language.md
