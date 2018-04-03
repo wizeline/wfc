@@ -6,7 +6,7 @@ import jsonschema
 
 from parglare.exceptions import ParseError
 
-from . import Flow, FLOW_HOME
+from . import Flow, WFCHOME
 from .precompiler import pre_compile
 
 
@@ -69,5 +69,5 @@ def compile_source(parser, work_dir, source, output=sys.stdout):
 
 
 def load_output_schema():
-    with open(os.path.join(FLOW_HOME, 'assets/schema.json')) as schema:
+    with open(os.path.join(WFCHOME, 'assets/schema.json')) as schema:
         return json.loads(schema.read())

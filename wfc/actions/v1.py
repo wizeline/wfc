@@ -3,7 +3,7 @@ from enum import Enum
 
 from parglare.actions import pass_none
 
-from flow import Flow
+from wfc import Flow
 
 
 class InputSource(Enum):

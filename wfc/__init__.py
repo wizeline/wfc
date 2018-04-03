@@ -1,8 +1,10 @@
 from os import path
 
+__author__ = 'wizeline'
+__name__ = 'wfc'
 __version__ = '0.1'
 
-FLOW_HOME = path.abspath(path.dirname(__file__))
+WFCHOME = path.abspath(path.dirname(__file__))
 
 
 class Flow:

@@ -2,12 +2,12 @@ import os
 
 from parglare import Grammar, Parser
 
-from . import FLOW_HOME
+from . import WFCHOME
 from .actions.v1 import build_actions
 
 
 def load_grammar():
-    grammar_path = os.path.join(FLOW_HOME, 'assets/grammar.txt')
+    grammar_path = os.path.join(WFCHOME, 'assets/grammar.txt')
     return Grammar.from_file(grammar_path)
 
 

@@ -9,18 +9,18 @@ def requirements(filename):
     return [str(r.req) for r in reqs]
 
 
-def get_version():
-    with open('flow/__init__.py', 'r') as f:
-        version_regex = r'__version__\s*=\s*[\'"](.+)[\'"]'
-        return re.search(version_regex, f.read(), re.MULTILINE).group(1)
+def get_property(prop):
+    with open('wfc/__init__.py', 'r') as f:
+        prop_regex = r'__{}__\s*=\s*[\'"](.+)[\'"]'.format(prop)
+        return re.search(prop_regex, f.read(), re.MULTILINE).group(1)
 
 
 if __name__ == '__main__':
     setup(
-        name='flow',
-        version=get_version(),
+        name=get_property('name'),
+        version=get_property('version'),
         url='https://github.com/wizeline/flow',
-        author='Whizeline',
+        author=get_property('author'),
         author_email='engineering@wizeline.com',
         description='Wizeline Flow Compiler',
         packages=find_packages(exclude=['tests']),
