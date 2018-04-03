@@ -16,16 +16,17 @@ def get_property(prop):
 
 
 if __name__ == '__main__':
+    package_name = get_property('name')
     setup(
-        name=get_property('name'),
+        name=package_name,
         version=get_property('version'),
-        url='https://github.com/wizeline/flow',
+        url='https://github.com/wizeline/wfc',
         author=get_property('author'),
         author_email='engineering@wizeline.com',
         description='Wizeline Flow Compiler',
         packages=find_packages(exclude=['tests']),
         package_data={
-            'flow': [
+            package_name: [
                 'flow/assets/grammar.txt',
                 'flow/assets/schema.json'
             ]
