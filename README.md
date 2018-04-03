@@ -37,6 +37,12 @@ With the snipet shown at [Hello World](#hello-world) section saved as `hellow.fl
 $ python -m wfc < hello.flow > hello.json
 ```
 
+Or:
+
+```sh
+$ wfc < hello.flow > hello.json
+```
+
 And you'll get a new file `hello.json` with this contents:
 
 ```javascript

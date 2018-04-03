@@ -44,5 +44,6 @@ if __name__ == '__main__':
             'Topic :: Utilities'
         ],
         test_require=requirements('requirements.txt'),
-        install_requires=requirements('requirements.txt')
+        install_requires=requirements('requirements.txt'),
+        entry_points={"console_scripts": ["wfc = wfc.cli:main"]}
     )
