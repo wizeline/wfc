@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "first",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "Inside the first dialog"
+        },
+        {
+          "action": "change_dialog",
+          "dialog": "second"
+        }
+      ]
+    },
+    {
+      "name": "second",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "Inside the second dialog"
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

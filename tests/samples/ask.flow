@@ -1,0 +1,3 @@
+dialog onboarding do
+  ask "Some question" as response
+done

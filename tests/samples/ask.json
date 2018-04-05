@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "text": "Some question",
+          "action": "ask_for_input",
+          "var_name": "response"
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

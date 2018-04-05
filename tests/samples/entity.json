@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "intentions": [
+    {
+      "name": "greeting",
+      "examples": [
+        "Hi"
+      ],
+      "dialog": "onboarding"
+    }
+  ],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "Hello World"
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "say_hi",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "hi"
+        }
+      ]
+    }
+  ],
+  "qa": []
+}
