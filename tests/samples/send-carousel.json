@@ -1,0 +1,43 @@
+{
+  "version": "1.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "action": "call_integration",
+          "integration": "my_integration",
+          "function": "get_rooms",
+          "function_params": []
+        },
+        {
+          "action": "send_carousel",
+          "content_source": "$my_integration.get_rooms",
+          "card_content": {
+            "name": "{{$room_name}}",
+            "email": "{{$room_email}}",
+            "location": "{{$room_location}}"
+          }
+        },
+        {
+          "action": "call_integration",
+          "integration": "your_integration",
+          "function": "get_other_rooms",
+          "function_params": []
+        },
+        {
+          "action": "send_carousel",
+          "content_source": "$your_integration.get_other_rooms",
+          "card_content": {
+            "name": "{{$room_name}}",
+            "email": "{{$room_email}}",
+            "location": "{{$room_location}}"
+          }
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

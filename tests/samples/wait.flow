@@ -1,0 +1,3 @@
+dialog onboarding do
+  wait input
+done

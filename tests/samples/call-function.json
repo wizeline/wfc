@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "action": "call_integration",
+          "integration": "some_integration",
+          "function": "somefunction",
+          "function_params": []
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

@@ -1,0 +1,5 @@
+dialog onboarding do
+  wait variable
+  if $varible is empty: say "The variable is empty"
+  say "Bye"
+done

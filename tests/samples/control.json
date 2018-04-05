@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "action": "wait_input",
+          "var_name": "variable"
+        },
+        {
+          "action": "send_text",
+          "text": "The variable is empty",
+          "condition": [
+            "$varible",
+            "is",
+            "empty"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "Bye"
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

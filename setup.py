@@ -25,12 +25,6 @@ if __name__ == '__main__':
         author_email='engineering@wizeline.com',
         description='Wizeline Flow Compiler',
         packages=find_packages(exclude=['tests']),
-        package_data={
-            package_name: [
-                'flow/assets/grammar.txt',
-                'flow/assets/schema.json'
-            ]
-        },
         include_package_data=True,
         zip_safe=False,
         classifiers=[

@@ -1,0 +1,13 @@
+carousel rooms:
+  set name room_name,
+  set email room_email,
+  set location room_location
+
+dialog onboarding do
+  call my_integration.get_rooms()
+  show rooms using $my_integration.get_rooms and pick name
+
+  -- Reusing the carousel
+  call your_integration.get_other_rooms()
+  show rooms using $your_integration.get_other_rooms and pick name
+done
