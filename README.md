@@ -31,6 +31,8 @@ done
 
 ## Usage
 
+### Command Line
+
 With the snipet shown at [Hello World](#hello-world) section saved as `hellow.flow` do:
 
 ```sh
@@ -69,6 +71,33 @@ And you'll get a new file `hello.json` with this contents:
   ],
   "qa": []
 }
+```
+
+### Python Library
+
+```python
+>>> import wfc.core as wfc
+>>> script = 'dialog say_hi do say "Hello World!" done'
+>>> print(wfc.compile_string(script))
+{
+  "version": "1.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "say_hi",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "Hello World!",
+          "id": "8cfa6bc1-868f-4f7c-a90c-4ddb91e8f5cf"
+        }
+      ]
+    }
+  ],
+  "qa": []
+}
+>>>
 ```
 
 For more details about Wizeline Flow, see the [language reference][lang-ref]

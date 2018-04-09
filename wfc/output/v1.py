@@ -1,9 +1,17 @@
+import json
+
 from uuid import uuid4
 from enum import Enum
 
+import jsonschema
+
+from jsonschema.exceptions import ValidationError
 from parglare.actions import pass_none
 
-from wfc import Flow
+from wfc.commons import asset_path
+from wfc.errors import DialogNotDefined, CarouselNotDefined
+
+_script = None
 
 
 class InputSource(Enum):
@@ -51,9 +59,9 @@ def definition_value(_, nodes):
         'examples': read_examples(examples)
     }
     if def_type == 'intent':
-        Flow.INTENTIONS[def_name] = value
+        _script.INTENTIONS[def_name] = value
     elif def_type == 'entity':
-        Flow.ENTITIES[def_name] = value
+        _script.ENTITIES[def_name] = value
 
     return value
 
@@ -160,6 +168,9 @@ def change_dialog_value(_, nodes):
     """
     _, _, dialog, _ = nodes
 
+    if dialog not in _script.DIALOGS:
+        raise DialogNotDefined(dialog)
+
     value = {
         'action': 'change_dialog',
         'dialog': dialog
@@ -199,10 +210,10 @@ def dialog_value(_, nodes):
 
     if dialog_intent is not None:
         intent = dialog_intent[1][1:]
-        if intent in Flow.INTENTIONS:
-            Flow.INTENTIONS[intent]['dialog'] = name
+        if intent in _script.INTENTIONS:
+            _script.INTENTIONS[intent]['dialog'] = name
 
-    Flow.DIALOGS[name] = value
+    _script.DIALOGS[name] = value
     return value
 
 
@@ -233,15 +244,15 @@ def attribute_value(_, nodes):
 
 def define_carousel_value(_, nodes):
     """
-    CAROUSEL: 'carousel' IDENTIFIER COLON ATTRIBUTES;
+    CAROUSEL: 'carousel' IDENTIFIER COLON ATTRIBUTES 'end';
     """
-    _, name, _, attributes = nodes
+    _, name, _, attributes, _ = nodes
 
     content = {}
     for attribute, value in attributes:
         content[attribute] = '{{' + '${}'.format(value) + '}}'
 
-    Flow.CAROUSELS[name] = content
+    _script.CAROUSELS[name] = content
 
 
 def send_carousel_value(_, nodes):
@@ -251,16 +262,22 @@ def send_carousel_value(_, nodes):
     """
     _, name, _, source, _, _, variable = nodes
 
-    value = {
-        'action': 'send_carousel',
-        'content_source': source,
-        'card_content': Flow.CAROUSELS[name]
-    }
+    try:
+        value = {
+            'action': 'send_carousel',
+            'content_source': source,
+            'card_content': _script.CAROUSELS[name]
+        }
+    except KeyError:
+        raise CarouselNotDefined(name)
 
     return value
 
 
-def build_actions():
+def build_actions(script: object) -> dict:
+    global _script
+    _script = script
+
     return {
         'ACTION': action_value,
         'ATTRIBUTE': attribute_value,
@@ -290,3 +307,44 @@ def build_actions():
         'STRING': string_value,
         'VARIABLE': prefixed_value,
     }
+
+
+def build_intentions() -> list:
+    intents = []
+    for intent in _script.INTENTIONS.values():
+        if 'dialog' not in intent:
+            raise Exception('Intent not used: {}'.format(intent['name']))
+        intents.append(intent)
+    return intents
+
+
+def build_dialogs() -> list:
+    try:
+        onboarding = _script.DIALOGS.pop('onboarding')
+        dialogs = [onboarding] + list(_script.DIALOGS.values())
+    except KeyError:
+        dialogs = list(_script.DIALOGS.values())
+
+    return dialogs
+
+
+def load_output_schema() -> dict:
+    with open(asset_path('schema.json')) as schema:
+        return json.loads(schema.read())
+
+
+def get_script():
+    try:
+        script = {
+            'version': "1.0.0",
+            'intentions': build_intentions(),
+            'entities': [],
+            'dialogs': build_dialogs(),
+            'qa': []
+        }
+
+        jsonschema.validate(script, load_output_schema())
+        return json.dumps(script, indent=2)
+    except ValidationError as ex:
+        print(ex)
+        raise ValueError('Generated script does not match with schema')

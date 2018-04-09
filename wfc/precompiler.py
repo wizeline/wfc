@@ -6,7 +6,7 @@ def remove_comment(line):
     return re.sub('--.*$', '', line)
 
 
-def include_file(work_dir, line):
+def include_file(work_dir: str, line: str) -> list:
     try:
         lines = []
         line = line.rstrip()
@@ -24,10 +24,10 @@ def include_file(work_dir, line):
 
 def pre_compile(work_dir, source):
     buf = []
-    for line in source.readlines():
+    for line in source.split('\n'):
         if line.startswith('%include'):
             buf.extend(include_file(work_dir, line))
         else:
             buf.append(remove_comment(line))
 
-    return ''.join(buf)
+    return '\n'.join(buf)
