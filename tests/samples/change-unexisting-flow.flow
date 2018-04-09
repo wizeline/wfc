@@ -1,0 +1,4 @@
+flow first do
+  say "Inside the first dialog"
+  change flow second
+done

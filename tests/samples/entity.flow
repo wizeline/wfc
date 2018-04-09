@@ -1,5 +1,5 @@
 define intent greeting "Hi"
 
-dialog onboarding given #greeting do
+flow onboarding given #greeting do
   say "Hello World"
 done

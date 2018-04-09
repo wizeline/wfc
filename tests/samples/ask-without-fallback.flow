@@ -1,0 +1,5 @@
+flow onboarding do
+  ask "Some question" as response with:
+    reply "Of course",
+    reply "No way"
+done

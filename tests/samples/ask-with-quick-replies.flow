@@ -1,0 +1,6 @@
+flow onboarding do
+  ask "Some question" as response with:
+    reply "Of course" as @yes,
+    reply "No way" as @no
+    fallback "Did not get that"
+done

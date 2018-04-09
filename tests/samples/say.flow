@@ -1,3 +1,3 @@
-dialog say_hi do
+flow say_hi do
   say "hi"
 done

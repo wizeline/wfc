@@ -1,8 +1,8 @@
-dialog second do
+flow second do
   say "Inside the second dialog"
 done
 
-dialog first do
+flow first do
   say "Inside the first dialog"
-  change dialog second
+  change flow second
 done
