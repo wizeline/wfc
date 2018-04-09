@@ -69,11 +69,23 @@ install outlook using "outlook-configuration.json"
 
 ![Carousel definition grammar][carousel-grammar]
 
+A carousel definition represents the relationship between a set of object member names
+with the slots of a carousel card set to the card content slots of a carousel
+
+The valid slots in a carousel card are:
+
+- _title_ (mandatory)
+- _description_ (optional)
+- _image\_url_ (optional)
+- _buttons_ (optional)
+
 Example
 ```
 carousel contacts_carousel:
-  set name contact_name,
-  set phone contact_phone
+  set title contact_name,
+  set description contact_phone
+  set image_url contact_avatar
+end
 ```
 
 For details see [carousels](#) documentation.

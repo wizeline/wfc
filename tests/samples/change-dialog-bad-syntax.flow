@@ -1,0 +1,8 @@
+dialog first do
+  say "Inside the first dialog"
+  change dialog $second
+done
+
+dialog second do
+  say "Inside the second dialog"
+done

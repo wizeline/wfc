@@ -1,0 +1,6 @@
+
+define intent 'greeting'
+
+dialog onboarding given #greeting do
+  say "Hello World"
+done

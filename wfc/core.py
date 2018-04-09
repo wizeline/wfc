@@ -1,75 +1,61 @@
-import json
 import sys
 import os
 
-import jsonschema
-
 from parglare.exceptions import ParseError
 
-from . import Flow, WFCHOME
-from .precompiler import pre_compile
+from wfc import output
+from wfc.commons import asset_path
+from wfc.errors import CompilationError, WFCError
+from wfc.parser import create_parser
+from wfc.precompiler import pre_compile
 
 
-class CompilationError(Exception): pass  # noqa
+def compile(**kwargs):
+    """Compiles a Flow script into the selected output format
 
+    Keyword Arguments:
+    in_script -- input file. sys.stdin by default
+    out_script -- output file. sys.stdout by default
+    out_format -- script output format. 'v1' by default
+    work_dir -- work directory. '.' by default
+    quiet -- suppress standard error. False by default
+    """
+    in_script = kwargs.get('in_script', sys.stdin)
+    out_script = kwargs.get('out_script', sys.stdout)
+    out_format = kwargs.get('format_source', 'v1')
+    work_dir = kwargs.get('work_dir', os.path.abspath(os.path.curdir))
+    quiet = kwargs.get('quiet', False)
 
-def build_intentions():
-    intents = []
-    for intent in Flow.INTENTIONS.values():
-        if 'dialog' not in intent:
-            raise Exception('Intent not used: {}'.format(intent['name']))
-        intents.append(intent)
-    return intents
-
-
-def build_dialogs():
-    try:
-        onboarding = Flow.DIALOGS.pop('onboarding')
-        dialogs = [onboarding] + list(Flow.DIALOGS.values())
-    except KeyError:
-        dialogs = list(Flow.DIALOGS.values())
-
-    return dialogs
-
-
-def dump_script(script):
-    for ln, line in enumerate(script.split('\n'), 1):
-        print("%6d  %s" % (ln, line))
-
-
-def compile_source(parser, work_dir, source, output=sys.stdout):
-    Flow.DIALOGS = {}
-    Flow.ENTITIES = {}
-    Flow.INTENTIONS = {}
+    compiled_script = None
 
     try:
-        script = pre_compile(work_dir, source)
-        parser.parse(script)
+        in_script = in_script.read()
+        compiled_script = compile_string(in_script, out_format, work_dir)
+        out_script.write(compiled_script)
+
     except ParseError as ex:
-        print(ex)
-        print('Dialogs so far:', json.dumps(Flow.DIALOGS, indent=2))
-        dump_script(script)
-        raise ex
+        if not quiet:
+            dump_script(in_script, ex)
+        raise CompilationError
 
-    flow = {
-        'version': "1.0.0",
-        'intentions': build_intentions(),
-        'entities': [],
-        'dialogs': build_dialogs(),
-        'qa': []
-    }
-
-    try:
-        # TODO: The `id` field is not currently accepted for send_carousel
-        # action, so schema validation will be disabled by now.
-        # jsonschema.validate(flow, load_output_schema())
-        output.write(json.dumps(flow, indent=2))
-    except Exception as e:
-        with open('failed.json', 'w') as wfcerror:
-            wfcerror.write(json.dumps(flow, indent=2))
+    except WFCError as e:
+        if compiled_script:
+            with open('failed.json', 'w') as wfcout:
+                wfcout.write(compiled_script)
         raise e
 
 
-def load_output_schema():
-    with open(os.path.join(WFCHOME, 'assets/schema.json')) as schema:
-        return json.loads(schema.read())
+def compile_string(in_script, out_format='v1', work_dir=os.curdir):
+    in_script = pre_compile(work_dir, in_script)
+    parser = create_parser(asset_path('grammar.txt'),
+                           output.build_actions(out_format))
+    parser.parse(in_script)
+    return output.get_script(out_format)
+
+
+def dump_script(script, parse_error):
+    for ln, line in enumerate(script.split('\n'), 1):
+        sys.stderr.write('\n{:>6}  {}'.format(ln, line))
+        if ln == parse_error.line:
+            sys.stderr.write('\n' + ' ' * (8 + parse_error.column) + '^')
+    sys.stderr.write('\n{}\n'.format(parse_error))

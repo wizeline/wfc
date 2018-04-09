@@ -4,6 +4,15 @@
   "entities": [],
   "dialogs": [
     {
+      "name": "second",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "Inside the second dialog"
+        }
+      ]
+    },
+    {
       "name": "first",
       "actions": [
         {
@@ -13,15 +22,6 @@
         {
           "action": "change_dialog",
           "dialog": "second"
-        }
-      ]
-    },
-    {
-      "name": "second",
-      "actions": [
-        {
-          "action": "send_text",
-          "text": "Inside the second dialog"
         }
       ]
     }

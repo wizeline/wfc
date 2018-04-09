@@ -2,17 +2,14 @@
 import os
 import sys
 
-from .core import compile_source
-from .parser import create_parser
+from wfc import core
 
 
 def main():
-    parser = create_parser()
     if len(sys.argv) == 1:
-        work_dir = os.path.abspath(os.path.curdir)
-        compile_source(parser, work_dir, sys.stdin)
+        core.compile()
     else:
         for source in sys.argv[1:]:
-            with open(source) as source_file:
-                work_dir = os.path.dirname(source)
-                compile_source(parser, work_dir, source_file)
+            work_dir = os.path.abspath(os.path.dirname(source))
+            with open(source) as in_script:
+                core.compile(work_dir=work_dir, in_script=in_script)
