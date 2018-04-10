@@ -9,7 +9,7 @@ starts with `--` and finishes at the end of the line:
 Example:
 ```
 -- This is a comment
-dialog onboarding do
+flow onboarding do
   say 'Hi' -- This is a comment too
 done
 ```
@@ -44,12 +44,12 @@ Hi!_
 ### Reserved Words
 
 ```
-as         ask        call      change    define
-define     dialog     do        done      empty
-entity     equal      given     has       if
-include    install    intent    intent    is
-nil        not        null      reply     say
-using      wait       when      with
+as        ask       call     change   define
+do        done      empty    end      entity
+equal     flow      given    has      if
+include   install   intent   is       nil
+not       null      reply    say      using
+wait      when      with
 ```
 
 ### Script Sections
@@ -101,12 +101,12 @@ define intent greeting "Hello", "Hi"
 define entity person using "person-entity-def-file.json"
 ```
 
-For details see [intents and entities](#) documentation.
+For details see [intents and entities][intents] documentation.
 
 
-#### Dialog Definition
+#### Flow Definition
 
-A list of one or more dialogs see [dialog](#dialog) section for details.
+A list of one or more dialogs see [flow](#flow) section for details.
 
 ### Expressions
 
@@ -188,9 +188,10 @@ ask "Do you want to continue?" as variable with:
     reply "No"
 ```
 ```
-ask  "Would your like to recive offers? as variable
-with: reply "Sure!" as @yes,
-      reply "Maybe later, thanks!" as @no
+ask "Would your like to recive offers? as variable with:
+  reply "Sure!" as @yes,
+  reply "Maybe later, thanks!" as @no
+  fallback "I will ask you later"
 ```
 
 
@@ -202,11 +203,11 @@ Example
 wait variable
 ```
 
-#### Change Dialog
-!['change dialog' action grammar][change-grammar]
+#### Change Flow
+!['change flow' action grammar][change-grammar]
 
 ```
-change dialog menu
+change flow menu
 ```
 
 
@@ -283,19 +284,19 @@ when @role equals "boss": say "Hey, you're the boss!"
 ```
 
 
-### Dialog
-![Dialog Grammar][dialog-grammar]
+### Flow
+![Flow Grammar][flow-grammar]
 
 Examples:
 ```
-dialog say_hi do
+flow say_hi do
   say "Hello"
   ask "What's your name" as user_name
   say "Nice to meet you {$user_name}"
 done
 ```
 ```
-dialog say_hi given @greeting do
+flow say_hi given @greeting do
   ask "What can I help you with?" as user_response
   if $user_response equals 'show menu' change dialog menu
 done
@@ -320,11 +321,12 @@ contents before the compilation process starts.
 [block-grammar]: img/grammar/block.svg
 [call-function-grammar]: img/grammar/call-function.svg
 [carousel-grammar]: img/grammar/carousel-definition.svg
-[change-grammar]: img/grammar/change-dialog.svg
+[change-grammar]: img/grammar/change-flow.svg
 [control-grammar]: img/grammar/control.svg
-[dialog-grammar]: img/grammar/dialog.svg
+[flow-grammar]: img/grammar/flow.svg
 [install-grammar]: img/grammar/install-integration.svg
 [intent-entity-def]: img/grammar/intent-entity-def.svg
+[intents]: #
 [open-flow-grammar]: #
 [say-grammar]: img/grammar/say.svg
 [send-carousel-grammar]: img/grammar/send-carousel.svg

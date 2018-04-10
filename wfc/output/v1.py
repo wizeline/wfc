@@ -9,7 +9,7 @@ from jsonschema.exceptions import ValidationError
 from parglare.actions import pass_none
 
 from wfc.commons import asset_path
-from wfc.errors import DialogNotDefined, CarouselNotDefined
+from wfc.errors import FlowNotDefined, CarouselNotDefined
 
 _script = None
 
@@ -68,7 +68,11 @@ def definition_value(_, nodes):
 
 def action_value(_, nodes):
     action = nodes[0]
-    action['id'] = str(uuid4())
+    try:
+        action['id'] = str(uuid4())
+    except TypeError as ex:
+        print(ex, action, '<---- here')
+        raise ex
     return action
 
 
@@ -78,6 +82,9 @@ def object_value(_, nodes):
     """
     return nodes[0] + ''.join(nodes[1])
 
+
+def parameters_value(_, nodes):
+    return [str(p) for p in nodes[1]]
 
 def prefixed_value(_, nodes):
     """
@@ -162,18 +169,18 @@ def bot_waits_value(_, nodes):
     return {'action': 'wait_input', 'var_name': nodes[1]}
 
 
-def change_dialog_value(_, nodes):
+def change_flow_value(_, nodes):
     """
-    change dialog IDENTIFIER DIALOG_PARAMETER?
+    change flow IDENTIFIER DIALOG_PARAMETER?
     """
-    _, _, dialog, _ = nodes
+    _, _, flow, _ = nodes
 
-    if dialog not in _script.DIALOGS:
-        raise DialogNotDefined(dialog)
+    if flow not in _script.FLOWS:
+        raise FlowNotDefined(flow)
 
     value = {
-        'action': 'change_dialog',
-        'dialog': dialog
+        'action': 'change_dialog', # Right now the instruction is change_dialog
+        'dialog': flow
     }
     return value
 
@@ -197,7 +204,7 @@ def block_value(_, nodes):
         return nodes[0]
 
 
-def dialog_value(_, nodes):
+def flow_value(_, nodes):
     """
     dialog IDENTIFIER DIALOG_INTENT? BLOCK
     """
@@ -213,7 +220,7 @@ def dialog_value(_, nodes):
         if intent in _script.INTENTIONS:
             _script.INTENTIONS[intent]['dialog'] = name
 
-    _script.DIALOGS[name] = value
+    _script.FLOWS[name] = value
     return value
 
 
@@ -222,8 +229,6 @@ def call_function_value(_, nodes):
     CALL_FUNCTION: 'call' IDENTIFIER PERIOD IDENTIFIER PARAMETERS?;
     """
     _, integration, _, fname, params = nodes
-
-    params = [] if params is None else params[1]
 
     value = {
         'action': 'call_integration',
@@ -287,10 +292,10 @@ def build_actions(script: object) -> dict:
         'BOT_WAITS': bot_waits_value,
         'CAROUSEL': define_carousel_value,
         'CALL_FUNCTION': call_function_value,
-        'CHANGE_DIALOG': change_dialog_value,
+        'CHANGE_FLOW': change_flow_value,
         'COMMENT': pass_none,
         'DEFINITION': definition_value,
-        'DIALOG': dialog_value,
+        'FLOW': flow_value,
         'ENTITY': prefixed_value,
         'EXAMPLE_FILE': example_file_value,
         'EXAMPLE_LIST': example_list_value,
@@ -301,6 +306,7 @@ def build_actions(script: object) -> dict:
         'MEMBER': prefixed_value,
         'OBJECT': object_value,
         'OPERATOR': operator_value,
+        'PARAMETERS': parameters_value,
         'REPLY': reply_value,
         'QUICK_REPLIES': quick_replies_value,
         'SEND_CAROUSEL': send_carousel_value,
@@ -318,14 +324,14 @@ def build_intentions() -> list:
     return intents
 
 
-def build_dialogs() -> list:
+def build_flows() -> list:
     try:
-        onboarding = _script.DIALOGS.pop('onboarding')
-        dialogs = [onboarding] + list(_script.DIALOGS.values())
+        onboarding = _script.FLOWS.pop('onboarding')
+        flows = [onboarding] + list(_script.FLOWS.values())
     except KeyError:
-        dialogs = list(_script.DIALOGS.values())
+        flows = list(_script.FLOWS.values())
 
-    return dialogs
+    return flows
 
 
 def load_output_schema() -> dict:
@@ -339,7 +345,7 @@ def get_script():
             'version': "1.0.0",
             'intentions': build_intentions(),
             'entities': [],
-            'dialogs': build_dialogs(),
+            'dialogs': build_flows(),
             'qa': []
         }
 

@@ -1,4 +1,0 @@
-dialog first do
-  say "Inside the first dialog"
-  change dialog second
-done

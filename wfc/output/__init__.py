@@ -8,7 +8,7 @@ _FORMATS = {
 
 class Script:
     def __init__(self):
-        self.DIALOGS = {}
+        self.FLOWS = {}
         self.CAROUSELS = {}
         self.ENTITIES = {}
         self.INTENTIONS = {}

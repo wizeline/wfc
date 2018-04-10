@@ -36,7 +36,7 @@ def compile(**kwargs):
     except ParseError as ex:
         if not quiet:
             dump_script(in_script, ex)
-        raise CompilationError
+        raise CompilationError(str(ex))
 
     except WFCError as e:
         if compiled_script:

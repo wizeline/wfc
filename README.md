@@ -10,6 +10,25 @@ Language to simplify chatbot script development
 
 ## Install
 
+### Create a virtual envirionment
+
+You can use a virtual envrironment to install the package without having
+super user privileges:
+
+**Create a virtual environment using venv module**
+```sh
+$ python3 -m venv ~/.venvs/wfc-testing
+```
+**Activate the virtual environment**
+```
+$ source ~/.venvs/wfc-testing/bin/activate
+```
+**Upgrade the python package manager**
+```
+$ pip install --upgrade pip
+```
+
+### Install WFC
 1. Download the package in a `.zip` archive
 
 ![Package download][wfc-zip]
@@ -18,15 +37,6 @@ Language to simplify chatbot script development
 
 ```sh
 $ pip install /path/to/wfc-development.zip
-```
-
-## Hello World
-
-```
-dialog say_hi do
-  say "Hello World!"
-  say "I am a simple bot"
-done
 ```
 
 ## Usage
@@ -77,7 +87,7 @@ And you'll get a new file `hello.json` with this contents:
 
 ```python
 >>> import wfc.core as wfc
->>> script = 'dialog say_hi do say "Hello World!" done'
+>>> script = 'flow say_hi do say "Hello World!" done'
 >>> print(wfc.compile_string(script))
 {
   "version": "1.0.0",
@@ -98,6 +108,15 @@ And you'll get a new file `hello.json` with this contents:
   "qa": []
 }
 >>>
+```
+
+## Hello World
+
+```
+flow say_hi do
+  say "Hello World!"
+  say "I am a simple bot"
+done
 ```
 
 For more details about Wizeline Flow, see the [language reference][lang-ref]
