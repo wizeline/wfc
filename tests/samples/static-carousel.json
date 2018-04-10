@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "action": "send_carousel",
+          "cards": [
+            {
+              "title": "One",
+              "description": "test description",
+              "image_url": "http://example.com/images/card-one.jpg"
+            },
+            {
+              "title": "Two",
+              "description": "test description",
+              "image_url": "http://example.com/images/card-two.jpg"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

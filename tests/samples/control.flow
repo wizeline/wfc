@@ -1,5 +1,9 @@
+flow say_thank_you do
+  say "Thank you!"
+done
+
 flow onboarding do
-  wait variable
-  if $varible is empty: say "The variable is empty"
+  ask "Please type 'yes'" as input
+  if $input equal 'yes': change flow say_thank_you
   say "Bye"
 done

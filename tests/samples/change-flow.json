@@ -4,24 +4,24 @@
   "entities": [],
   "dialogs": [
     {
-      "name": "second",
+      "name": "onboarding",
       "actions": [
         {
           "action": "send_text",
-          "text": "Inside the second dialog"
-        }
-      ]
-    },
-    {
-      "name": "first",
-      "actions": [
-        {
-          "action": "send_text",
-          "text": "Inside the first dialog"
+          "text": "Hello"
         },
         {
           "action": "change_dialog",
           "dialog": "second"
+        }
+      ]
+    },
+    {
+      "name": "second",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "World!"
         }
       ]
     }

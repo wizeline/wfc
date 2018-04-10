@@ -20,11 +20,11 @@ def compile(**kwargs):
     work_dir -- work directory. '.' by default
     quiet -- suppress standard error. False by default
     """
-    in_script = kwargs.get('in_script', sys.stdin)
-    out_script = kwargs.get('out_script', sys.stdout)
-    out_format = kwargs.get('format_source', 'v1')
-    work_dir = kwargs.get('work_dir', os.path.abspath(os.path.curdir))
-    quiet = kwargs.get('quiet', False)
+    in_script = kwargs.pop('in_script', sys.stdin)
+    out_script = kwargs.pop('out_script', sys.stdout)
+    out_format = kwargs.pop('format_source', 'v1')
+    work_dir = kwargs.pop('work_dir', os.path.abspath(os.path.curdir))
+    quiet = kwargs.pop('quiet', False)
 
     compiled_script = None
 
@@ -36,7 +36,7 @@ def compile(**kwargs):
     except ParseError as ex:
         if not quiet:
             dump_script(in_script, ex)
-        raise CompilationError(str(ex))
+        raise CompilationError(str(ex)) from ex
 
     except WFCError as e:
         if compiled_script:

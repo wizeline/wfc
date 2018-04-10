@@ -10,6 +10,10 @@
           "text": "Some question",
           "action": "ask_for_input",
           "var_name": "response"
+        },
+        {
+          "action": "send_text",
+          "text": "The response is: {{$response}}"
         }
       ]
     }

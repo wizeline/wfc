@@ -9,7 +9,7 @@ from jsonschema.exceptions import ValidationError
 from parglare.actions import pass_none
 
 from wfc.commons import asset_path
-from wfc.errors import FlowNotDefined, CarouselNotDefined
+from wfc.errors import CompilationError, ComponentNotDefined
 
 _script = None
 
@@ -17,10 +17,6 @@ _script = None
 class InputSource(Enum):
     INLINE = 0
     FILE = 1
-
-
-def raw_value(_, value):
-    return value
 
 
 def read_examples(examples):
@@ -58,21 +54,13 @@ def definition_value(_, nodes):
         'name': def_name,
         'examples': read_examples(examples)
     }
-    if def_type == 'intent':
-        _script.INTENTIONS[def_name] = value
-    elif def_type == 'entity':
-        _script.ENTITIES[def_name] = value
-
+    _script.add_component(def_type, def_name, value)
     return value
 
 
 def action_value(_, nodes):
     action = nodes[0]
-    try:
-        action['id'] = str(uuid4())
-    except TypeError as ex:
-        print(ex, action, '<---- here')
-        raise ex
+    action['id'] = str(uuid4())
     return action
 
 
@@ -85,6 +73,7 @@ def object_value(_, nodes):
 
 def parameters_value(_, nodes):
     return [str(p) for p in nodes[1]]
+
 
 def prefixed_value(_, nodes):
     """
@@ -171,15 +160,15 @@ def bot_waits_value(_, nodes):
 
 def change_flow_value(_, nodes):
     """
-    change flow IDENTIFIER DIALOG_PARAMETER?
+    change flow IDENTIFIER FLOW_PARAMETER?
     """
     _, _, flow, _ = nodes
 
-    if flow not in _script.FLOWS:
-        raise FlowNotDefined(flow)
+    if not _script.has_component('flow', flow):
+        raise ComponentNotDefined('flow', flow)
 
     value = {
-        'action': 'change_dialog', # Right now the instruction is change_dialog
+        'action': 'change_dialog',  # Right now the action is change_dialog
         'dialog': flow
     }
     return value
@@ -206,21 +195,24 @@ def block_value(_, nodes):
 
 def flow_value(_, nodes):
     """
-    dialog IDENTIFIER DIALOG_INTENT? BLOCK
+    flow IDENTIFIER FLOW_INTENT? BLOCK
     """
 
-    _, name, dialog_intent, block = nodes
+    _, name, flow_intention, block = nodes
     value = {
         'name': name,
         'actions': block
     }
 
-    if dialog_intent is not None:
-        intent = dialog_intent[1][1:]
-        if intent in _script.INTENTIONS:
-            _script.INTENTIONS[intent]['dialog'] = name
+    if flow_intention is not None:
+        intent = flow_intention[1][1:]
+        try:
+            intent_component = _script.get_component('intent', intent)
+            intent_component['dialog'] = name
+        except ComponentNotDefined:
+            pass
 
-    _script.FLOWS[name] = value
+    _script.add_component('flow', name, value)
     return value
 
 
@@ -242,41 +234,125 @@ def call_function_value(_, nodes):
 
 def attribute_value(_, nodes):
     """
-    IDENTIFIER IDENTIFIER
+    ATTRIBUTE: 'set' IDENTIFIER IDENTIFIER
     """
     return nodes[1], nodes[2]
 
 
+def card_body_value(_, nodes):
+    """
+    CARD_BODY: ATTRIBUTE+[SEPARATOR] BUTTON_DEFINITION*[SEPARATOR];
+    """
+    attributes, buttons = nodes[0], nodes[1]
+
+    card_body = {name: value for name, value in attributes}
+    if buttons:
+        card_body['buttons'] = buttons
+
+    return card_body
+
+
+def card_value(_, nodes):
+    """
+    CARD: 'card' COLON CARD_BODY;
+    """
+    return nodes[2]
+
+
+def carousel_body_value(_, nodes):
+    """
+    CAROUSEL_BODY: CARD_BODY | CARDS+
+    """
+    if isinstance(nodes[0], list):
+        return {'cards': nodes[0]}
+    else:
+        return {'card_content': nodes[0]}
+
+
 def define_carousel_value(_, nodes):
     """
-    CAROUSEL: 'carousel' IDENTIFIER COLON ATTRIBUTES 'end';
+    CAROUSEL: 'carousel' IDENTIFIER COLON CAROUSEL_BODY 'end';
     """
-    _, name, _, attributes, _ = nodes
+    _, identifier, _, carousel_body, _ = nodes
+    _script.add_component('carousel', identifier, carousel_body)
 
-    content = {}
-    for attribute, value in attributes:
-        content[attribute] = '{{' + '${}'.format(value) + '}}'
 
-    _script.CAROUSELS[name] = content
+def carousel_content_source_value(_, nodes):
+    """
+    CAROUSEL_CONTENT_SOURCE: 'using' EXPRESSION;
+    """
+    return nodes[1]
 
 
 def send_carousel_value(_, nodes):
     """
-    SEND_CAROUSEL: 'show' IDENTIFIER 'using' EXPRESSION
-                   'and' 'pick' IDENTIFIER;
+    SEND_CAROUSEL: 'show' IDENTIFIER ['using' EXPRESSION];
     """
-    _, name, _, source, _, _, variable = nodes
+    _, name, source = nodes
+    carousel = _script.get_component('carousel', name)
+    send_carousel = {'action': 'send_carousel'}
+    send_carousel.update(carousel)
 
-    try:
-        value = {
-            'action': 'send_carousel',
-            'content_source': source,
-            'card_content': _script.CAROUSELS[name]
-        }
-    except KeyError:
-        raise CarouselNotDefined(name)
+    if 'card_content' in carousel:
+        if not source:
+            raise CompilationError('Dynamic carousel needs a content source:',
+                                   name)
+        send_carousel.update({'content_source': source})
 
-    return value
+    elif source:
+        raise CompilationError('Static carousel must not have content source:',
+                               name)
+
+    return send_carousel
+
+
+def url_button_value(_, nodes):
+    """
+    URL_BUTTON: 'url' OPEN STRING SEPARATOR STRING CLOSE;
+    """
+    label, url = nodes[2], nodes[4]
+
+    return {
+        'label': label,
+        'payload': url,
+        'type': 'open_url'
+    }
+
+
+def postback_attribute_value(_, nodes):
+    """
+    POSTBACK_ATTRIBUTE: IDENTIFIER COLON STRING;
+    """
+    return nodes[0], nodes[2]
+
+
+def postback_button_value(_, nodes):
+    """
+    POSTBACK_BUTTON: 'postback' OPEN
+        STRING SEPARATOR POSTBACK_ATTRIBUTE+[SEPARATOR]
+    CLOSE;
+    """
+    label, attributes = nodes[2], nodes[4]
+    payload = {}
+    for key, name in attributes:
+        payload.update({key: name})
+
+    return {
+        'label': label,
+        'payload': payload,
+        'type': 'postback'
+    }
+
+
+def button_value(_, nodes):
+    return nodes[0]
+
+
+def button_definition_value(_, nodes):
+    """
+    BUTTON_DEFINITION: 'button' BUTTON;
+    """
+    return nodes[1]
 
 
 def build_actions(script: object) -> dict:
@@ -290,16 +366,22 @@ def build_actions(script: object) -> dict:
         'BOT_ASKS': bot_asks_value,
         'BOT_SAYS': bot_says_value,
         'BOT_WAITS': bot_waits_value,
-        'CAROUSEL': define_carousel_value,
+        'BUTTON': button_value,
+        'BUTTON_DEFINITION': button_definition_value,
         'CALL_FUNCTION': call_function_value,
+        'CARD': card_value,
+        'CARD_BODY': card_body_value,
+        'CAROUSEL': define_carousel_value,
+        'CAROUSEL_BODY': carousel_body_value,
+        'CAROUSEL_CONTENT_SOURCE': carousel_content_source_value,
         'CHANGE_FLOW': change_flow_value,
         'COMMENT': pass_none,
         'DEFINITION': definition_value,
-        'FLOW': flow_value,
         'ENTITY': prefixed_value,
         'EXAMPLE_FILE': example_file_value,
         'EXAMPLE_LIST': example_list_value,
         'FALLBACK': fallback_value,
+        'FLOW': flow_value,
         'IF': control_statement_value,
         'INTEGER': integer_value,
         'INTENT': prefixed_value,
@@ -307,29 +389,35 @@ def build_actions(script: object) -> dict:
         'OBJECT': object_value,
         'OPERATOR': operator_value,
         'PARAMETERS': parameters_value,
-        'REPLY': reply_value,
+        'POSTBACK_ATTRIBUTE': postback_attribute_value,
+        'POSTBACK_BUTTON': postback_button_value,
         'QUICK_REPLIES': quick_replies_value,
+        'REPLY': reply_value,
         'SEND_CAROUSEL': send_carousel_value,
         'STRING': string_value,
+        'URL_BUTTON': url_button_value,
         'VARIABLE': prefixed_value,
     }
 
 
 def build_intentions() -> list:
     intents = []
-    for intent in _script.INTENTIONS.values():
+    for intent in _script.get_components_by_type('intent').values():
         if 'dialog' not in intent:
-            raise Exception('Intent not used: {}'.format(intent['name']))
+            raise CompilationError(
+                'Intent not used: {}'.format(intent['name'])
+            )
         intents.append(intent)
     return intents
 
 
 def build_flows() -> list:
     try:
-        onboarding = _script.FLOWS.pop('onboarding')
-        flows = [onboarding] + list(_script.FLOWS.values())
+        flows = _script.get_components_by_type('flow')
+        onboarding = flows.pop('onboarding')
+        flows = [onboarding] + list(flows.values())
     except KeyError:
-        flows = list(_script.FLOWS.values())
+        flows = list(flows.values())
 
     return flows
 

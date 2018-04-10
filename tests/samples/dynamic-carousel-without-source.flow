@@ -1,0 +1,9 @@
+carousel rooms:
+  set title "{{$room_name}}",
+  set description "{{$room_email}}",
+  set image_url "{{$room_picture}}"
+end
+
+flow onboarding do
+  show rooms
+done

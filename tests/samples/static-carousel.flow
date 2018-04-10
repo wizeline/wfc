@@ -1,0 +1,14 @@
+carousel static_carousel:
+  card:
+    set title 'One',
+    set description 'test description',
+    set image_url 'http://example.com/images/card-one.jpg'
+  card:
+    set title 'Two',
+    set description 'test description',
+    set image_url 'http://example.com/images/card-two.jpg'
+end
+
+flow onboarding do
+  show static_carousel
+done
