@@ -17,7 +17,7 @@ def main():
                     core.compile(work_dir=work_dir, in_script=in_script)
         rc = 0
     except WFCError as ex:
-        sys.stderr.write('{}: {}\n'.format(type(ex), ex))
+        sys.stderr.write('\n{}\n'.format(ex))
         rc = 1
 
     return rc

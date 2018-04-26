@@ -1,11 +1,11 @@
 import sys
 import os
 
-from parglare.exceptions import ParseError
+from parglare.exceptions import ParseError as ParglareParseError
 
 from wfc import output
 from wfc.commons import asset_path
-from wfc.errors import CompilationError, WFCError
+from wfc.errors import CompilationError, ParseError
 from wfc.parser import create_parser
 from wfc.precompiler import pre_compile
 
@@ -33,16 +33,19 @@ def compile(**kwargs):
         compiled_script = compile_string(in_script, out_format, work_dir)
         out_script.write(compiled_script)
 
-    except ParseError as ex:
+    except ParglareParseError as ex:
         if not quiet:
             dump_script(in_script, ex)
-        raise CompilationError(str(ex)) from ex
+        raise ParseError(ex)
 
-    except WFCError as e:
+    except CompilationError as ex:
         if compiled_script:
             with open('failed.json', 'w') as wfcout:
                 wfcout.write(compiled_script)
-        raise e
+
+        if not quiet:
+            dump_script(in_script, ex)
+        raise ex
 
 
 def compile_string(in_script, out_format='v1', work_dir=os.curdir):
@@ -53,9 +56,19 @@ def compile_string(in_script, out_format='v1', work_dir=os.curdir):
     return output.get_script(out_format)
 
 
+def get_dump_frame(parse_error):
+    start, end = parse_error.line - 5, parse_error.line + 5
+    if start < 0:
+        start = 0
+
+    return start, end
+
+
 def dump_script(script, parse_error):
-    for ln, line in enumerate(script.split('\n'), 1):
+    start, end = get_dump_frame(parse_error)
+    script_lines = script.split('\n')[start:end]
+
+    for ln, line in enumerate(script_lines, start + 1):
         sys.stderr.write('\n{:>6}  {}'.format(ln, line))
         if ln == parse_error.line:
             sys.stderr.write('\n' + ' ' * (8 + parse_error.column) + '^')
-    sys.stderr.write('\n{}\n'.format(parse_error))

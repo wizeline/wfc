@@ -9,7 +9,14 @@ from jsonschema.exceptions import ValidationError
 from parglare.actions import pass_none
 
 from wfc.commons import asset_path
-from wfc.errors import CompilationError, ComponentNotDefined
+from wfc.errors import (
+    CompilationError,
+    ComponentNotDefined,
+    DynamicCarouselMissingSource,
+    StaticCarouselWithSource,
+    UndefinedCarousel,
+    UndefinedFlow
+)
 
 _script = None
 
@@ -158,20 +165,19 @@ def bot_waits_value(_, nodes):
     return {'action': 'wait_input', 'var_name': nodes[1]}
 
 
-def change_flow_value(_, nodes):
+def change_flow_value(context, nodes):
     """
     change flow IDENTIFIER FLOW_PARAMETER?
     """
     _, _, flow, _ = nodes
 
     if not _script.has_component('flow', flow):
-        raise ComponentNotDefined('flow', flow)
+        raise UndefinedFlow(flow, context)
 
-    value = {
+    return {
         'action': 'change_dialog',  # Right now the action is change_dialog
         'dialog': flow
     }
-    return value
 
 
 def control_statement_value(_, nodes):
@@ -284,24 +290,27 @@ def carousel_content_source_value(_, nodes):
     return nodes[1]
 
 
-def send_carousel_value(_, nodes):
+def send_carousel_value(context, nodes):
     """
     SEND_CAROUSEL: 'show' IDENTIFIER ['using' EXPRESSION];
     """
     _, name, source = nodes
-    carousel = _script.get_component('carousel', name)
+    try:
+        carousel = _script.get_component('carousel', name)
+    except ComponentNotDefined as ex:
+        raise UndefinedCarousel(name, context)
+
     send_carousel = {'action': 'send_carousel'}
     send_carousel.update(carousel)
 
     if 'card_content' in carousel:
         if not source:
-            raise CompilationError('Dynamic carousel needs a content source:',
-                                   name)
+            raise DynamicCarouselMissingSource(name, context)
+
         send_carousel.update({'content_source': source})
 
     elif source:
-        raise CompilationError('Static carousel must not have content source:',
-                               name)
+        raise StaticCarouselWithSource(name, context)
 
     return send_carousel
 
