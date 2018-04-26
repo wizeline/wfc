@@ -1,5 +1,6 @@
+from wfc import errors
+
 from tests import CompilerTestCase
-from wfc.errors import CompilationError
 
 
 class TestAsk(CompilerTestCase):
@@ -7,7 +8,7 @@ class TestAsk(CompilerTestCase):
         self._compile_to_json('ask')
 
     def test_ask_with_bad_syntax(self):
-        with self.assertRaises(CompilationError):
+        with self.assertRaises(errors.ParseError):
             self._compile_to_json_with_failure('ask-bad-syntax')
 
     def test_ask_with_quick_replies(self):

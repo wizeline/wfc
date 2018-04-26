@@ -1,5 +1,6 @@
+from wfc import errors
+
 from tests import CompilerTestCase
-from wfc.errors import CompilationError
 
 
 class TestIntent(CompilerTestCase):
@@ -7,5 +8,5 @@ class TestIntent(CompilerTestCase):
         self._compile_to_json('intent')
 
     def test_intent_with_bad_syntax(self):
-        with self.assertRaises(CompilationError):
+        with self.assertRaises(errors.ParseError):
             self._compile_to_json_with_failure('intent-bad-syntax')

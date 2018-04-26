@@ -1,5 +1,6 @@
+from wfc import errors
+
 from tests import CompilerTestCase
-from wfc.errors import CompilationError
 
 
 class TestControl(CompilerTestCase):
@@ -7,5 +8,5 @@ class TestControl(CompilerTestCase):
         self._compile_to_json('control')
 
     def test_control_with_bad_syntax(self):
-        with self.assertRaises(CompilationError):
+        with self.assertRaises(errors.ParseError):
             self._compile_to_json('control-with-bad-syntax')

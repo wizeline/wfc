@@ -1,5 +1,6 @@
+from wfc import errors
+
 from tests import CompilerTestCase
-from wfc.errors import CompilationError
 
 
 class TestCallFunction(CompilerTestCase):
@@ -10,5 +11,5 @@ class TestCallFunction(CompilerTestCase):
         self._compile_to_json('call-function-with-arguments')
 
     def test_call_function_with_bad_syntax(self):
-        with self.assertRaises(CompilationError):
+        with self.assertRaises(errors.ParseError):
             self._compile_to_json_with_failure('call-function-bad-syntax')
