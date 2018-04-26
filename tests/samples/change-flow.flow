@@ -1,8 +1,8 @@
 flow second do
-  say "Inside the second dialog"
+  say "World!"
 done
 
-flow first do
-  say "Inside the first dialog"
+flow onboarding do
+  say "Hello"
   change flow second
 done

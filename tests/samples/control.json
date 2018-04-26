@@ -7,21 +7,31 @@
       "name": "onboarding",
       "actions": [
         {
-          "action": "wait_input",
-          "var_name": "variable"
+          "text": "Please type 'yes'",
+          "action": "ask_for_input",
+          "var_name": "input"
         },
         {
-          "action": "send_text",
-          "text": "The variable is empty",
+          "action": "change_dialog",
+          "dialog": "say_thank_you",
           "condition": [
-            "$varible",
-            "is",
-            "empty"
+            "$input",
+            "equal",
+            "yes"
           ]
         },
         {
           "action": "send_text",
           "text": "Bye"
+        }
+      ]
+    },
+    {
+      "name": "say_thank_you",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "Thank you!"
         }
       ]
     }

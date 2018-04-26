@@ -1,0 +1,56 @@
+{
+  "version": "1.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "action": "send_carousel",
+          "cards": [
+            {
+              "title": "Card I",
+              "description": "the first card",
+              "image_url": "http://example.com/images/card-one.jpg",
+              "buttons": [
+                {
+                  "label": "Wizeline",
+                  "payload": "http://www.wizeline.com",
+                  "type": "open_url"
+                },
+                {
+                  "label": "Select Option",
+                  "payload": {
+                    "action": "you clicked the first card"
+                  },
+                  "type": "postback"
+                }
+              ]
+            },
+            {
+              "title": "Card II",
+              "description": "the second card",
+              "image_url": "http://example.com/images/card-two.jpg",
+              "buttons": [
+                {
+                  "label": "Google",
+                  "payload": "http://www.google.com",
+                  "type": "open_url"
+                },
+                {
+                  "label": "Post",
+                  "payload": {
+                    "action": "you clicked the second card"
+                  },
+                  "type": "postback"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

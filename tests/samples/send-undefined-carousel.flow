@@ -1,4 +1,4 @@
 flow onboarding do
   call my_integration.get_rooms()
-  show rooms using $my_integration.get_rooms and pick title
+  show rooms using $my_integration.get_rooms
 done

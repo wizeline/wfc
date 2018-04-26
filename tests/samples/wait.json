@@ -9,6 +9,10 @@
         {
           "action": "wait_input",
           "var_name": "input"
+        },
+        {
+          "action": "send_text",
+          "text": "You just said '{{$input}}'"
         }
       ]
     }

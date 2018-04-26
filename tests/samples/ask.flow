@@ -1,3 +1,4 @@
 flow onboarding do
   ask "Some question" as response
+  say "The response is: {{$response}}"
 done

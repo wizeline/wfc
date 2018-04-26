@@ -1,3 +1,4 @@
 flow onboarding do
   wait input
+  say "You just said '{{$input}}'"
 done

@@ -21,6 +21,10 @@
               "no"
             ]
           }
+        },
+        {
+          "action": "send_text",
+          "text": "response is: {{$response}}"
         }
       ]
     }
