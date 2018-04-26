@@ -77,14 +77,25 @@ The valid slots in a carousel card are:
 - _title_ (mandatory)
 - _description_ (optional)
 - _image\_url_ (optional)
-- _buttons_ (optional)
+- _buttons_ (optional, two or three buttons)
 
-Example
+Dynamic Carousel Example
 ```
 carousel contacts_carousel:
   set title contact_name,
-  set description contact_phone
+  set description contact_phone,
   set image_url contact_avatar
+end
+```
+Static Carousel Example
+```
+carousel options_carousel:
+  card:
+    set title 'Option 1',
+    set description 'contact_phone',
+    set image_url 'http://example-bucket.com/images/contact_avatar.jpg'
+    button postback('Label', action:'action-text', id:'option-id'),
+    button url('My Web Site', 'http://example.com')
 end
 ```
 
@@ -232,7 +243,7 @@ TODO: Add example
 
 Example
 ```
-SEND_CAROUSEL: 'show' IDENTIFIER 'using' EXPRESSION 'and' 'pick' IDENTIFIER;
+SEND_CAROUSEL: 'show' IDENTIFIER ['using' EXPRESSION]? ;
 ```
 ```
 show contacts_carousel using $outlook.get_collaborators and pick name
