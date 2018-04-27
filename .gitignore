@@ -1,4 +1,5 @@
 # Developer's stuff
+*.swp
 .vscode
 tags
 

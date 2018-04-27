@@ -34,9 +34,10 @@ def compile(**kwargs):
         out_script.write(compiled_script)
 
     except ParglareParseError as ex:
+        error = ParseError(ex)
         if not quiet:
-            dump_script(in_script, ex)
-        raise ParseError(ex)
+            dump_script(in_script, error)
+        raise error
 
     except CompilationError as ex:
         if compiled_script:
@@ -57,7 +58,7 @@ def compile_string(in_script, out_format='v1', work_dir=os.curdir):
 
 
 def get_dump_frame(parse_error):
-    start, end = parse_error.line - 5, parse_error.line + 5
+    start, end = parse_error.context.line - 5, parse_error.context.line + 5
     if start < 0:
         start = 0
 
@@ -70,5 +71,5 @@ def dump_script(script, parse_error):
 
     for ln, line in enumerate(script_lines, start + 1):
         sys.stderr.write('\n{:>6}  {}'.format(ln, line))
-        if ln == parse_error.line:
-            sys.stderr.write('\n' + ' ' * (8 + parse_error.column) + '^')
+        if ln == parse_error.context.line:
+            sys.stderr.write('\n' + ' ' * (8 + parse_error.context.column) + '^')

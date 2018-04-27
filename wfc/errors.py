@@ -1,9 +1,21 @@
 import parglare
 
 
+class ErrorContext:
+    """Extracts meaningful information from parglare context"""
+    def __init__(self, context=None):
+        if context:
+            position = parglare.pos_to_line_col(context.input_str,
+                                                context.start_position)
+            self.line, self.column = position
+        else:
+            self.line, self.column = None, None
+
+
 class WFCError(Exception):
-    def __init__(self, arg, *args):
-        Exception.__init__(self, arg, *args)
+    def __init__(self, parse_context, *args):
+        super().__init__(*args)
+        self.context = ErrorContext(parse_context)
 
 
 class ComponentNotDefined(WFCError):
@@ -26,50 +38,43 @@ class InvalidOutputFormat(WFCError):
     pass
 
 
-class CompilationError(WFCError):
-    def __init__(self, cause, context, *args):
-        super().__init__(cause, *args)
-        self.line, self.column = self._get_position(context)
-
-    def __str__(self):
-        return 'Error at position {},{} => {}'.format(
-            self.line,
-            self.column,
-            super().__str__()
-        )
-
-    def _get_position(self, context):
-        return parglare.pos_to_line_col(context.input_str,
-                                        context.start_position)
-
-
 class ParseError(WFCError):
-    def __init__(self, parse_error):
-        self.parse_error = parse_error
+    def __init__(self, context):
+        self.context = context
 
     def __str__(self):
-        return str(self.parse_error)
+        return str(self.context)
+
+
+class CompilationError(Exception):
+    __format__ = 'Error at position {},{} => {}'
+    __message__ = '{}'
+
+    def __init__(self, context, arg):
+        if isinstance(context, ErrorContext):
+            self.context = context
+        else:
+            self.context = ErrorContext(context)
+
+        self.message = self.__message__.format(arg)
+        super().__init__(
+            self.__format__.format(self.context.line,
+                                   self.context.column,
+                                   self.message)
+        )
 
 
 class DynamicCarouselMissingSource(CompilationError):
-    def __init__(self, name, context):
-        msg = 'Missing content source for dynamic carousel "{}"'.format(name)
-        super().__init__(msg, context)
+    __message__ = 'Missing content source for dynamic carousel "{}"'
 
 
 class StaticCarouselWithSource(CompilationError):
-    def __init__(self, name, context):
-        msg = 'Static carousel "{}" must not have content source'.format(name)
-        super().__init__(msg, context)
+    __message__ = 'Static carousel "{}" must not have content source'
 
 
 class UndefinedCarousel(CompilationError):
-    def __init__(self, name, context):
-        msg = 'Carousel "{}" is not defined'.format(name)
-        super().__init__(msg, context)
+    __message__ = 'Carousel "{}" is not defined'
 
 
 class UndefinedFlow(CompilationError):
-    def __init__(self, name, context):
-        msg = 'Flow "{}" is not defined'.format(name)
-        super().__init__(msg, context)
+    __message__ = 'Flow "{}" is not defined'

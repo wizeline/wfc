@@ -14,8 +14,7 @@ from wfc.errors import (
     ComponentNotDefined,
     DynamicCarouselMissingSource,
     StaticCarouselWithSource,
-    UndefinedCarousel,
-    UndefinedFlow
+    UndefinedCarousel
 )
 
 _script = None
@@ -52,7 +51,7 @@ def example_list_value(_, nodes):
         return {'source': InputSource.INLINE, 'value': values[0]}
 
 
-def definition_value(_, nodes):
+def definition_value(context, nodes):
     """
     DEFINE /intent|entity/ IDENTIFIER EXAMPLES
     """
@@ -61,7 +60,7 @@ def definition_value(_, nodes):
         'name': def_name,
         'examples': read_examples(examples)
     }
-    _script.add_component(def_type, def_name, value)
+    _script.add_component(context, def_type, def_name, value)
     return value
 
 
@@ -172,7 +171,7 @@ def change_flow_value(context, nodes):
     _, _, flow, _ = nodes
 
     if not _script.has_component('flow', flow):
-        raise UndefinedFlow(flow, context)
+        _script.ask_missing_component('flow', flow, context)
 
     return {
         'action': 'change_dialog',  # Right now the action is change_dialog
@@ -199,7 +198,7 @@ def block_value(_, nodes):
         return nodes[0]
 
 
-def flow_value(_, nodes):
+def flow_value(context, nodes):
     """
     flow IDENTIFIER FLOW_INTENT? BLOCK
     """
@@ -213,12 +212,12 @@ def flow_value(_, nodes):
     if flow_intention is not None:
         intent = flow_intention[1][1:]
         try:
-            intent_component = _script.get_component('intent', intent)
+            intent_component = _script.get_component(context, 'intent', intent)
             intent_component['dialog'] = name
         except ComponentNotDefined:
             pass
 
-    _script.add_component('flow', name, value)
+    _script.add_component(context, 'flow', name, value)
     return value
 
 
@@ -275,12 +274,12 @@ def carousel_body_value(_, nodes):
         return {'card_content': nodes[0]}
 
 
-def define_carousel_value(_, nodes):
+def define_carousel_value(context, nodes):
     """
     CAROUSEL: 'carousel' IDENTIFIER COLON CAROUSEL_BODY 'end';
     """
     _, identifier, _, carousel_body, _ = nodes
-    _script.add_component('carousel', identifier, carousel_body)
+    _script.add_component(context, 'carousel', identifier, carousel_body)
 
 
 def carousel_content_source_value(_, nodes):
@@ -296,21 +295,21 @@ def send_carousel_value(context, nodes):
     """
     _, name, source = nodes
     try:
-        carousel = _script.get_component('carousel', name)
+        carousel = _script.get_component(context, 'carousel', name)
     except ComponentNotDefined as ex:
-        raise UndefinedCarousel(name, context)
+        raise UndefinedCarousel(context, name)
 
     send_carousel = {'action': 'send_carousel'}
     send_carousel.update(carousel)
 
     if 'card_content' in carousel:
         if not source:
-            raise DynamicCarouselMissingSource(name, context)
+            raise DynamicCarouselMissingSource(context, name)
 
         send_carousel.update({'content_source': source})
 
     elif source:
-        raise StaticCarouselWithSource(name, context)
+        raise StaticCarouselWithSource(context, name)
 
     return send_carousel
 
@@ -437,6 +436,7 @@ def load_output_schema() -> dict:
 
 
 def get_script():
+    _script.perform_sanity_checks()
     try:
         script = {
             'version': "1.0.0",
