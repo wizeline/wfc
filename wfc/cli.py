@@ -3,7 +3,7 @@ import os
 import sys
 
 from wfc import core
-from wfc.errors import WFCError
+from wfc.errors import CompilationError, WFCError
 
 
 def main():
@@ -16,7 +16,7 @@ def main():
                 with open(source) as in_script:
                     core.compile(work_dir=work_dir, in_script=in_script)
         rc = 0
-    except WFCError as ex:
+    except (CompilationError, WFCError) as ex:
         sys.stderr.write('\n{}\n'.format(ex))
         rc = 1
 

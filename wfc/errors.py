@@ -51,17 +51,20 @@ class CompilationError(Exception):
     __message__ = '{}'
 
     def __init__(self, context, arg):
-        if isinstance(context, ErrorContext):
-            self.context = context
-        else:
-            self.context = ErrorContext(context)
-
         self.message = self.__message__.format(arg)
-        super().__init__(
-            self.__format__.format(self.context.line,
-                                   self.context.column,
-                                   self.message)
-        )
+
+        if context is None:
+            self.context = None
+            super().__init__(self.message)
+        else:
+            if isinstance(context, ErrorContext):
+                self.context = context
+            else:
+                self.context = ErrorContext(context)
+
+            super().__init__(self.__format__.format(self.context.line,
+                                                    self.context.column,
+                                                    self.message))
 
 
 class DynamicCarouselMissingSource(CompilationError):

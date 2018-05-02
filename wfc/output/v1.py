@@ -413,6 +413,7 @@ def build_intentions() -> list:
     for intent in _script.get_components_by_type('intent').values():
         if 'dialog' not in intent:
             raise CompilationError(
+                None,
                 'Intent not used: {}'.format(intent['name'])
             )
         intents.append(intent)

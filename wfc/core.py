@@ -44,7 +44,7 @@ def compile(**kwargs):
             with open('failed.json', 'w') as wfcout:
                 wfcout.write(compiled_script)
 
-        if not quiet:
+        if ex.context and not quiet:
             dump_script(in_script, ex)
         raise ex
 
