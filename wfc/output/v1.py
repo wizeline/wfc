@@ -51,6 +51,13 @@ def example_list_value(_, nodes):
         return {'source': InputSource.INLINE, 'value': values[0]}
 
 
+def equals_value(_, nodes):
+    """
+    EQUALS: OBJECT 'equals' EXPRESSION;
+    """
+    return nodes
+
+
 def definition_value(context, nodes):
     """
     DEFINE /intent|entity/ IDENTIFIER EXAMPLES
@@ -86,6 +93,14 @@ def prefixed_value(_, nodes):
     PERIOD IDENTIFIER
     """
     return nodes[0] + nodes[1]
+
+
+def has_entity_value(_, nodes):
+    """
+    HAS_ENTITY: OBJECT 'has' 'entity' ENTITY';
+    """
+    obj, _, _, entity = nodes
+    return [obj, 'has_entity', entity[1:]]
 
 
 def bot_says_value(_, nodes):
@@ -185,6 +200,15 @@ def control_statement_value(_, nodes):
     """
     _, expression, _, action = nodes
     action['condition'] = expression
+    return action
+
+
+def if_statement_value(_, nodes):
+    """
+    if CONDITION COLON ACTION
+    """
+    _, condition, _, action = nodes
+    action['condition'] = condition
     return action
 
 
@@ -388,11 +412,13 @@ def build_actions(script: object) -> dict:
         'ENTITY': prefixed_value,
         'EXAMPLE_FILE': example_file_value,
         'EXAMPLE_LIST': example_list_value,
+        'EQUALS': equals_value,
         'FALLBACK': fallback_value,
         'FLOW': flow_value,
         'IF': control_statement_value,
         'INTEGER': integer_value,
         'INTENT': prefixed_value,
+        'HAS_ENTITY': has_entity_value,
         'MEMBER': prefixed_value,
         'OBJECT': object_value,
         'OPERATOR': operator_value,

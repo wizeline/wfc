@@ -38,7 +38,9 @@ class Script:
             raise UndefinedFlow(context, name)
 
     def ask_missing_component(self, component_type, name, context):
-        self._asked_components.append((component_type, name, ErrorContext(context)))
+        self._asked_components.append((component_type,
+                                       name,
+                                       ErrorContext(context)))
 
     def add_component(self, context, component_type, name, component):
         try:

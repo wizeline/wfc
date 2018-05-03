@@ -72,4 +72,5 @@ def dump_script(script, parse_error):
     for ln, line in enumerate(script_lines, start + 1):
         sys.stderr.write('\n{:>6}  {}'.format(ln, line))
         if ln == parse_error.context.line:
-            sys.stderr.write('\n' + ' ' * (8 + parse_error.context.column) + '^')
+            hfill = ' ' * (8 + parse_error.context.column)
+            sys.stderr.write('\n{}^'.format(hfill))
