@@ -1,0 +1,19 @@
+define intent foo
+
+define entity bar
+
+flow onboarding given #foo do
+  if $foo.bar is not empty:
+    change flow bar_is_set
+
+  if $foo.bar is empty:
+    change flow bar_is_not_set
+done
+
+flow bar_is_set do
+  say 'bar is set'
+done
+
+flow bar_is_not_set do
+  say 'bar is not set'
+done

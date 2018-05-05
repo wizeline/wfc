@@ -95,6 +95,17 @@ def prefixed_value(_, nodes):
     return nodes[0] + nodes[1]
 
 
+def is_not_empty_value(_, nodes):
+    """
+    IS_NOT_EMPTY: VARIABLE is not? empty
+    """
+    variable, _, negative, _ = nodes
+    if negative is None:
+        return [variable, 'is_empty']
+    else:
+        return [variable, 'is_not_empty']
+
+
 def has_entity_value(_, nodes):
     """
     HAS_ENTITY: OBJECT 'has' 'entity' ENTITY';
@@ -418,6 +429,7 @@ def build_actions(script: object) -> dict:
         'IF': control_statement_value,
         'INTEGER': integer_value,
         'INTENT': prefixed_value,
+        'IS_NOT_EMPTY': is_not_empty_value,
         'HAS_ENTITY': has_entity_value,
         'MEMBER': prefixed_value,
         'OBJECT': object_value,
