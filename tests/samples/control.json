@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "text": "Please type 'yes'",
+          "action": "ask_for_input",
+          "var_name": "input"
+        },
+        {
+          "action": "change_dialog",
+          "dialog": "say_thank_you",
+          "condition": [
+            "$input",
+            "equal",
+            "yes"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "Bye"
+        }
+      ]
+    },
+    {
+      "name": "say_thank_you",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "Thank you!"
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

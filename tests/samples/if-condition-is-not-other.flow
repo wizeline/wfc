@@ -1,0 +1,8 @@
+define intent foo
+
+define entity bar
+
+flow onboarding given #foo do
+  if $foo.bar is not other:
+    say 'nothing'
+done

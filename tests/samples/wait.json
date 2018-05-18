@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "action": "wait_input",
+          "var_name": "input"
+        },
+        {
+          "action": "send_text",
+          "text": "You just said '{{$input}}'"
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

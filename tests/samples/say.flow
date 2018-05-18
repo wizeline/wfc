@@ -1,0 +1,3 @@
+flow say_hi do
+  say "hi"
+done

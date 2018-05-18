@@ -1,0 +1,53 @@
+{
+  "version": "1.0.0",
+  "intentions": [
+    {
+      "name": "foo",
+      "examples": [],
+      "dialog": "onboarding"
+    }
+  ],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "action": "change_dialog",
+          "dialog": "bar_is_set",
+          "condition": [
+            "$foo.bar",
+            "is_not_empty"
+          ]
+        },
+        {
+          "action": "change_dialog",
+          "dialog": "bar_is_not_set",
+          "condition": [
+            "$foo.bar",
+            "is_empty"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "bar_is_set",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "bar is set"
+        }
+      ]
+    },
+    {
+      "name": "bar_is_not_set",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "bar is not set"
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

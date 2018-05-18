@@ -1,0 +1,9 @@
+flow say_thank_you do
+  say "Thank you!"
+done
+
+flow onboarding do
+  ask "Please type 'yes'" as input
+  if $input equal 'yes': change flow say_thank_you
+  say "Bye"
+done

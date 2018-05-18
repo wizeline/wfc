@@ -1,0 +1,2 @@
+include wfc/assets/grammar.txt
+include wfc/assets/schema.json

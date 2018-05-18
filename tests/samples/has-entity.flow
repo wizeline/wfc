@@ -1,0 +1,7 @@
+define entity foo
+
+flow onboarding do
+  ask "question?" as bar
+  if $bar has entity @foo:
+    say "{{$bar}} has entity foo"
+done

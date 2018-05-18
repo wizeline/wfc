@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "text": "Some question",
+          "action": "ask_for_input",
+          "var_name": "response",
+          "quick_replies": [
+            "Of course",
+            "No way"
+          ],
+          "expect": {
+            "fallback": "Did not get that",
+            "entities": [
+              "yes",
+              "no"
+            ]
+          }
+        },
+        {
+          "action": "send_text",
+          "text": "response is: {{$response}}"
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

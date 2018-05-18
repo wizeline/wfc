@@ -1,0 +1,3 @@
+flow onboarding do
+  ask "Some question" response
+done

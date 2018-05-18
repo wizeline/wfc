@@ -1,0 +1,3 @@
+flow onboarding do
+  call some_integration.somefunction($arg1, 1, 2)
+done

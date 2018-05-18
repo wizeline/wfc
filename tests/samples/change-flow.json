@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "Hello"
+        },
+        {
+          "action": "change_dialog",
+          "dialog": "second"
+        }
+      ]
+    },
+    {
+      "name": "second",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "World!"
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

@@ -1,3 +1,8 @@
+# Developer's stuff
+*.swp
+.vscode
+tags
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

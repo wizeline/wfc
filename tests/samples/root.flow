@@ -1,0 +1,4 @@
+flow onboarding do
+  say "Hello"
+  change flow second
+done

@@ -1,0 +1,10 @@
+carousel rooms:
+  set title room_name,
+  set description room_email,
+  set image_url room_picture
+end
+
+flow onboarding do
+  call my_integration.get_rooms()
+  show rooms using $my_integration.get_rooms and title
+done

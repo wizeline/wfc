@@ -1,0 +1,416 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "title": "Script",
+  "description": "A bot script",
+  "type": "object",
+  "required": ["dialogs"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "description": "The version of this Script",
+      "type": "string"
+    },
+    "nlp_fallback": {
+      "description": "What the bot will say when NLP doesn't recognize an intent",
+      "type": "string"
+    },
+    "unexpected_error_dialog": {
+      "description": "what the bot will say when an unexpected error happens",
+      "type": "string"
+    },
+    "intentions": {
+      "description": "List of intentions that can be spotted by the NLP Engine",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "dialog": {
+            "type": "string"
+          },
+          "examples": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["name"],
+        "additionalProperties": false
+      }
+    },
+    "entities": {
+      "description": "List of possible entities contained in this script",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["name"],
+        "additionalProperties": false
+      }
+    },
+    "qa": {
+      "description": "List of Questions and its respective Answers",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "answer": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["question", "answer"],
+        "additionalProperties": false
+      }
+    },
+    "dialogs": {
+      "description": "List of bot Script available Dialogs",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "actions": {
+            "description": "List of Actions a Dialog will execute",
+            "type": "array",
+            "items": {
+              "oneOf": [
+                { "$ref": "#/definitions/sendText" },
+                { "$ref": "#/definitions/waitInput" },
+                { "$ref": "#/definitions/changeDialog" },
+                { "$ref": "#/definitions/callIntegration" },
+                { "$ref": "#/definitions/sendMenu" },
+                { "$ref": "#/definitions/sendCarousel" },
+                { "$ref": "#/definitions/sendMedia" },
+                { "$ref": "#/definitions/askForInput" }
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "condition": {
+                  "type": "array",
+                  "items": {
+                    "type": ["string", "boolean", "number"]
+                  },
+                  "minItems": 2,
+                  "maxItems": 3
+                }
+              }
+            },
+            "required": ["id", "action"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["name", "actions"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "definitions": {
+    "buttons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "payload": {
+            "type": [
+              "object",
+              "string"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "label"
+        ]
+      }
+    },
+    "sendText": {
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "one_of": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "action": {
+          "enum": ["send_text"]
+        }
+      },
+      "required": ["action"]
+    },
+    "waitInput": {
+      "properties": {
+        "var_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "enum": ["wait_input"]
+        },
+        "expect": {
+          "type": "object",
+          "properties": {
+            "entities": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1
+            },
+            "attachment_types": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "payload": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "fallback": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "can_switch_content": {
+                "type": "boolean"
+              }
+            }
+          },
+          "required": ["fallback"]
+        }
+      },
+      "required": ["action", "var_name"]
+    },
+    "changeDialog": {
+      "properties": {
+        "dialog": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "enum": ["change_dialog"]
+        }
+      },
+      "required": ["action", "dialog"]
+    },
+    "callIntegration": {
+      "properties": {
+        "integration": {
+          "type": "string",
+          "minLength": 1
+        },
+        "function": {
+          "type": "string",
+          "minLength": 1
+        },
+        "function_params": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "action": {
+          "enum": ["call_integration"]
+        },
+        "errors": {
+          "type": "object",
+          "patternProperties": {
+            "^on_": {
+              "type": "object",
+              "properties": {
+                "jump": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": ["jump"]
+            }
+          },
+          "minProperties": 1
+        }
+      },
+      "required": ["integration", "function", "function_params", "action"],
+      "additionalItems": false
+    },
+    "sendMenu": {
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "buttons": {
+          "$ref": "#/definitions/buttons"
+        },
+        "action": {
+          "enum": ["send_menu"]
+        }
+      },
+      "required": ["action", "buttons"]
+    },
+    "sendCarousel": {
+      "properties": {
+        "content_source": {
+          "type": "string",
+          "minLength": 2
+        },
+        "action": {
+          "enum": ["send_carousel"]
+        },
+        "card_content": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 2
+            },
+            "description": {
+              "type": "string",
+              "minLength": 2
+            },
+            "image_url": {
+              "type": "string",
+              "minLength": 2
+            },
+            "buttons": {
+              "$ref": "#/definitions/buttons"
+            }
+          },
+          "required": ["title"],
+          "additionalProperties": false
+        },
+        "cards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "image_url": {
+                "type": "string"
+              },
+              "buttons": {
+                "$ref": "#/definitions/buttons"
+              }
+            },
+            "required": ["title"]
+          }
+        }
+      },
+      "oneOf": [{
+        "required": ["action", "cards"]
+      }, {
+        "required": ["action", "content_source", "card_content"]
+      }]
+    },
+    "askForInput": {
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "var_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quick_replies": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "action": {
+          "enum": ["ask_for_input"]
+        },
+        "expect": {
+          "type": "object",
+          "properties": {
+            "entities": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minLength": 1
+            },
+            "fallback": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": ["entities", "fallback"]
+        }
+      },
+      "required": ["action", "var_name", "text"]
+    },
+    "sendMedia": {
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "media_id": {
+          "type": "string"
+        },
+        "buttons": {
+          "$ref": "#/definitions/buttons"
+        },
+        "action": {
+          "enum": ["send_media"]
+        }
+      },
+      "oneOf": [{
+        "required": ["action", "media_type", "url"]
+      }, {
+        "required": ["action", "media_type", "media_id"]
+      }]
+    }
+  }
+}
