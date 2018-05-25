@@ -149,7 +149,7 @@ def compile_string(context, in_script):
 
 def dump_script(context, script, parse_error):
     input_path = os.path.basename(context.get_input_path())
-    sys.stderr.write('{}|{}\n'.format(input_path, parse_error))
+    sys.stderr.write('{}|{}\n'.format(input_path, str(parse_error)))
     start, end = get_dump_frame(parse_error)
     script_lines = get_script_frame(script, start, end)
 

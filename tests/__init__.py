@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 import unittest
 
 from wfc import core
@@ -18,8 +19,11 @@ class CompilerTestCase(unittest.TestCase, mixins.TmpIOHandler):
         unittest.TestCase.setUp(self)
         self.maxDiff = None
         self.arg_parser = make_argument_parser()
+        self._sys_stderr = sys.stderr
+        sys.stderr = self.open_tmpout()
 
     def tearDown(self):
+        sys.stderr = self._sys_stderr
         self.unlink_tmpio()
 
     def _mock_output(self, context, tstin, tstout):
@@ -27,7 +31,6 @@ class CompilerTestCase(unittest.TestCase, mixins.TmpIOHandler):
         context.get_output_file = MagicMock(name='get_output_file')
         context.get_input_file.return_value = tstin
         context.get_output_file.return_value = tstout
-        context.set_quiet()
 
     def _compile_to_json(self, test_target):
         script = self._compile_sample('{}.flow'.format(test_target))
@@ -48,7 +51,8 @@ class CompilerTestCase(unittest.TestCase, mixins.TmpIOHandler):
             rc = core.compile(context)
             tmp_out.close()
 
-        assert rc == 0, 'Compilation failed'
+        output = self.open_tmpin().read()
+        assert rc == 0, 'Compilation failed\n{}'.format(output)
 
         with self.open_tmpin() as compiled_sample:
             return json.load(compiled_sample)
