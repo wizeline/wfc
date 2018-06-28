@@ -214,6 +214,15 @@ Example
 wait variable
 ```
 
+#### Set variable
+
+!['set variable' action grammar][var-grammar]
+
+Example
+```
+var millenniumStartedOn = 2000
+```
+
 #### Change Flow
 !['change flow' action grammar][change-grammar]
 
@@ -343,4 +352,5 @@ contents before the compilation process starts.
 [send-carousel-grammar]: img/grammar/send-carousel.svg
 [send-media-grammar]: #
 [send-menu-grammar]: #
+[var-grammar]: img/grammar/var.svg
 [wait-grammar]: img/grammar/wait.svg
