@@ -123,7 +123,8 @@ def compile(context):
             context.next()
         except (CompilationError, WFCError) as error:
             if verbose:
-                dump_script(context, in_script, error)
+                input_file_name = os.path.relpath(context.get_input_path())
+                sys.stderr.write('{}:{}\n'.format(input_file_name, str(error)))
             return 1
 
     try:
@@ -145,19 +146,6 @@ def compile_string(context, in_script):
         parser.parse(in_script)
     except ParglareParseError as ex:
         raise ParseError(ex)
-
-
-def dump_script(context, script, parse_error):
-    input_path = os.path.basename(context.get_input_path())
-    sys.stderr.write('{}|{}\n'.format(input_path, parse_error))
-    start, end = get_dump_frame(parse_error)
-    script_lines = get_script_frame(script, start, end)
-
-    for ln, line in enumerate(script_lines, start + 1):
-        sys.stderr.write('{:>6}  {}\n'.format(ln, line))
-        if ln == parse_error.context.line:
-            hfill = ' ' * (8 + parse_error.context.column)
-            sys.stderr.write('{}^\n'.format(hfill))
 
 
 def get_dump_frame(parse_error):
