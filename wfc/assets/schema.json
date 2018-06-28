@@ -3,12 +3,13 @@
   "title": "Script",
   "description": "A bot script",
   "type": "object",
-  "required": ["dialogs"],
+  "required": ["dialogs", "version"],
   "additionalProperties": false,
   "properties": {
     "version": {
       "description": "The version of this Script",
-      "type": "string"
+      "type": "string",
+      "enum": ["0.0.1", "1.0.0"]
     },
     "nlp_fallback": {
       "description": "What the bot will say when NLP doesn't recognize an intent",
@@ -97,6 +98,8 @@
                 { "$ref": "#/definitions/waitInput" },
                 { "$ref": "#/definitions/changeDialog" },
                 { "$ref": "#/definitions/callIntegration" },
+                { "$ref": "#/definitions/openFlow" },
+                { "$ref": "#/definitions/setVar" },
                 { "$ref": "#/definitions/sendMenu" },
                 { "$ref": "#/definitions/sendCarousel" },
                 { "$ref": "#/definitions/sendMedia" },
@@ -108,12 +111,7 @@
                   "minLength": 1
                 },
                 "condition": {
-                  "type": "array",
-                  "items": {
-                    "type": ["string", "boolean", "number"]
-                  },
-                  "minItems": 2,
-                  "maxItems": 3
+                  "$ref": "#/definitions/expression"
                 }
               }
             },
@@ -222,6 +220,33 @@
         }
       },
       "required": ["action", "var_name"]
+    },
+    "openFlow": {
+      "properties": {
+        "flow": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "enum": ["open_flow"]
+        }
+      },
+      "required": ["action", "flow"]
+    },
+    "setVar": {
+      "properties": {
+        "var_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "minLength": 1
+        },
+        "action": {
+          "enum": ["set_var"]
+        }
+      },
+      "required": ["var_name", "value", "action"]
     },
     "changeDialog": {
       "properties": {
@@ -411,6 +436,38 @@
       }, {
         "required": ["action", "media_type", "media_id"]
       }]
+    },
+    "unaryOperators": {
+      "type": "string",
+      "enum": ["is_empty", "is_not_empty"]
+    },
+    "binaryOperators": {
+      "type": "string",
+      "enum": ["equal", "not_equal", "has_entity"]
+    },
+    "operands": {
+      "anyOf": [
+      	{ "type": "string" },
+        { "type": "boolean" },
+        { "type": "number" },
+        { "$ref": "#/definitions/expression" }
+      ]
+    },
+    "operators": {
+      "anyOf": [
+        { "$ref": "#/definitions/unaryOperators" },
+        { "$ref": "#/definitions/binaryOperators" }
+      ]
+    },
+    "expression": {
+      "type": "array",
+      "items": [
+        { "$ref": "#/definitions/operands" },
+        { "$ref": "#/definitions/operators" },
+        { "$ref": "#/definitions/operands" }
+      ],
+      "minItems": 2,
+      "maxItems": 3
     }
   }
 }

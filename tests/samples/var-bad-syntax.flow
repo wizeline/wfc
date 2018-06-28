@@ -1,0 +1,3 @@
+flow onboarding do
+  var 3 = other_variable
+done
