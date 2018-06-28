@@ -379,6 +379,19 @@ def send_carousel_value(context, nodes):
     return send_carousel
 
 
+def set_var_value(context, nodes):
+    """
+    SET_VAR: 'var' IDENTIFIER '=' E;
+    """
+    _, identifier, _, exp = nodes
+
+    return {
+        'action': 'set_var',
+        'var_name': identifier,
+        'value': exp
+    }
+
+
 def url_button_value(_, nodes):
     """
     URL_BUTTON: 'url' OPEN STRING SEPARATOR STRING CLOSE;
@@ -468,6 +481,7 @@ def build_actions() -> dict:
         'QUICK_REPLIES': quick_replies_value,
         'REPLY': reply_value,
         'SEND_CAROUSEL': send_carousel_value,
+        'SET_VAR': set_var_value,
         'STRING': string_value,
         'URL_BUTTON': url_button_value,
         'VARIABLE': prefixed_value,
