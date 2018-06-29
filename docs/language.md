@@ -44,12 +44,12 @@ Hi!_
 ### Reserved Words
 
 ```
-as        ask       call     change   define
-do        done      empty    end      entity
-equal     flow      given    has      if
-include   install   intent   is       nil
-not       null      reply    say      using
-wait      when      with
+as       ask      call    change  define
+do       done     empty   end     entity
+equal    flow     given   has     if
+include  install  intent  is      nil
+not      null     open    reply   say
+using    var      wait    when    with
 ```
 
 ### Script Sections
@@ -231,6 +231,14 @@ change flow menu
 ```
 
 
+#### Open Flow
+!['open flow' action grammar][open-grammar]
+
+```
+open flow menu
+```
+
+
 #### Call Function
 ![Call function grammar][call-function-grammar]
 
@@ -347,7 +355,7 @@ contents before the compilation process starts.
 [install-grammar]: img/grammar/install-integration.svg
 [intent-entity-def]: img/grammar/intent-entity-def.svg
 [intents]: #
-[open-flow-grammar]: #
+[open-grammar]: img/grammar/open.svg
 [say-grammar]: img/grammar/say.svg
 [send-carousel-grammar]: img/grammar/send-carousel.svg
 [send-media-grammar]: #
