@@ -1,0 +1,8 @@
+flow first do
+  say "Inside the first dialog"
+  open flow $second
+done
+
+flow second do
+  say "Inside the second dialog"
+done
