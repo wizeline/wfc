@@ -205,6 +205,21 @@ def change_flow_value(context, nodes):
     }
 
 
+def open_flow_value(context, nodes):
+    """
+    open flow IDENTIFIER
+    """
+    _, _, flow = nodes
+
+    if not _script.has_component('flow', flow):
+        _script.ask_missing_component('flow', flow, context)
+
+    return {
+        'action': 'open_flow',  # Right now the action is change_dialog
+        'flow': flow
+    }
+
+
 def control_statement_value(_, nodes):
     """
     /if|when/ EXPRESSION COLON ACTION
@@ -218,19 +233,49 @@ def if_statement_value(_, nodes):
     """
     if CONDITION COLON ACTION
     """
-    _, condition, _, action = nodes
+    _, condition, _, action, else_action = nodes
+
     action['condition'] = condition
-    return action
+
+    if else_action is not None:
+        else_action['condition'] = not_condition(condition)
+        actions = [action, else_action]
+
+    else:
+        actions = [action]
+
+    return actions
+
+
+def not_condition(condition):
+    negatives = {
+        'is_empty': 'is_not_empty',
+        'has_entity': 'has_not_entity'
+    }
+    not_condition = list(condition)
+    not_condition[1] = negatives[condition[1]]
+    return not_condition
+
+
+def else_value(_, nodes):
+    return nodes[2]
 
 
 def block_value(_, nodes):
     """
     STATEMENT | DO STATEMENT+ DONE
     """
+    statements = []
     try:
-        return nodes[1]
+        for statement in nodes[1]:
+            if isinstance(statement, dict):
+                statements.append(statement)
+            elif isinstance(statement, list):
+                statements.extend(statement)
     except IndexError:
-        return nodes[0]
+        statements = nodes[0]
+
+    return statements
 
 
 def flow_value(context, nodes):
@@ -349,6 +394,19 @@ def send_carousel_value(context, nodes):
     return send_carousel
 
 
+def set_var_value(context, nodes):
+    """
+    SET_VAR: 'var' IDENTIFIER '=' E;
+    """
+    _, identifier, _, exp = nodes
+
+    return {
+        'action': 'set_var',
+        'var_name': identifier,
+        'value': exp
+    }
+
+
 def url_button_value(_, nodes):
     """
     URL_BUTTON: 'url' OPEN STRING SEPARATOR STRING CLOSE;
@@ -417,19 +475,21 @@ def build_actions() -> dict:
         'CHANGE_FLOW': change_flow_value,
         'COMMENT': pass_none,
         'DEFINITION': definition_value,
+        'ELSE': else_value,
         'ENTITY': prefixed_value,
         'EXAMPLE_FILE': example_file_value,
         'EXAMPLE_LIST': example_list_value,
         'EQUALS': equals_value,
         'FALLBACK': fallback_value,
         'FLOW': flow_value,
-        'IF': control_statement_value,
+        'IF': if_statement_value,
         'INTEGER': integer_value,
         'INTENT': prefixed_value,
         'IS_NOT_EMPTY': is_not_empty_value,
         'HAS_ENTITY': has_entity_value,
         'MEMBER': prefixed_value,
         'OBJECT': object_value,
+        'OPEN_FLOW': open_flow_value,
         'OPERATOR': operator_value,
         'PARAMETERS': parameters_value,
         'POSTBACK_ATTRIBUTE': postback_attribute_value,
@@ -437,6 +497,7 @@ def build_actions() -> dict:
         'QUICK_REPLIES': quick_replies_value,
         'REPLY': reply_value,
         'SEND_CAROUSEL': send_carousel_value,
+        'SET_VAR': set_var_value,
         'STRING': string_value,
         'URL_BUTTON': url_button_value,
         'VARIABLE': prefixed_value,
@@ -485,7 +546,11 @@ def get_script():
         jsonschema.validate(script, load_output_schema())
         return json.dumps(script, indent=2)
     except ValidationError as ex:
-        raise ValueError('Generated script does not match with schema')
+        with open('/tmp/invalid.json', 'w') as invalid_script:
+            invalid_script.write(json.dumps(script, indent=2))
+
+        raise ValueError('Generated script does not match with schema',
+                         script)
 
 
 def set_script(script):

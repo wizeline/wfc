@@ -44,12 +44,12 @@ Hi!_
 ### Reserved Words
 
 ```
-as        ask       call     change   define
-do        done      empty    end      entity
-equal     flow      given    has      if
-include   install   intent   is       nil
-not       null      reply    say      using
-wait      when      with
+as       ask      call    change  define
+do       done     empty   end     entity
+equal    flow     given   has     if
+include  install  intent  is      nil
+not      null     open    reply   say
+using    var      wait    when    with
 ```
 
 ### Script Sections
@@ -214,11 +214,28 @@ Example
 wait variable
 ```
 
+#### Set variable
+
+!['set variable' action grammar][var-grammar]
+
+Example
+```
+var millenniumStartedOn = 2000
+```
+
 #### Change Flow
 !['change flow' action grammar][change-grammar]
 
 ```
 change flow menu
+```
+
+
+#### Open Flow
+!['open flow' action grammar][open-grammar]
+
+```
+open flow menu
 ```
 
 
@@ -338,9 +355,10 @@ contents before the compilation process starts.
 [install-grammar]: img/grammar/install-integration.svg
 [intent-entity-def]: img/grammar/intent-entity-def.svg
 [intents]: #
-[open-flow-grammar]: #
+[open-grammar]: img/grammar/open.svg
 [say-grammar]: img/grammar/say.svg
 [send-carousel-grammar]: img/grammar/send-carousel.svg
 [send-media-grammar]: #
 [send-menu-grammar]: #
+[var-grammar]: img/grammar/var.svg
 [wait-grammar]: img/grammar/wait.svg

@@ -1,0 +1,6 @@
+flow conditional do
+  if $variable is empty:
+    say 'The variable is empty'
+  else:
+    say 'The variable is not empty'
+done

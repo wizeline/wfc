@@ -45,13 +45,11 @@ class ParseError(WFCError):
         self.context = context
 
     def __str__(self):
-        return '{} col {}| {}'.format(self.context.line,
-                                      self.context.column,
-                                      ParseError.MESSAGE)
+        return '{}:{}'.format(self.context.line, ParseError.MESSAGE)
 
 
 class CompilationError(Exception):
-    __format__ = '|{} col {}| {}'
+    __format__ = '{}:{}'
     __message__ = '{}'
 
     def __init__(self, context, arg):
@@ -67,7 +65,6 @@ class CompilationError(Exception):
                 self.context = ErrorContext(context)
 
             super().__init__(self.__format__.format(self.context.line,
-                                                    self.context.column,
                                                     self.message))
 
 

@@ -1,0 +1,4 @@
+flow onboarding do
+  var start = 0
+  say "start is: {{$start}}"
+done

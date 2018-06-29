@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "conditional",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "The variable is empty",
+          "condition": [
+            "$variable",
+            "is_empty"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "The variable is not empty",
+          "condition": [
+            "$variable",
+            "is_not_empty"
+          ]
+        }
+      ]
+    }
+  ],
+  "qa": []
+}
