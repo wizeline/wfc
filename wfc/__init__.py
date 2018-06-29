@@ -1,3 +1,3 @@
 __author__ = 'wizeline'
 __name__ = 'wfc'
-__version__ = '0.2'
+__version__ = '0.3'
