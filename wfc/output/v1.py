@@ -205,6 +205,21 @@ def change_flow_value(context, nodes):
     }
 
 
+def open_flow_value(context, nodes):
+    """
+    open flow IDENTIFIER
+    """
+    _, _, flow = nodes
+
+    if not _script.has_component('flow', flow):
+        _script.ask_missing_component('flow', flow, context)
+
+    return {
+        'action': 'open_flow',  # Right now the action is change_dialog
+        'flow': flow
+    }
+
+
 def control_statement_value(_, nodes):
     """
     /if|when/ EXPRESSION COLON ACTION
@@ -474,6 +489,7 @@ def build_actions() -> dict:
         'HAS_ENTITY': has_entity_value,
         'MEMBER': prefixed_value,
         'OBJECT': object_value,
+        'OPEN_FLOW': open_flow_value,
         'OPERATOR': operator_value,
         'PARAMETERS': parameters_value,
         'POSTBACK_ATTRIBUTE': postback_attribute_value,
