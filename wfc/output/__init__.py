@@ -36,6 +36,7 @@ class OutputBuilder:
 class ComponentType(Enum):
     BUTTON = 'button'
     CAROUSEL = 'carousel'
+    COMMAND = 'command'
     ENTITY = 'entity'
     FLOW = 'flow'
     INTEGRATION = 'integration'

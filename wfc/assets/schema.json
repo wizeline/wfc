@@ -9,7 +9,7 @@
     "version": {
       "description": "The version of this Script",
       "type": "string",
-      "enum": ["0.0.1", "1.0.0", "2.0.0"]
+      "enum": ["2.0.0"]
     },
     "nlp_fallback": {
       "description": "What the bot will say when NLP doesn't recognize an intent",
@@ -39,6 +39,23 @@
           }
         },
         "required": ["name"],
+        "additionalProperties": false
+      }
+    },
+    "commands": {
+      "description": "List of commands that can be spotted by the Bot",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "keyword": {
+            "type": "string"
+          },
+          "dialog": {
+            "type": "string"
+          }
+        },
+        "required": ["keyword", "dialog"],
         "additionalProperties": false
       }
     },
@@ -103,7 +120,11 @@
                 { "$ref": "#/definitions/sendMenu" },
                 { "$ref": "#/definitions/sendCarousel" },
                 { "$ref": "#/definitions/sendMedia" },
-                { "$ref": "#/definitions/askForInput" }
+                { "$ref": "#/definitions/subscribeFeed" },
+                { "$ref": "#/definitions/unsubscribeFeed" },
+                { "$ref": "#/definitions/askForInput" },
+                { "$ref": "#/definitions/handoff" },
+                { "$ref": "#/definitions/if" }
               ],
               "properties": {
                 "id": {
@@ -141,6 +162,10 @@
             ]
           },
           "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "flow": {
             "type": "string",
             "minLength": 1
           }
@@ -371,7 +396,7 @@
       "oneOf": [{
         "required": ["action", "cards"]
       }, {
-        "required": ["action", "content_source", "card_content"]
+      "required": ["action", "content_source", "card_content"]
       }]
     },
     "askForInput": {
@@ -434,12 +459,64 @@
       "oneOf": [{
         "required": ["action", "media_type", "url"]
       }, {
-        "required": ["action", "media_type", "media_id"]
+      "required": ["action", "media_type", "media_id"]
       }]
+    },
+    "subscribeFeed": {
+      "properties": {
+        "feed": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "enum": ["subscribe_feed"]
+        }
+      },
+      "required": ["action", "feed"]
+    },
+    "unsubscribeFeed": {
+      "properties": {
+        "feed": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "enum": ["unsubscribe_feed"]
+        }
+      },
+      "required": ["action", "feed"]
+    },
+    "handoff": {
+      "properties": {
+        "assignee": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "enum": ["handoff"]
+        }
+      },
+      "required": ["action", "assignee"]
     },
     "unaryOperators": {
       "type": "string",
       "enum": ["is_empty", "is_not_empty"]
+    },
+    "if": {
+      "properties": {
+        "then": {
+          "type": "string",
+          "minLength": 1
+        },
+        "else": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "enum": ["if"]
+        }
+      },
+      "required": ["action", "condition", "then"]
     },
     "binaryOperators": {
       "type": "string",
@@ -447,7 +524,7 @@
     },
     "operands": {
       "anyOf": [
-      	{ "type": "string" },
+        { "type": "string" },
         { "type": "boolean" },
         { "type": "number" },
         { "$ref": "#/definitions/expression" }

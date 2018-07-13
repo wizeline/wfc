@@ -1,0 +1,5 @@
+when read command flow_name
+
+flow flow_name do
+  say "nothing"
+done
