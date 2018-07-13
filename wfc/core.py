@@ -19,7 +19,7 @@ class CompilerContext:
         if args is None:
             self._flow_paths = [None]
             self._output_path = None
-            self._output_version = 'v1'
+            self._output_version = 'v2'
             self._verbose = True
             self._work_dir = os.path.abspath(os.curdir)
         else:

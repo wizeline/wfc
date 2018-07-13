@@ -536,7 +536,7 @@ def get_script():
     _script.perform_sanity_checks()
     try:
         script = {
-            'version': "1.0.0",
+            'version': "2.0.0",
             'intentions': build_intentions(),
             'entities': [],
             'dialogs': build_flows(),

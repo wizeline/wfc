@@ -65,7 +65,7 @@ class TestArgumentParser(CompilerTestCase):
                                                 'main.flow', 'module.flow'])
 
         self.assertEquals('script.json', arguments.output)
-        self.assertEquals('v1', arguments.outversion)
+        self.assertEquals('v2', arguments.outversion)
         self.assertEquals(os.curdir, arguments.workdir)
         self.assertListEqual(['main.flow', 'module.flow'], arguments.flows)
 
@@ -73,7 +73,7 @@ class TestArgumentParser(CompilerTestCase):
         arguments = self.arg_parser.parse_args(['main.flow', 'module.flow'])
 
         self.assertEquals('', arguments.output)
-        self.assertEquals('v1', arguments.outversion)
+        self.assertEquals('v2', arguments.outversion)
         self.assertEquals(os.curdir, arguments.workdir)
         self.assertListEqual(['main.flow', 'module.flow'], arguments.flows)
 
@@ -81,7 +81,7 @@ class TestArgumentParser(CompilerTestCase):
         arguments = self.arg_parser.parse_args(['-q'])
 
         self.assertEquals('', arguments.output)
-        self.assertEquals('v1', arguments.outversion)
+        self.assertEquals('v2', arguments.outversion)
         self.assertListEqual([], arguments.flows)
         self.assertEquals(os.curdir, arguments.workdir)
         self.assertTrue(arguments.quiet)

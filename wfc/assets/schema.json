@@ -9,7 +9,7 @@
     "version": {
       "description": "The version of this Script",
       "type": "string",
-      "enum": ["0.0.1", "1.0.0"]
+      "enum": ["0.0.1", "1.0.0", "2.0.0"]
     },
     "nlp_fallback": {
       "description": "What the bot will say when NLP doesn't recognize an intent",
