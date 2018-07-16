@@ -34,7 +34,7 @@ def make_argument_parser():
     parser.add_argument('-o', '--output', default='', help='output file')
     parser.add_argument('-q', '--quiet', default=False, action='store_true',
                         help='run compiler in quiet mode')
-    parser.add_argument('-v', '--outversion', default='v1',
+    parser.add_argument('-v', '--outversion', default='v2',
                         help='output format')
     parser.add_argument('-w', '--workdir', default=os.curdir,
                         help='work directory')

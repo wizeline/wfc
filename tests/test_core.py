@@ -40,7 +40,7 @@ class TestContext(CompilerTestCase):
         with core.CompilerContext(None) as context:
             self.assertIs(sys.stdout, context.get_output_file())
             self.assertIs(sys.stdin, context.get_input_file())
-            self.assertEqual('v1', context.get_output_version())
+            self.assertEqual('v2', context.get_output_version())
             self.assertEqual(os.path.abspath('.'),
                              context.get_work_directory())
             self.assertTrue(context.is_verbose())

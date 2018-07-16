@@ -44,12 +44,14 @@ Hi!_
 ### Reserved Words
 
 ```
-as       ask      call    change  define
-do       done     empty   end     entity
-equal    flow     given   has     if
-include  install  intent  is      nil
-not      null     open    reply   say
-using    var      wait    when    with
+as       ask     call   change
+define   do      done   empty
+end      entity  equal  flow
+given    has     if     include
+install  intent  is     nil
+not      null    open   read
+reply    say     using  var
+wait     when    with
 ```
 
 ### Script Sections
@@ -114,6 +116,20 @@ define entity person using "person-entity-def-file.json"
 
 For details see [intents and entities][intents] documentation.
 
+#### Command Definition
+
+![commands grammar][commands-grammar]
+
+The commands feature helps you to bypass the NLP and jump to any flow you want.
+
+Examples
+```
+when read "/hi" do say_hi_flow
+
+flow say_hi_flow do
+  say "Hello World"
+done
+```
 
 #### Flow Definition
 
@@ -171,7 +187,6 @@ Let EXP be a **string**, **number**, **constant**, **variable**, **entity**, **i
 ## Statements
 ### Actions
 ![action grammar][action-grammar]
-
 
 #### Bot Says
 !['say' action grammar][say-grammar]
@@ -350,6 +365,7 @@ contents before the compilation process starts.
 [call-function-grammar]: img/grammar/call-function.svg
 [carousel-grammar]: img/grammar/carousel-definition.svg
 [change-grammar]: img/grammar/change-flow.svg
+[commands-grammar]: img/grammar/commands.svg
 [control-grammar]: img/grammar/control.svg
 [flow-grammar]: img/grammar/flow.svg
 [install-grammar]: img/grammar/install-integration.svg

@@ -1,0 +1,5 @@
+when read "/help" do not_a_flow
+
+flow entry_point_flow do
+  say "This is a test flow"
+done

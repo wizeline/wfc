@@ -9,10 +9,10 @@ from wfc.errors import (
     UndefinedCarousel,
     UndefinedFlow
 )
-from wfc.output import v1
+from wfc.output import v2
 
 _FORMATS = {
-    'v1': v1
+    'v2': v2
 }
 
 
@@ -36,6 +36,7 @@ class OutputBuilder:
 class ComponentType(Enum):
     BUTTON = 'button'
     CAROUSEL = 'carousel'
+    COMMAND = 'command'
     ENTITY = 'entity'
     FLOW = 'flow'
     INTEGRATION = 'integration'

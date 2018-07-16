@@ -1,0 +1,10 @@
+when read "/help" do flow_one
+when read "/help" do flow_two
+
+flow flow_one do
+  say "This is a test flow"
+done
+
+flow flow_two do
+  say "This is another test flow"
+done

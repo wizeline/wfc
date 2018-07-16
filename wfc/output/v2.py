@@ -205,6 +205,23 @@ def change_flow_value(context, nodes):
     }
 
 
+def define_command_value(context, nodes):
+    """
+    when read STRING do IDENTIFIER
+    """
+    _, _, keyword, _, flow = nodes
+
+    if not _script.has_component('flow', flow):
+        _script.ask_missing_component('flow', flow, context)
+
+    command = {
+        'keyword': keyword,
+        'dialog': flow
+    }
+
+    _script.add_component(context, 'command', keyword, command)
+
+
 def open_flow_value(context, nodes):
     """
     open flow IDENTIFIER
@@ -473,6 +490,7 @@ def build_actions() -> dict:
         'CAROUSEL_BODY': carousel_body_value,
         'CAROUSEL_CONTENT_SOURCE': carousel_content_source_value,
         'CHANGE_FLOW': change_flow_value,
+        'COMMAND': define_command_value,
         'COMMENT': pass_none,
         'DEFINITION': definition_value,
         'ELSE': else_value,
@@ -502,6 +520,23 @@ def build_actions() -> dict:
         'URL_BUTTON': url_button_value,
         'VARIABLE': prefixed_value,
     }
+
+
+def build_commands() -> list:
+    commands = []
+
+    for command in _script.get_components_by_type('command').values():
+        if not _script.has_component('flow', command['dialog']):
+            raise CompilationError(
+                None,
+                'Command linked to unexisting flow: {} -> {}'.format(
+                    command['keyword'],
+                    command['dialog']
+                )
+            )
+        commands.append(command)
+
+    return commands
 
 
 def build_intentions() -> list:
@@ -536,12 +571,15 @@ def get_script():
     _script.perform_sanity_checks()
     try:
         script = {
-            'version': "1.0.0",
+            'version': "2.0.0",
             'intentions': build_intentions(),
             'entities': [],
             'dialogs': build_flows(),
             'qa': []
         }
+        commands = build_commands()
+        if commands:
+            script['commands'] = commands
 
         jsonschema.validate(script, load_output_schema())
         return json.dumps(script, indent=2)

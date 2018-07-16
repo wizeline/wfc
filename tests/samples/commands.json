@@ -2,18 +2,19 @@
   "version": "2.0.0",
   "intentions": [],
   "entities": [],
+  "commands": [
+    {
+      "keyword": "/help",
+      "dialog": "entry_point_flow"
+    }
+  ],
   "dialogs": [
     {
-      "name": "onboarding",
+      "name": "entry_point_flow",
       "actions": [
         {
-          "action": "set_var",
-          "var_name": "start",
-          "value": 0
-        },
-        {
           "action": "send_text",
-          "text": "start is: {{$start}}"
+          "text": "This is a test flow"
         }
       ]
     }
