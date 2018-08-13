@@ -21,8 +21,15 @@
             "buttons": [
               {
                 "label": "Details",
-                "payload": "http://www.wizeline.com/profile",
-                "type": "open_url"
+                "payload": {
+                  "id": "{{$nerd_id}}"
+                },
+                "type": "postback"
+              },
+              {
+                "label": "Something",
+                "payload": "Any random text",
+                "type": "postback"
               },
               {
                 "label": "More Details",

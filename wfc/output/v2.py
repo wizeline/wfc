@@ -447,13 +447,17 @@ def postback_attribute_value(_, nodes):
 def postback_button_value(_, nodes):
     """
     POSTBACK_BUTTON: 'postback' OPEN
-        STRING SEPARATOR POSTBACK_ATTRIBUTE+[SEPARATOR]
+        STRING SEPARATOR POSTBACK_PARAMS
     CLOSE;
     """
     label, attributes = nodes[2], nodes[4]
-    payload = {}
-    for key, name in attributes:
-        payload.update({key: name})
+
+    if isinstance(attributes, list):
+        payload = {}
+        for key, name in attributes:
+            payload.update({key: name})
+    else:
+        payload = attributes
 
     return {
         'label': label,
