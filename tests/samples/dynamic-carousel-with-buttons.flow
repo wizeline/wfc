@@ -2,7 +2,8 @@ carousel nerds:
   set title "{{$name}}",
   set description "{{$alias}}",
   set image_url "{{$avatar}}"
-  button url('Details', 'http://www.wizeline.com/profile'),
+  button postback('Details', id: "{{$nerd_id}}"),
+  button postback('Something', "Any random text"),
   button url('More Details', 'http://www.wizeline.com/profile')
 end
 

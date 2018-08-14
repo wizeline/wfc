@@ -4,14 +4,16 @@ carousel static_carousel:
     set description "the first card",
     set image_url 'http://example.com/images/card-one.jpg'
     button url('Wizeline', 'http://www.wizeline.com'),
-    button postback('Select Option', action:"you clicked the first card")
+    button postback('Select Option', action:"you clicked the first card"),
+    button postback('Simple Button', "Hey! you clicked the first card")
 
   card:
     set title "Card II",
     set description "the second card",
     set image_url 'http://example.com/images/card-two.jpg'
     button url('Google', 'http://www.google.com'),
-    button postback('Post', action:"you clicked the second card")
+    button postback('Post', action:"you clicked the second card"),
+    button postback('Simple Button', "Hey! you clicked the second card")
 end
 
 flow onboarding do

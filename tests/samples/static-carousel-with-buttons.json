@@ -25,6 +25,11 @@
                     "action": "you clicked the first card"
                   },
                   "type": "postback"
+                },
+                {
+                  "label": "Simple Button",
+                  "payload": "Hey! you clicked the first card",
+                  "type": "postback"
                 }
               ]
             },
@@ -43,6 +48,11 @@
                   "payload": {
                     "action": "you clicked the second card"
                   },
+                  "type": "postback"
+                },
+                {
+                  "label": "Simple Button",
+                  "payload": "Hey! you clicked the second card",
                   "type": "postback"
                 }
               ]
