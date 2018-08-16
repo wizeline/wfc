@@ -148,6 +148,12 @@ def compile_string(context, in_script):
         raise ParseError(ex)
 
 
+def compile_text(text):
+    with CompilerContext(None) as context:
+        compile_string(context, text)
+        return context.build_script()
+
+
 def get_dump_frame(parse_error):
     start, end = parse_error.context.line - 5, parse_error.context.line + 5
     if start < 0:
