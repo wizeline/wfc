@@ -10,9 +10,9 @@ Language to simplify chatbot script development
 
 ## Install
 
-### Create a virtual envirionment
-
 ### Install WFC
+> Note: you can install this package inside a [virtual environment][venv] too ;)
+
 1. Go to [WFC releases](https://github.com/wizeline/wfc/releases) and download
    the most recent release
 
@@ -124,3 +124,4 @@ For more details about Wizeline Flow, see the [language reference][lang-ref]
 
 [wfc-zip]: docs/img/wfc-zip-package.png
 [lang-ref]: docs/language.md
+[venv]: https://github.com/wizeline/bots-platform-docs/blob/master/tools/venv.md
