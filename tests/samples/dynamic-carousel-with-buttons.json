@@ -32,6 +32,11 @@
                 "type": "postback"
               },
               {
+                "label": "ping",
+                "payload": "pong",
+                "type": "message"
+              },
+              {
                 "label": "More Details",
                 "payload": "http://www.wizeline.com/profile",
                 "type": "open_url"
