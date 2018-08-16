@@ -12,31 +12,14 @@ Language to simplify chatbot script development
 
 ### Create a virtual envirionment
 
-You can use a virtual envrironment to install the package without having
-super user privileges:
-
-**Create a virtual environment using venv module**
-```sh
-$ python3 -m venv ~/.venvs/wfc-testing
-```
-**Activate the virtual environment**
-```
-$ source ~/.venvs/wfc-testing/bin/activate
-```
-**Upgrade the python package manager**
-```
-$ pip install --upgrade pip
-```
-
 ### Install WFC
-1. Download the package in a `.zip` archive
-
-![Package download][wfc-zip]
+1. Go to [WFC releases](https://github.com/wizeline/wfc/releases) and download
+   the most recent release
 
 2. Install the package with pip
 
 ```sh
-$ pip install /path/to/wfc-development.zip
+$ pip install /path/to/wfc-X.Y.zip
 ```
 
 ## Usage
@@ -59,7 +42,7 @@ And you'll get a new file `hello.json` with this contents:
 
 ```javascript
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "intentions": [],
   "entities": [],
   "dialogs": [
@@ -106,10 +89,9 @@ $ wfc -o my-bot.json module1.flow module2.flow main.flow
 ```python
 >>> import wfc.core as wfc
 >>> script = 'flow say_hi do say "Hello World!" done'
->>> with wfc.CompilerContext(None) as context:
-...     print(context, wfc.compile_string(script))
+>>> print(wfc.compile_text(script))
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "intentions": [],
   "entities": [],
   "dialogs": [
