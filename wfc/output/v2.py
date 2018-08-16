@@ -424,17 +424,24 @@ def set_var_value(context, nodes):
     }
 
 
-def url_button_value(_, nodes):
+def scalar_button_value(_, nodes):
     """
-    URL_BUTTON: 'url' OPEN STRING SEPARATOR STRING CLOSE;
+    SCALAR_BUTTON: SCALAR_BUTTON_TYPE OPEN STRING SEPARATOR STRING CLOSE;
     """
-    label, url = nodes[2], nodes[4]
+    button_type, label, payload = nodes[0], nodes[2], nodes[4]
 
-    return {
-        'label': label,
-        'payload': url,
-        'type': 'open_url'
-    }
+    if button_type == 'url':
+        return {
+            'label': label,
+            'payload': payload,
+            'type': 'open_url'
+        }
+    elif button_type == 'message':
+        return {
+            'label': label,
+            'payload': payload,
+            'type': 'message'
+        }
 
 
 def postback_attribute_value(_, nodes):
@@ -521,7 +528,7 @@ def build_actions() -> dict:
         'SEND_CAROUSEL': send_carousel_value,
         'SET_VAR': set_var_value,
         'STRING': string_value,
-        'URL_BUTTON': url_button_value,
+        'SCALAR_BUTTON': scalar_button_value,
         'VARIABLE': prefixed_value,
     }
 

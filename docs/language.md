@@ -100,6 +100,16 @@ carousel options_carousel:
     button url('My Web Site', 'http://example.com')
 end
 ```
+Dynamic Carousel Example (with buttons)
+```
+carousel contacts_carousel:
+  set title contact_name,
+  set description contact_phone,
+  set image_url contact_avatar
+  button postback('Label', 'postback message'),
+  button message('Say Hi', 'Hi')
+end
+```
 
 For details see [carousels](#) documentation.
 

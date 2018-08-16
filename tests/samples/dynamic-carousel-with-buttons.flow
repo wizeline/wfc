@@ -4,6 +4,7 @@ carousel nerds:
   set image_url "{{$avatar}}"
   button postback('Details', id: "{{$nerd_id}}"),
   button postback('Something', "Any random text"),
+  button message('ping', 'pong'),
   button url('More Details', 'http://www.wizeline.com/profile')
 end
 
