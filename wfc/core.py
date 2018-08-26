@@ -70,7 +70,7 @@ class CompilerContext:
             self._output_file.close()
 
     def add_input_file(self, input_path):
-        if not input_path in self._flow_paths:
+        if input_path not in self._flow_paths:
             self._flow_paths.append(input_path)
             self._flow_files.append(open(input_path))
 

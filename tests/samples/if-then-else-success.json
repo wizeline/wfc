@@ -4,7 +4,7 @@
   "entities": [],
   "dialogs": [
     {
-      "name": "conditional",
+      "name": "conditional0",
       "actions": [
         {
           "action": "send_text",
@@ -20,6 +20,138 @@
           "condition": [
             "$variable",
             "is_not_empty"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "anything",
+          "condition": [
+            "$variable2",
+            "is_not_empty"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "conditional1",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "The variable is empty",
+          "condition": [
+            "$variable",
+            "is_empty"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "blah",
+          "condition": [
+            "$variable",
+            "is_empty"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "The variable is not empty",
+          "condition": [
+            "$variable",
+            "is_not_empty"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "conditional2",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "The variable is empty",
+          "condition": [
+            "$variable",
+            "is_empty"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "blah",
+          "condition": [
+            "$variable",
+            "is_empty"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "The variable is not empty",
+          "condition": [
+            "$variable",
+            "is_not_empty"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "blah",
+          "condition": [
+            "$variable",
+            "is_not_empty"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "conditional3",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "The variable is empty",
+          "condition": [
+            "$variable",
+            "is_empty"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "The variable is not empty",
+          "condition": [
+            "$variable",
+            "is_not_empty"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "blah",
+          "condition": [
+            "$variable",
+            "is_not_empty"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "conditional4",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "The variable is empty",
+          "condition": [
+            "$variable",
+            "is_empty"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "The variable is not empty",
+          "condition": [
+            "$variable",
+            "is_empty"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "blah",
+          "condition": [
+            "$variable",
+            "is_empty"
           ]
         }
       ]

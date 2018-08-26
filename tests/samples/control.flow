@@ -7,3 +7,11 @@ flow onboarding do
   if $input equal 'yes': change flow say_thank_you
   say "Bye"
 done
+
+flow with_conditional_blocs do
+  ask "Please type 'yes'" as input
+  if $input equal 'yes'
+    say 'You said "yes"'
+    change flow say_thank_you
+  end
+done
