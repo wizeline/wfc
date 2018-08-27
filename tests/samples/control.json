@@ -34,6 +34,34 @@
           "text": "Thank you!"
         }
       ]
+    },
+    {
+      "name": "with_conditional_blocs",
+      "actions": [
+        {
+          "text": "Please type 'yes'",
+          "action": "ask_for_input",
+          "var_name": "input"
+        },
+        {
+          "action": "send_text",
+          "text": "You said \"yes\"",
+          "condition": [
+            "$input",
+            "equal",
+            "yes"
+          ]
+        },
+        {
+          "action": "change_dialog",
+          "dialog": "say_thank_you",
+          "condition": [
+            "$input",
+            "equal",
+            "yes"
+          ]
+        }
+      ]
     }
   ],
   "qa": []

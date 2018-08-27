@@ -248,20 +248,44 @@ def control_statement_value(_, nodes):
 
 def if_statement_value(_, nodes):
     """
-    if CONDITION COLON ACTION
+    if CONDITION IF_BODY
     """
-    _, condition, _, action, else_action = nodes
+    _, condition, if_body = nodes
+    actions, else_actions = if_body
+    for action in actions:
+        action['condition'] = condition
 
-    action['condition'] = condition
-
-    if else_action is not None:
-        else_action['condition'] = not_condition(condition)
-        actions = [action, else_action]
-
-    else:
-        actions = [action]
+    if else_actions not in (None, 'end'):
+        negative = not_condition(condition)
+        for else_action in else_actions:
+            else_action['condition'] = negative
+        actions += else_actions
 
     return actions
+
+
+def if_body_value(_, nodes):
+    """
+    IF_BODY: COLON ACTION ELSE? | ACTION+ IF_CLOSURE
+    """
+    if nodes[0] == ':':
+        actions = [nodes[1]]
+        else_actions = nodes[2]
+    else:
+        actions = nodes[0]
+        else_actions = nodes[1]
+
+    return [actions, else_actions]
+
+
+def if_closure_value(_, nodes):
+    """
+    IF_CLOSURE: 'end' | ELSE
+    """
+    if nodes[0] == 'end':
+        return None
+    else:
+        return nodes[0]
 
 
 def not_condition(condition):
@@ -274,8 +298,19 @@ def not_condition(condition):
     return not_condition
 
 
+def else_body_value(_, nodes):
+    """
+    ELSE_BODY: COLON ACTION | ACTION+ END;
+    """
+
+    if nodes[0] == ':':
+        return [nodes[1]]
+    else:
+        return nodes[0]
+
+
 def else_value(_, nodes):
-    return nodes[2]
+    return nodes[1]
 
 
 def block_value(_, nodes):
@@ -424,6 +459,13 @@ def set_var_value(context, nodes):
     }
 
 
+def single_action_value(context, nodes):
+    """
+    SINGLE_ACTION: COLON ACTION;
+    """
+    return [nodes[1]]
+
+
 def scalar_button_value(_, nodes):
     """
     SCALAR_BUTTON: SCALAR_BUTTON_TYPE OPEN STRING SEPARATOR STRING CLOSE;
@@ -504,6 +546,7 @@ def build_actions() -> dict:
         'COMMAND': define_command_value,
         'COMMENT': pass_none,
         'DEFINITION': definition_value,
+        'ELSE_BODY': else_body_value,
         'ELSE': else_value,
         'ENTITY': prefixed_value,
         'EXAMPLE_FILE': example_file_value,
@@ -512,6 +555,7 @@ def build_actions() -> dict:
         'FALLBACK': fallback_value,
         'FLOW': flow_value,
         'IF': if_statement_value,
+        'IF_BODY': if_body_value,
         'INTEGER': integer_value,
         'INTENT': prefixed_value,
         'IS_NOT_EMPTY': is_not_empty_value,
@@ -527,6 +571,7 @@ def build_actions() -> dict:
         'REPLY': reply_value,
         'SEND_CAROUSEL': send_carousel_value,
         'SET_VAR': set_var_value,
+        'SINGLE_ACTION': single_action_value,
         'STRING': string_value,
         'SCALAR_BUTTON': scalar_button_value,
         'VARIABLE': prefixed_value,

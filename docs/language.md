@@ -326,16 +326,38 @@ Examples:
 if $identity equals "The Boss":
   say "Hey, you're the boss!"
 ```
+
 ```
-if $variable is empty: do
+if $variable is empty
   ask "You did not specify a value" as variable
   say "Thank you!"
-done
-```
-```
-when @role equals "boss": say "Hey, you're the boss!"
+end
 ```
 
+```
+if $variable is empty:
+  ask "You did not specify a value" as variable
+else:
+  say "The variable is {{$variable}}"
+```
+
+```
+if $variable is empty
+  say 'You did not enter the variable'
+  ask 'Please enter a value' as variable
+else:
+  say "The variable is {{$variable}}"
+```
+
+```
+if $variable is empty
+  say 'You did not enter the variable'
+  ask 'Please enter a value' as variable
+else:
+  say "The variable is {{$variable}}"
+  say 'Thank you!'
+end
+```
 
 ### Flow
 ![Flow Grammar][flow-grammar]

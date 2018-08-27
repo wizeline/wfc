@@ -1,6 +1,52 @@
-flow conditional do
+flow conditional0 do
   if $variable is empty:
     say 'The variable is empty'
   else:
     say 'The variable is not empty'
+
+  if $variable2 is not empty:
+    say 'anything'
+done
+
+flow conditional1 do
+
+  if $variable is empty
+    say 'The variable is empty'
+    say 'blah'
+  else:
+    say 'The variable is not empty'
+
+done
+
+flow conditional2 do
+
+  if $variable is empty
+    say 'The variable is empty'
+    say 'blah'
+  else
+    say 'The variable is not empty'
+    say 'blah'
+  end
+
+done
+
+flow conditional3 do
+
+  if $variable is empty:
+    say 'The variable is empty'
+  else
+    say 'The variable is not empty'
+    say 'blah'
+  end
+
+done
+
+flow conditional4 do
+
+  if $variable is empty
+    say 'The variable is empty'
+    say 'The variable is not empty'
+    say 'blah'
+  end
+
 done
