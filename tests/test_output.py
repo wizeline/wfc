@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import MagicMock
 
 from wfc.errors import (
     ComponentNotDefined,
@@ -13,7 +14,9 @@ class TestScript(unittest.TestCase):
         unittest.TestCase.setUp(self)
         self.component = {'any': 'object'}
         self.name = 'any-object'
-        self.script = Script()
+        self.context = MagicMock()
+        self.script = Script(self.context)
+        self.context.get_input_path.return_value = '/tmp/file.flow'
 
     def test_script_add_component_success(self):
         for component_type in ('button', 'carousel', 'entity', 'flow',

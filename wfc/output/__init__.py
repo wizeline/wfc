@@ -1,3 +1,4 @@
+import os
 from enum import Enum
 
 from wfc.errors import (
@@ -18,11 +19,10 @@ _FORMATS = {
 
 class OutputBuilder:
     def __init__(self, script, format_name):
-        try:
-            self._output_module = _FORMATS[format_name]
-        except KeyError:
+        if format_name not in _FORMATS:
             raise InvalidOutputFormat(format_name)
 
+        self._output_module = _FORMATS[format_name]
         self._output_module.set_script(script)
         self._actions = self._output_module.build_actions()
 
@@ -44,9 +44,13 @@ class ComponentType(Enum):
 
 
 class Script:
-    def __init__(self):
-        self._components = {}
+    def __init__(self, compiler_context):
         self._asked_components = []
+        self._components = {}
+        self.compiler_context = compiler_context
+
+    def _get_current_file(self):
+        return os.path.basename(self.compiler_context.get_input_path())
 
     def _raise_missing_component_error(self, component_type, name, context):
         if component_type == 'carousel':
@@ -56,9 +60,11 @@ class Script:
             raise UndefinedFlow(context, name)
 
     def ask_missing_component(self, component_type, name, context):
-        self._asked_components.append((component_type,
-                                       name,
-                                       ErrorContext(context)))
+        self._asked_components.append((
+            component_type,
+            name,
+            ErrorContext(self._get_current_file(), context)
+        ))
 
     def add_component(self, context, component_type, name, component):
         try:

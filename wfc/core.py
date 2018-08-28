@@ -43,7 +43,7 @@ class CompilerContext:
                 os.path.join(self._work_dir, flow) for flow in args.flows
             ]
 
-        self._script = output.Script()
+        self._script = output.Script(self)
         self._output = output.OutputBuilder(self._script, self._output_version)
         self._parser = create_parser(asset_path('grammar.txt'),
                                      self._output.get_actions())
@@ -123,8 +123,7 @@ def compile(context):
             context.next()
         except (CompilationError, WFCError) as error:
             if verbose:
-                input_file_name = os.path.relpath(context.get_input_path())
-                sys.stderr.write('{}:{}\n'.format(input_file_name, str(error)))
+                sys.stderr.write(f'{error}\n')
             return 1
 
     try:
@@ -132,7 +131,7 @@ def compile(context):
         out_file.write(context.build_script())
     except CompilationError as error:
         if verbose:
-            sys.stderr.write(str(error))
+            sys.stderr.write(f'{error}\n')
         return 2
 
     return 0
@@ -145,7 +144,7 @@ def compile_string(context, in_script):
     try:
         parser.parse(in_script)
     except ParglareParseError as ex:
-        raise ParseError(ex)
+        raise ParseError(ex, context.get_input_path())
 
 
 def compile_text(text):
