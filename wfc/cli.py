@@ -5,6 +5,7 @@ import sys
 from argparse import ArgumentParser
 
 from wfc import core
+from wfc.errors import InvalidOutputFormat
 
 
 def main():
@@ -17,9 +18,14 @@ def main():
     try:
         with core.CompilerContext(args) as context:
             rc = core.compile(context)
-    except (FileNotFoundError, IsADirectoryError, NotADirectoryError) as ex:
-        sys.stderr.write('{}\n'.format(ex))
-        rc = ex.errno
+    except (
+        FileNotFoundError,
+        IsADirectoryError,
+        NotADirectoryError,
+        InvalidOutputFormat
+    ) as ex:
+        sys.stderr.write(f'{ex}\n')
+        rc = getattr(ex, 'errno', 1)
 
     return rc
 

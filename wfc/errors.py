@@ -1,15 +1,24 @@
+import os
+import re
+
 import parglare
 
 
 class ErrorContext:
     """Extracts meaningful information from parglare context"""
-    def __init__(self, context=None):
+    def __init__(self, input_path, context=None):
+        self.input_path = os.path.basename(input_path)
         if context:
             position = parglare.pos_to_line_col(context.input_str,
                                                 context.start_position)
             self.line, self.column = position
         else:
             self.line, self.column = None, None
+
+
+class InvalidOutputFormat(Exception):
+    def __str__(self):
+        return f'Invalid script version: {self.args[0]}'
 
 
 class WFCError(Exception):
@@ -26,59 +35,63 @@ class ComponentNotSupprted(WFCError):
     pass
 
 
-class ComponentRedefinition(WFCError):
-    pass
-
-
 class FlowNotDefined(WFCError):
     pass
 
 
-class InvalidOutputFormat(WFCError):
-    pass
-
-
 class ParseError(WFCError):
-    MESSAGE = 'Syntax error. Please review the language reference'
-
-    def __init__(self, context):
+    def __init__(self, context, input_path):
         self.context = context
+        self.input_path = os.path.basename(input_path)
 
     def __str__(self):
-        return '{}:{}'.format(self.context.line, ParseError.MESSAGE)
+        message = self._extract_error_message()
+        return f'{self.input_path}:{self.context.line}:Syntax error. {message}'
+
+    def _extract_error_message(self):
+        raw_message = self.context.args[0]
+        message_pattern = r'Error at position .* => (.*) Expected.*'
+        match = re.search(message_pattern, raw_message)
+        return match.groups()[0]
 
 
 class CompilationError(Exception):
-    __format__ = '{}:{}'
-    __message__ = '{}'
+    def __init__(self, context, *args):
+        super().__init__(*args)
 
-    def __init__(self, context, arg):
-        self.message = self.__message__.format(arg)
-
-        if context is None:
-            self.context = None
-            super().__init__(self.message)
+        if isinstance(context, ErrorContext):
+            self.context = context
         else:
-            if isinstance(context, ErrorContext):
-                self.context = context
-            else:
-                self.context = ErrorContext(context)
+            self.context = ErrorContext(context)
 
-            super().__init__(self.__format__.format(self.context.line,
-                                                    self.message))
+    def __str__(self):
+        message = self._build_error_message()
+        return f'{self.context.input_path}:{self.context.line}:{message}'
+
+    def _build_error_message(self):
+        pass
 
 
 class DynamicCarouselMissingSource(CompilationError):
-    __message__ = 'Missing content source for dynamic carousel "{}"'
+    def _build_error_message(self):
+        return f'Missing content source for dynamic carousel {self.args[0]}'
 
 
 class StaticCarouselWithSource(CompilationError):
-    __message__ = 'Static carousel "{}" must not have content source'
+    def _build_error_message(self):
+        return f'Static carousel "{self.args[0]}" must not have content source'
 
 
 class UndefinedCarousel(CompilationError):
-    __message__ = 'Carousel "{}" is not defined'
+    def _build_error_message(self):
+        return f'Carousel "{self.args[0]}" is not defined'
 
 
 class UndefinedFlow(CompilationError):
-    __message__ = 'Flow "{}" is not defined'
+    def _build_error_message(self):
+        return f'Flow "{self.args[0]}" is not defined'
+
+
+class ComponentRedefinition(CompilationError):
+    def _build_error_message(self):
+        return f'Redefinition of {self.args[0]} "{self.args[1]}"'
