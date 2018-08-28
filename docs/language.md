@@ -367,7 +367,7 @@ Examples:
 flow say_hi do
   say "Hello"
   ask "What's your name" as user_name
-  say "Nice to meet you {$user_name}"
+  say "Nice to meet you {{$user_name}}"
 done
 ```
 ```
