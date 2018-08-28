@@ -1,3 +1,5 @@
+import re
+
 import parglare
 
 
@@ -39,13 +41,18 @@ class InvalidOutputFormat(WFCError):
 
 
 class ParseError(WFCError):
-    MESSAGE = 'Syntax error. Please review the language reference'
-
     def __init__(self, context):
         self.context = context
 
     def __str__(self):
-        return '{}:{}'.format(self.context.line, ParseError.MESSAGE)
+        message = self._extract_error_message()
+        return '{}:Syntax error. {}'.format(self.context.line, message)
+
+    def _extract_error_message(self):
+        raw_message = self.context.args[0]
+        message_pattern = r'Error at position .* => (.*) Expected.*'
+        match = re.search(message_pattern, raw_message)
+        return match.groups()[0]
 
 
 class CompilationError(Exception):
