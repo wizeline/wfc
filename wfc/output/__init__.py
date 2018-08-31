@@ -11,10 +11,11 @@ from wfc.errors import (
     UndefinedCarousel,
     UndefinedFlow
 )
-from wfc.output import v2
+from wfc.output import v20, v21
 
 _FORMATS = {
-    'v2': v2
+    'v2.0.0': v20,
+    'v2.1.0': v21
 }
 
 

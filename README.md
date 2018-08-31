@@ -73,8 +73,8 @@ There are some command line options available
 - `-q` or `--quiet` runs the compiler in quiet mode, so it won't display any
 	error message
 - `-v` or `--outversion` specifies the output version format, currently it
-	accepts only its default value: `v1` see [output formats][out-format] for
-	details.
+  supports script versions 2.0.0 and 2.1.0. see [output versions][out-ver] for
+  details.
 - `-w` or `--workdir` sets the working directory, its the fault value is the
 	current work directory
 - `-h` or `--help` displays help information
@@ -82,6 +82,9 @@ There are some command line options available
 Examples:
 ```sh
 $ wfc -o my-bot.json module1.flow module2.flow main.flow
+```
+```sh
+$ wfc -v 2.1.0 module1.flow module2.flow main.flow
 ```
 
 ### Python Library
@@ -125,3 +128,4 @@ For more details about Wizeline Flow, see the [language reference][lang-ref]
 [wfc-zip]: docs/img/wfc-zip-package.png
 [lang-ref]: docs/language.md
 [venv]: https://github.com/wizeline/bots-platform-docs/blob/master/tools/venv.md
+[out-ver]: docs/output.md
