@@ -6,7 +6,7 @@ import parglare
 
 class ErrorContext:
     """Extracts meaningful information from parglare context"""
-    def __init__(self, input_path, context=None):
+    def __init__(self, input_path='', context=None):
         self.input_path = os.path.basename(input_path)
         if context:
             position = parglare.pos_to_line_col(context.input_str,
@@ -14,6 +14,12 @@ class ErrorContext:
             self.line, self.column = position
         else:
             self.line, self.column = None, None
+
+    def has_input_path(self):
+        return len(self.input_path) > 0
+
+    def set_intpu_path(self, input_path):
+        self.input_path = input_path
 
 
 class InvalidOutputFormat(Exception):
@@ -25,18 +31,6 @@ class WFCError(Exception):
     def __init__(self, parse_context, *args):
         super().__init__(*args)
         self.context = ErrorContext(parse_context)
-
-
-class ComponentNotDefined(WFCError):
-    pass
-
-
-class ComponentNotSupprted(WFCError):
-    pass
-
-
-class FlowNotDefined(WFCError):
-    pass
 
 
 class ParseError(WFCError):
@@ -62,7 +56,7 @@ class CompilationError(Exception):
         if isinstance(context, ErrorContext):
             self.context = context
         else:
-            self.context = ErrorContext(context)
+            self.context = ErrorContext(context=context)
 
     def __str__(self):
         message = self._build_error_message()
@@ -70,6 +64,21 @@ class CompilationError(Exception):
 
     def _build_error_message(self):
         pass
+
+
+class ComponentNotDefined(CompilationError):
+    def _build_error_message(self):
+        return f'Component {self.args[0]} is not defined'
+
+
+class ComponentNotSupprted(CompilationError):
+    def _build_error_message(self):
+        return f'Component {self.args[0]} is not supported'
+
+
+class FlowNotDefined(CompilationError):
+    def _build_error_message(self):
+        return f'Flow {self.args[0]} is not defined'
 
 
 class DynamicCarouselMissingSource(CompilationError):
