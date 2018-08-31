@@ -1,7 +1,33 @@
-flow onboarding do
+flow scenario1 do
   ask "Some question" as response with:
     reply "Of course" as @yes,
     reply "No way" as @no
     fallback "Did not get that"
+  say "response is: {{$response}}"
+done
+
+flow scenario2 do
+  ask "Some question" as response with:
+    reply "Of course" as @yes,
+    reply "No way" as @no,
+    reply @other_entity
+    fallback "Did not get that"
+  say "response is: {{$response}}"
+done
+
+flow scenario3 do
+  ask "Some question" as response with:
+    reply @yes,
+    reply @no,
+    reply @other_entity
+    fallback "Did not get that"
+  say "response is: {{$response}}"
+done
+
+flow scenario4 do
+  ask "Some question" as response with:
+    reply 'Answer1',
+    reply 'Answer2',
+    reply 'Answer3'
   say "response is: {{$response}}"
 done
