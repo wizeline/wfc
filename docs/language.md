@@ -212,7 +212,7 @@ say 'Hello, I am a 'sample' bot, '
 
 
 #### Bot Asks
-!['ask' action grammar][ask-grammar]
+!['ask' action grammar][ask-grammar] <!-- TODO: update the grammar chart -->
 
 Examples
 ```
@@ -227,6 +227,12 @@ ask "Do you want to continue?" as variable with:
 ask "Would your like to recive offers? as variable with:
   reply "Sure!" as @yes,
   reply "Maybe later, thanks!" as @no
+  fallback "I will ask you later"
+```
+```
+ask "Would your like to recive offers? as variable with:
+  reply @yes,
+  reply @no
   fallback "I will ask you later"
 ```
 
