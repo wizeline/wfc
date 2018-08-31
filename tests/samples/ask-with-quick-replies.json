@@ -4,7 +4,7 @@
   "entities": [],
   "dialogs": [
     {
-      "name": "onboarding",
+      "name": "scenario1",
       "actions": [
         {
           "text": "Some question",
@@ -21,6 +21,74 @@
               "no"
             ]
           }
+        },
+        {
+          "action": "send_text",
+          "text": "response is: {{$response}}"
+        }
+      ]
+    },
+    {
+      "name": "scenario2",
+      "actions": [
+        {
+          "text": "Some question",
+          "action": "ask_for_input",
+          "var_name": "response",
+          "quick_replies": [
+            "Of course",
+            "No way"
+          ],
+          "expect": {
+            "fallback": "Did not get that",
+            "entities": [
+              "yes",
+              "no",
+              "other_entity"
+            ]
+          }
+        },
+        {
+          "action": "send_text",
+          "text": "response is: {{$response}}"
+        }
+      ]
+    },
+    {
+      "name": "scenario3",
+      "actions": [
+        {
+          "text": "Some question",
+          "action": "ask_for_input",
+          "var_name": "response",
+          "expect": {
+            "fallback": "Did not get that",
+            "entities": [
+              "yes",
+              "no",
+              "other_entity"
+            ]
+          }
+        },
+        {
+          "action": "send_text",
+          "text": "response is: {{$response}}"
+        }
+      ]
+    },
+    {
+      "name": "scenario4",
+      "actions": [
+        {
+          "text": "Some question",
+          "action": "ask_for_input",
+          "var_name": "response",
+          "quick_replies": [
+            "Answer1",
+            "Answer2",
+            "Answer3"
+          ],
+          "can_switch_context": false
         },
         {
           "action": "send_text",

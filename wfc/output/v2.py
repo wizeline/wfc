@@ -127,9 +127,21 @@ def bot_says_value(_, nodes):
 
 def reply_value(_, nodes):
     """
-    reply STRING SET_ENTITY?
+    reply REPLY_BODY
     """
-    return nodes[1], nodes[2]
+    return nodes[1]
+
+
+def reply_body_value(_, nodes):
+    """
+    STRING SET_ENTITY? | ENTITY
+    """
+    if len(nodes) == 1:
+        return None, nodes[0]
+    elif nodes[1] is not None:
+        return nodes[0], nodes[1][1]
+    else:
+        return nodes[0], None
 
 
 def quick_replies_value(_, nodes):
@@ -143,9 +155,10 @@ def quick_replies_value(_, nodes):
     quick_replies = []
 
     for text, entity in replies:
-        quick_replies.append(text)
+        if text is not None:
+            quick_replies.append(text)
         if entity is not None:
-            entities.append(entity[1][1:])  # <'as' @entity> becomes <entity>
+            entities.append(entity[1:])  # <@entity> becomes <entity>
 
     if entities:
         expect['fallback'] = fallback
@@ -172,7 +185,8 @@ def bot_asks_value(_, nodes):
     if replies:
         quick_replies, expect = replies
 
-        value['quick_replies'] = quick_replies
+        if quick_replies:
+            value['quick_replies'] = quick_replies
 
         if expect:
             value['expect'] = expect
@@ -569,6 +583,7 @@ def build_actions() -> dict:
         'POSTBACK_BUTTON': postback_button_value,
         'QUICK_REPLIES': quick_replies_value,
         'REPLY': reply_value,
+        'REPLY_BODY': reply_body_value,
         'SEND_CAROUSEL': send_carousel_value,
         'SET_VAR': set_var_value,
         'SINGLE_ACTION': single_action_value,
