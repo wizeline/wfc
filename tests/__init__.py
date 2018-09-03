@@ -17,9 +17,11 @@ SAMPLES_HOME = os.path.join(TESTS_HOME, 'samples')
 class CompilerTestCase(unittest.TestCase, mixins.TmpIOHandler):
     def setUp(self):
         unittest.TestCase.setUp(self)
-        self.maxDiff = None
-        self.arg_parser = make_argument_parser()
+
         self._sys_stderr = sys.stderr
+        self.arg_parser = make_argument_parser()
+        self.maxDiff = None
+
         sys.stderr = self.open_tmpout()
 
     def tearDown(self):
