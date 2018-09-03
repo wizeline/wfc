@@ -5,6 +5,7 @@ import sys
 from argparse import ArgumentParser
 
 from wfc import core
+from wfc.commons import OutputVersion
 from wfc.errors import InvalidOutputFormat
 
 
@@ -40,7 +41,7 @@ def make_argument_parser():
     parser.add_argument('-o', '--output', default='', help='output file')
     parser.add_argument('-q', '--quiet', default=False, action='store_true',
                         help='run compiler in quiet mode')
-    parser.add_argument('-v', '--outversion', default='v2',
+    parser.add_argument('-v', '--outversion', default=OutputVersion.V20.value,
                         help='output format')
     parser.add_argument('-w', '--workdir', default=os.curdir,
                         help='work directory')

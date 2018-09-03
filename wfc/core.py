@@ -5,7 +5,7 @@ import os
 from parglare.exceptions import ParseError as ParglareParseError
 
 from wfc import output
-from wfc.commons import asset_path
+from wfc.commons import asset_path, OutputVersion
 from wfc.errors import CompilationError, ParseError, WFCError
 from wfc.parser import create_parser
 from wfc.precompiler import pre_compile
@@ -19,7 +19,7 @@ class CompilerContext:
         if args is None:
             self._flow_paths = [None]
             self._output_path = None
-            self._output_version = 'v2'
+            self._output_version = OutputVersion.V20
             self._verbose = True
             self._work_dir = os.path.abspath(os.curdir)
         else:
@@ -37,7 +37,7 @@ class CompilerContext:
                 )
 
             self._output_path = args.output
-            self._output_version = args.outversion
+            self._output_version = OutputVersion(args.outversion)
             self._verbose = not args.quiet
             self._flow_paths = [
                 os.path.join(self._work_dir, flow) for flow in args.flows
@@ -93,7 +93,7 @@ class CompilerContext:
         return self._output_file or sys.stdout
 
     def get_output_version(self):
-        return self._output_version
+        return self._output_version.value
 
     def get_parser(self):
         return self._parser
