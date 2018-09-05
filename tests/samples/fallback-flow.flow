@@ -1,0 +1,7 @@
+flow greeting do
+  say "Hello"
+done
+
+fallback flow did_not_get_that do
+  say "What did you mean?"
+done
