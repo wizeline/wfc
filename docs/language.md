@@ -382,6 +382,13 @@ flow say_hi given @greeting do
   if $user_response equals 'show menu' change dialog menu
 done
 ```
+```
+fallback flow say_hi do
+  say "Sorry, what did you mean?"
+  say "These are the things I can help you with:"
+  show stuff
+done
+```
 
 ### Including code
 
