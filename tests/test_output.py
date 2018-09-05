@@ -19,13 +19,23 @@ class TestScript(unittest.TestCase):
         self.context.get_input_path.return_value = '/tmp/file.flow'
 
     def test_script_add_component_success(self):
-        for component_type in ('button', 'carousel', 'entity', 'flow',
-                               'integration', 'intent'):
-            self.script.add_component(None, component_type,
-                                      self.name, self.name)
-            component = self.script.get_component(None, component_type,
-                                                  self.name)
-            self.assertEqual(self.name, component)
+        components = {
+            'button': {},
+            'carousel': {},
+            'entity': {},
+            'flow': {'is_fallback': False},
+            'integration': {},
+            'intent': {}
+        }
+
+        for component_type, component in components.items():
+            self.script.add_component(None,
+                                      component_type,
+                                      self.name,
+                                      component)
+            stored_component = self.script.get_component(None, component_type,
+                                                         self.name)
+            self.assertEqual(stored_component, component)
 
     def test_script_add_unsupported_component(self):
         with self.assertRaises(ComponentNotSupprted):
@@ -40,6 +50,14 @@ class TestScript(unittest.TestCase):
         with self.assertRaises(ComponentNotDefined):
             self.script.get_component(None, 'button', 'button')
 
-        self.script.add_component(None, 'flow', 'onboarding', {})
+        self.script.add_component(
+            None,
+            'flow',
+            'onboarding',
+            {
+                'is_fallback': True,
+                'name': 'onboarding'
+            }
+        )
         with self.assertRaises(ComponentNotDefined):
             self.script.get_component(None, 'flow', 'not_a_flow')
