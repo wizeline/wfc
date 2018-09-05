@@ -1,0 +1,7 @@
+flows:
+        - name: greet the user
+          actions:
+                  - send_text:
+                          text: hello user
+                  - send_text:
+                          text: I am a bot
