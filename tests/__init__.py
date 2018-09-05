@@ -34,16 +34,16 @@ class CompilerTestCase(unittest.TestCase, mixins.TmpIOHandler):
         context.get_input_file.return_value = tstin
         context.get_output_file.return_value = tstout
 
-    def _compile_to_json(self, test_target):
-        script = self._compile_sample('{}.flow'.format(test_target))
+    def _compile(self, test_target):
+        script = self._compile_sample(f'{test_target}.flow')
         self._prune_action_ids(script)
 
-        expected_script = self._load_json_script('{}.json'.format(test_target))
+        expected_script = self._load_json_script(f'{test_target}.json')
         self.assertDictEqual(expected_script, script)
 
-    def _compile_to_json_with_failure(self, test_target):
+    def _compile_with_failure(self, test_target):
         with self.assertRaises(AssertionError):
-            self._compile_sample('{}.flow'.format(test_target))
+            self._compile_sample(f'{test_target}.flow')
 
     def _compile_sample(self, sample_name):
         with self._load_sample(sample_name) as sample_script, \
@@ -54,7 +54,7 @@ class CompilerTestCase(unittest.TestCase, mixins.TmpIOHandler):
             tmp_out.close()
 
         output = self.open_tmpin().read()
-        assert rc == 0, 'Compilation failed\n{}'.format(output)
+        assert rc == 0, f'Compilation failed\n{output}'
 
         with self.open_tmpin() as compiled_sample:
             return json.load(compiled_sample)

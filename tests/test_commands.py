@@ -4,13 +4,13 @@ from tests import CompilerTestCase
 
 class TestCommands(CompilerTestCase):
     def test_commands_success(self):
-        self._compile_to_json('commands')
+        self._compile('commands')
 
     def test_commands_with_bad_syntax(self):
-        self._compile_to_json_with_failure('commands-bad-syntax')
+        self._compile_with_failure('commands-bad-syntax')
 
     def test_commands_with_undefined_flow(self):
-        self._compile_to_json_with_failure('commands-with-undefined-flow')
+        self._compile_with_failure('commands-with-undefined-flow')
 
     def test_commands_without_fallback(self):
-        self._compile_to_json_with_failure('commands-redefinition')
+        self._compile_with_failure('commands-redefinition')

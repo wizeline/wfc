@@ -1,11 +1,7 @@
-import json
-
 from uuid import uuid4
 from enum import Enum
 
-import jsonschema
-
-from jsonschema.exceptions import ValidationError
+import ruamel.yaml
 from parglare.actions import pass_none
 
 from wfc.commons import asset_path
@@ -627,7 +623,7 @@ def get_script():
     _script.perform_sanity_checks()
     try:
         script = {
-            'version': "2.0.0",
+            'version': "2.1.0",
             'intentions': build_intentions(),
             'entities': [],
             'dialogs': build_flows(),
@@ -640,7 +636,7 @@ def get_script():
         jsonschema.validate(script, load_output_schema())
         return json.dumps(script, indent=2)
     except ValidationError as ex:
-        with open('/tmp/invalid.json', 'w') as invalid_script:
+        with open('/tmp/invalid.yaml', 'w') as invalid_script:
             invalid_script.write(json.dumps(script, indent=2))
 
         raise ValueError('Generated script does not match with schema',
