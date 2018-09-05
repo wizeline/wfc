@@ -346,10 +346,10 @@ def block_value(_, nodes):
 
 def flow_value(context, nodes):
     """
-    flow IDENTIFIER FLOW_INTENT? BLOCK
+    fallback? flow IDENTIFIER FLOW_INTENT? BLOCK
     """
 
-    _, name, flow_intention, block = nodes
+    fallback, _, name, flow_intention, block = nodes
     value = {
         'name': name,
         'actions': block
@@ -363,6 +363,7 @@ def flow_value(context, nodes):
         except ComponentNotDefined:
             pass
 
+    value['is_fallback'] = True if fallback else False
     _script.add_component(context, 'flow', name, value)
     return value
 
@@ -651,6 +652,10 @@ def get_script():
         commands = build_commands()
         if commands:
             script['commands'] = commands
+
+        fallback_flow = _script.get_fallback_flow()
+        if fallback_flow:
+            script['nlp_fallback'] = fallback_flow
 
         jsonschema.validate(script, load_output_schema())
         return json.dumps(script, indent=2)

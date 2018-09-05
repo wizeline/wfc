@@ -6,6 +6,7 @@ from wfc.errors import (
     ComponentNotSupprted,
     ComponentRedefinition,
     ErrorContext,
+    FallbackFlowRedefinition,
     InvalidOutputFormat,
     UndefinedCarousel,
     UndefinedFlow
@@ -47,6 +48,7 @@ class Script:
     def __init__(self, compiler_context):
         self._asked_components = []
         self._components = {}
+        self._fallback_flow = ''
         self.compiler_context = compiler_context
 
     def _get_current_file(self):
@@ -69,6 +71,19 @@ class Script:
     def add_component(self, context, component_type, name, component):
         try:
             component_type = ComponentType(component_type).value
+
+            if component_type == 'flow':
+                is_fallback = component.pop('is_fallback')
+                if is_fallback:
+                    if self._fallback_flow == '':
+                        self._fallback_flow = component['name']
+                    else:
+                        raise FallbackFlowRedefinition(
+                            context,
+                            self._fallback_flow,
+                            component['name']
+                        )
+
             components = self._components.get(component_type, {})
 
             if name in components:
@@ -96,6 +111,9 @@ class Script:
             return {}
         except ValueError:
             raise ComponentNotSupprted(None, component_type)
+
+    def get_fallback_flow(self):
+        return self._fallback_flow
 
     def has_component(self, component_type, name):
         try:

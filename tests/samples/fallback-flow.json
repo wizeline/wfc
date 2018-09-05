@@ -1,0 +1,27 @@
+{
+  "version": "2.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "greeting",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "Hello"
+        }
+      ]
+    },
+    {
+      "name": "did_not_get_that",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "What did you mean?"
+        }
+      ]
+    }
+  ],
+  "qa": [],
+  "nlp_fallback": "did_not_get_that"
+}

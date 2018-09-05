@@ -63,7 +63,7 @@ class CompilationError(Exception):
         return f'{self.context.input_path}:{self.context.line}:{message}'
 
     def _build_error_message(self):
-        pass
+        return super().__str__()
 
 
 class ComponentNotDefined(CompilationError):
@@ -74,6 +74,11 @@ class ComponentNotDefined(CompilationError):
 class ComponentNotSupprted(CompilationError):
     def _build_error_message(self):
         return f'Component {self.args[0]} is not supported'
+
+
+class FallbackFlowRedefinition(CompilationError):
+    def _build_error_message(self):
+        return f'Fallback flow must be uniq: [{self.args[0]}] [{self.args[1]}]'
 
 
 class FlowNotDefined(CompilationError):
