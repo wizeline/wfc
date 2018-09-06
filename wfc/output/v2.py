@@ -175,7 +175,7 @@ def bot_asks_value(_, nodes):
     """
     ask STRING+ as IDENTIFIER QUICK_REPLIES?
     """
-    _, questions, _, var_name, replies = nodes
+    _, questions, _, var_name, context_switch, replies = nodes
     value = {
         'text': ''.join(questions),
         'action': 'ask_for_input',
@@ -193,6 +193,9 @@ def bot_asks_value(_, nodes):
         else:
             # TODO: REVIEW THE RIGHT USE OF THIS
             value['can_switch_context'] = False
+
+    if context_switch is not None:
+        value['can_switch_context'] = False
 
     return value
 
