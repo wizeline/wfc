@@ -1,4 +1,6 @@
 flow onboarding do
   ask "Some question" as response
   say "The response is: {{$response}}"
+
+  ask 'Some other question' as response keeping context
 done
