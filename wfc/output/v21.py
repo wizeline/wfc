@@ -1,7 +1,7 @@
-from uuid import uuid4
 from enum import Enum
 
-import ruamel.yaml
+import yaml
+
 from parglare.actions import pass_none
 
 from wfc.commons import asset_path
@@ -68,8 +68,11 @@ def definition_value(context, nodes):
 
 
 def action_value(_, nodes):
-    action = nodes[0]
-    action['id'] = str(uuid4())
+    action_body = nodes[0]
+    action_name = action_body.pop('action')
+    action = {
+        action_name: action_body
+    }
     return action
 
 
@@ -158,7 +161,7 @@ def bot_asks_value(_, nodes):
     """
     ask STRING+ as IDENTIFIER QUICK_REPLIES?
     """
-    _, questions, _, var_name, replies = nodes
+    _, questions, _, var_name, context_switch, replies = nodes
     value = {
         'text': ''.join(questions),
         'action': 'ask_for_input',
@@ -168,13 +171,17 @@ def bot_asks_value(_, nodes):
     if replies:
         quick_replies, expect = replies
 
-        value['quick_replies'] = quick_replies
+        if quick_replies:
+            value['quick_replies'] = quick_replies
 
         if expect:
             value['expect'] = expect
         else:
             # TODO: REVIEW THE RIGHT USE OF THIS
             value['can_switch_context'] = False
+
+    if context_switch is not None:
+        value['can_switch_context'] = False
 
     return value
 
@@ -328,10 +335,10 @@ def block_value(_, nodes):
 
 def flow_value(context, nodes):
     """
-    flow IDENTIFIER FLOW_INTENT? BLOCK
+    fallback? flow IDENTIFIER FLOW_INTENT? BLOCK
     """
 
-    _, name, flow_intention, block = nodes
+    fallback, _, name, flow_intention, block = nodes
     value = {
         'name': name,
         'actions': block
@@ -345,6 +352,7 @@ def flow_value(context, nodes):
         except ComponentNotDefined:
             pass
 
+    value['is_fallback'] = True if fallback else False
     _script.add_component(context, 'flow', name, value)
     return value
 
@@ -621,26 +629,11 @@ def load_output_schema() -> dict:
 
 def get_script():
     _script.perform_sanity_checks()
-    try:
-        script = {
-            'version': "2.1.0",
-            'intentions': build_intentions(),
-            'entities': [],
-            'dialogs': build_flows(),
-            'qa': []
-        }
-        commands = build_commands()
-        if commands:
-            script['commands'] = commands
-
-        jsonschema.validate(script, load_output_schema())
-        return json.dumps(script, indent=2)
-    except ValidationError as ex:
-        with open('/tmp/invalid.yaml', 'w') as invalid_script:
-            invalid_script.write(json.dumps(script, indent=2))
-
-        raise ValueError('Generated script does not match with schema',
-                         script)
+    script = {
+        'version': "2.1.0",
+        'flows': build_flows()
+    }
+    return yaml.dump(script, default_flow_style=False)
 
 
 def set_script(script):
