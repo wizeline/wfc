@@ -4,7 +4,7 @@ import sys
 
 from argparse import ArgumentParser
 
-from wfc import core
+from wfc import core, get_version
 from wfc.errors import InvalidOutputFormat
 
 
@@ -14,6 +14,10 @@ def main():
     else:
         argument_parser = make_argument_parser()
         args = argument_parser.parse_args()
+
+    if args.version:
+        print(f'wfc {get_version()}')
+        return 0
 
     try:
         with core.CompilerContext(args) as context:
@@ -35,6 +39,7 @@ def make_argument_parser():
         prog='wfc',
         description='Compiles .flow files into a chatbotscript'
     )
+    parser.add_argument('-V', '--version', default=False, action='store_true')
     parser.add_argument('flows', metavar='flow', type=str, nargs='*',
                         help='input .flow files')
     parser.add_argument('-o', '--output', default='', help='output file')

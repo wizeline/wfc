@@ -19,7 +19,7 @@ Language to simplify chatbot script development
 2. Install the package with pip
 
 ```sh
-$ pip install /path/to/wfc-X.Y.zip
+$ pip3 install /path/to/wfc-X.Y.zip
 ```
 
 ## Usage
@@ -73,11 +73,12 @@ There are some command line options available
 - `-q` or `--quiet` runs the compiler in quiet mode, so it won't display any
 	error message
 - `-v` or `--outversion` specifies the output version format, currently it
-	accepts only its default value: `v1` see [output formats][out-format] for
+	accepts only its default value: `v2` see [output formats][out-format] for
 	details.
 - `-w` or `--workdir` sets the working directory, its the fault value is the
 	current work directory
 - `-h` or `--help` displays help information
+- `-V` or `--version` displays the version number
 
 Examples:
 ```sh

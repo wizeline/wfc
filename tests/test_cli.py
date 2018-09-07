@@ -40,7 +40,7 @@ class TestMain(CompilerTestCase):
 
 class TestArgumentParser(CompilerTestCase):
     def test_parse_with_all_arguments(self):
-        arguments = self.arg_parser.parse_args(['-q', '-o', 'script.json',
+        arguments = self.arg_parser.parse_args(['-q', '-V', '-o', 'script.json',
                                                 '-v', 'v1',
                                                 '-w', SAMPLES_HOME,
                                                 'main.flow', 'module.flow'])
@@ -50,6 +50,7 @@ class TestArgumentParser(CompilerTestCase):
         self.assertEquals(SAMPLES_HOME, arguments.workdir)
         self.assertListEqual(['main.flow', 'module.flow'], arguments.flows)
         self.assertTrue(arguments.quiet)
+        self.assertTrue(arguments.version)
 
     def test_parse_without_output_file(self):
         arguments = self.arg_parser.parse_args(['-v', 'v1',

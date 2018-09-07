@@ -13,8 +13,7 @@
         },
         {
           "action": "send_text",
-          "text": "The response is: {{$response}}",
-          "id": "f707847b-db27-4701-9a41-63c61397c207"
+          "text": "The response is: {{$response}}"
         },
         {
           "text": "Some other question",
