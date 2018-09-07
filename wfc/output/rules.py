@@ -16,7 +16,6 @@ from wfc.errors import (
     StaticCarouselWithSource,
     UndefinedCarousel
 )
-from wfc.output import rules
 
 _script = None
 
@@ -545,59 +544,6 @@ def button_definition_value(_, nodes):
     return nodes[1]
 
 
-def build_actions() -> dict:
-    return {
-        'ACTION': action_value,
-        'ATTRIBUTE': attribute_value,
-        'BLOCK': block_value,
-        'BOT_ASKS': bot_asks_value,
-        'BOT_SAYS': bot_says_value,
-        'BOT_WAITS': bot_waits_value,
-        'BUTTON': button_value,
-        'BUTTON_DEFINITION': button_definition_value,
-        'CALL_FUNCTION': call_function_value,
-        'CARD': card_value,
-        'CARD_BODY': card_body_value,
-        'CAROUSEL': define_carousel_value,
-        'CAROUSEL_BODY': carousel_body_value,
-        'CAROUSEL_CONTENT_SOURCE': carousel_content_source_value,
-        'CHANGE_FLOW': change_flow_value,
-        'COMMAND': define_command_value,
-        'COMMENT': pass_none,
-        'DEFINITION': definition_value,
-        'ELSE_BODY': else_body_value,
-        'ELSE': else_value,
-        'ENTITY': prefixed_value,
-        'EXAMPLE_FILE': example_file_value,
-        'EXAMPLE_LIST': example_list_value,
-        'EQUALS': equals_value,
-        'FALLBACK': fallback_value,
-        'FLOW': flow_value,
-        'IF': if_statement_value,
-        'IF_BODY': if_body_value,
-        'INTEGER': integer_value,
-        'INTENT': prefixed_value,
-        'IS_NOT_EMPTY': is_not_empty_value,
-        'HAS_ENTITY': has_entity_value,
-        'MEMBER': prefixed_value,
-        'OBJECT': object_value,
-        'OPEN_FLOW': open_flow_value,
-        'OPERATOR': operator_value,
-        'PARAMETERS': parameters_value,
-        'POSTBACK_ATTRIBUTE': postback_attribute_value,
-        'POSTBACK_BUTTON': postback_button_value,
-        'QUICK_REPLIES': quick_replies_value,
-        'REPLY': reply_value,
-        'REPLY_BODY': reply_body_value,
-        'SEND_CAROUSEL': send_carousel_value,
-        'SET_VAR': set_var_value,
-        'SINGLE_ACTION': single_action_value,
-        'STRING': string_value,
-        'SCALAR_BUTTON': scalar_button_value,
-        'VARIABLE': prefixed_value,
-    }
-
-
 def build_commands() -> list:
     commands = []
 
@@ -628,51 +574,9 @@ def build_intentions() -> list:
 
 
 def build_flows() -> list:
-    try:
-        flows = _script.get_components_by_type('flow')
-        onboarding = flows.pop('onboarding')
-        flows = [onboarding] + list(flows.values())
-    except KeyError:
-        flows = list(flows.values())
-
-    return flows
-
-
-def load_output_schema() -> dict:
-    with open(asset_path('schema.json')) as schema:
-        return json.loads(schema.read())
-
-
-def get_script():
-    _script.perform_sanity_checks()
-    try:
-        script = {
-            'version': "2.0.0",
-            'intentions': build_intentions(),
-            'entities': [],
-            'dialogs': build_flows(),
-            'qa': []
-        }
-        commands = build_commands()
-        if commands:
-            script['commands'] = commands
-
-        fallback_flow = _script.get_fallback_flow()
-        if fallback_flow:
-            script['nlp_fallback'] = fallback_flow
-
-        jsonschema.validate(script, load_output_schema())
-        return json.dumps(script, indent=2)
-    except ValidationError as ex:
-        with open('/tmp/invalid.json', 'w') as invalid_script:
-            invalid_script.write(json.dumps(script, indent=2))
-
-        raise ValueError('Generated script does not match with schema',
-                         script)
+    return list(flows.values())
 
 
 def set_script(script):
     global _script
-
     _script = script
-    rules.set_script(script)

@@ -98,6 +98,9 @@ class CompilerContext:
     def get_parser(self):
         return self._parser
 
+    def get_version(self):
+        return self._output_version
+
     def get_work_directory(self):
         return self._work_dir
 
@@ -109,6 +112,11 @@ class CompilerContext:
 
     def set_verbose(self):
         self._verbose = True
+
+    def set_version(self, version):
+        self._output_version = OutputVersion(version)
+        self._script = output.Script(self)
+        self._output = output.OutputBuilder(self._script, self._output_version)
 
 
 def compile(context):

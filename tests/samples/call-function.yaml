@@ -1,0 +1,8 @@
+flows:
+- actions:
+  - call_integration:
+      function: somefunction
+      function_params: []
+      integration: some_integration
+  name: onboarding
+version: 2.1.0
