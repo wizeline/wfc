@@ -13,7 +13,14 @@
         },
         {
           "action": "send_text",
-          "text": "The response is: {{$response}}"
+          "text": "The response is: {{$response}}",
+          "id": "f707847b-db27-4701-9a41-63c61397c207"
+        },
+        {
+          "text": "Some other question",
+          "action": "ask_for_input",
+          "var_name": "response",
+          "can_switch_context": false
         }
       ]
     }

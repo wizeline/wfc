@@ -219,6 +219,9 @@ Examples
 ask "What can I do you for?" as variable
 ```
 ```
+ask "What can I do you for?" as variable keeping context
+```
+```
 ask "Do you want to continue?" as variable with:
     reply "Yes",
     reply "No"
