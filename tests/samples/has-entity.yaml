@@ -1,0 +1,13 @@
+flows:
+- actions:
+  - ask_for_input:
+      text: question?
+      var_name: bar
+  - condition:
+    - $bar
+    - has_entity
+    - foo
+    send_text:
+      text: '{{$bar}} has entity foo'
+  name: onboarding
+version: 2.1.0

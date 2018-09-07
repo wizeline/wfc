@@ -16,7 +16,7 @@ Language to simplify chatbot script development
 1. Go to [WFC releases](https://github.com/wizeline/wfc/releases) and download
    the most recent release
 
-2. Install the package with pip
+2. Install the package with pip3, since this tool is writen using Python3
 
 ```sh
 $ pip3 install /path/to/wfc-X.Y.zip
@@ -66,6 +66,25 @@ And you'll get a new file `hello.json` with this contents:
 }
 ```
 
+Or:
+
+```sh
+$ wfc -v 2.1.0 < hello.flow > hello.yaml
+```
+
+And you'll get a new file `hello.yaml` with this contents:
+
+```yaml
+flows:
+- actions:
+  - send_text:
+      text: Hello World!
+  - send_text:
+      text: I an a simple bot
+  name: say_hi
+version: 2.1.0
+```
+
 There are some command line options available
 
 - `-o` or `--output` specifies an output path to use rather than the standard
@@ -73,8 +92,8 @@ There are some command line options available
 - `-q` or `--quiet` runs the compiler in quiet mode, so it won't display any
 	error message
 - `-v` or `--outversion` specifies the output version format, currently it
-	accepts only its default value: `v2` see [output formats][out-format] for
-	details.
+  supports script versions 2.0.0 and 2.1.0. see [output versions][out-ver] for
+  details.
 - `-w` or `--workdir` sets the working directory, its the fault value is the
 	current work directory
 - `-h` or `--help` displays help information
@@ -83,6 +102,9 @@ There are some command line options available
 Examples:
 ```sh
 $ wfc -o my-bot.json module1.flow module2.flow main.flow
+```
+```sh
+$ wfc -v 2.1.0 -o my-bot.yaml module1.flow module2.flow main.flow
 ```
 
 ### Python Library
@@ -126,3 +148,4 @@ For more details about Wizeline Flow, see the [language reference][lang-ref]
 [wfc-zip]: docs/img/wfc-zip-package.png
 [lang-ref]: docs/language.md
 [venv]: https://github.com/wizeline/bots-platform-docs/blob/master/tools/venv.md
+[out-ver]: docs/output.md

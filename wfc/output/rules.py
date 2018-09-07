@@ -1,14 +1,8 @@
-import json
-
 from uuid import uuid4
 from enum import Enum
 
-import jsonschema
-
-from jsonschema.exceptions import ValidationError
 from parglare.actions import pass_none
 
-from wfc.commons import asset_path
 from wfc.errors import (
     CompilationError,
     ComponentNotDefined,
@@ -624,50 +618,6 @@ def build_intentions() -> list:
             )
         intents.append(intent)
     return intents
-
-
-def build_flows() -> list:
-    try:
-        flows = _script.get_components_by_type('flow')
-        onboarding = flows.pop('onboarding')
-        flows = [onboarding] + list(flows.values())
-    except KeyError:
-        flows = list(flows.values())
-
-    return flows
-
-
-def load_output_schema() -> dict:
-    with open(asset_path('schema.json')) as schema:
-        return json.loads(schema.read())
-
-
-def get_script():
-    _script.perform_sanity_checks()
-    try:
-        script = {
-            'version': "2.0.0",
-            'intentions': build_intentions(),
-            'entities': [],
-            'dialogs': build_flows(),
-            'qa': []
-        }
-        commands = build_commands()
-        if commands:
-            script['commands'] = commands
-
-        fallback_flow = _script.get_fallback_flow()
-        if fallback_flow:
-            script['nlp_fallback'] = fallback_flow
-
-        jsonschema.validate(script, load_output_schema())
-        return json.dumps(script, indent=2)
-    except ValidationError as ex:
-        with open('/tmp/invalid.json', 'w') as invalid_script:
-            invalid_script.write(json.dumps(script, indent=2))
-
-        raise ValueError('Generated script does not match with schema',
-                         script)
 
 
 def set_script(script):

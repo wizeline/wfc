@@ -3,6 +3,8 @@ import os
 import sys
 import unittest
 
+import yaml
+
 from wfc import core
 from wfc.cli import make_argument_parser
 
@@ -34,30 +36,38 @@ class CompilerTestCase(unittest.TestCase, mixins.TmpIOHandler):
         context.get_input_file.return_value = tstin
         context.get_output_file.return_value = tstout
 
-    def _compile_to_json(self, test_target):
-        script = self._compile_sample('{}.flow'.format(test_target))
+    def _compile(self, test_target):
+        script = self._compile_sample(test_target, '2.0.0')
         self._prune_action_ids(script)
 
-        expected_script = self._load_json_script('{}.json'.format(test_target))
+        expected_script = self._load_json_script(f'{test_target}.json')
         self.assertDictEqual(expected_script, script)
 
-    def _compile_to_json_with_failure(self, test_target):
+        script = self._compile_sample(test_target, '2.1.0')
+        expected_script = self._load_yaml_script(f'{test_target}.yaml')
+        self.assertDictEqual(expected_script, script)
+
+    def _compile_with_failure(self, test_target):
         with self.assertRaises(AssertionError):
-            self._compile_sample('{}.flow'.format(test_target))
+            self._compile_sample(test_target, '2.0.0')
 
-    def _compile_sample(self, sample_name):
-        with self._load_sample(sample_name) as sample_script, \
-                core.CompilerContext() as context:
-            tmp_out = self.open_tmpout()
-            self._mock_output(context, sample_script, tmp_out)
-            rc = core.compile(context)
-            tmp_out.close()
-
-        output = self.open_tmpin().read()
-        assert rc == 0, 'Compilation failed\n{}'.format(output)
+    def _compile_sample(self, sample_name, out_version):
+        compiled_script_path = self.get_tmp_path()
+        rc = self._compile_with_args([
+            '-o', compiled_script_path,
+            '-w', SAMPLES_HOME,
+            '-v', out_version,
+            f'{sample_name}.flow'
+        ])
 
         with self.open_tmpin() as compiled_sample:
-            return json.load(compiled_sample)
+            assert rc == 0, (f'Compilation failed with status {rc}\n'
+                             f'Compiler output: {compiled_sample.read()}')
+
+            if out_version == '2.0.0':
+                return json.load(compiled_sample)
+            elif out_version == '2.1.0':
+                return yaml.load(compiled_sample)
 
     def _compile_with_args(self, args):
         with core.CompilerContext(self.arg_parser.parse_args(args)) as context:
@@ -71,6 +81,10 @@ class CompilerTestCase(unittest.TestCase, mixins.TmpIOHandler):
     def _load_sample(self, sample_name):
         sample_path = os.path.join(SAMPLES_HOME, sample_name)
         return open(sample_path, 'r')
+
+    def _load_yaml_script(self, script_name):
+        with self._load_sample(script_name) as script_file:
+            return yaml.load(script_file)
 
     def _prune_action_ids(self, script):
         for dialog in script['dialogs']:

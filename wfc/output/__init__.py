@@ -11,19 +11,21 @@ from wfc.errors import (
     UndefinedCarousel,
     UndefinedFlow
 )
-from wfc.output import v2
+from wfc.commons import OutputVersion
+from wfc.output import v20, v21
 
-_FORMATS = {
-    'v2': v2
+_VERSIONS = {
+    OutputVersion.V20: v20,
+    OutputVersion.V21: v21
 }
 
 
 class OutputBuilder:
-    def __init__(self, script, format_name):
-        if format_name not in _FORMATS:
-            raise InvalidOutputFormat(format_name)
+    def __init__(self, script, version):
+        if version not in _VERSIONS:
+            raise InvalidOutputFormat(version)
 
-        self._output_module = _FORMATS[format_name]
+        self._output_module = _VERSIONS[version]
         self._output_module.set_script(script)
         self._actions = self._output_module.build_actions()
 

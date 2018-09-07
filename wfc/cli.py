@@ -5,6 +5,7 @@ import sys
 from argparse import ArgumentParser
 
 from wfc import core, get_version
+from wfc.commons import OutputVersion
 from wfc.errors import InvalidOutputFormat
 
 
@@ -34,10 +35,14 @@ def main():
     return rc
 
 
+MAIN_HELP = ('Compiles chatbot scripts written in flow language into'
+             'YSON or YAML format.')
+
+
 def make_argument_parser():
     parser = ArgumentParser(
         prog='wfc',
-        description='Compiles .flow files into a chatbotscript'
+        description=MAIN_HELP
     )
     parser.add_argument('-V', '--version', default=False, action='store_true')
     parser.add_argument('flows', metavar='flow', type=str, nargs='*',
@@ -45,8 +50,8 @@ def make_argument_parser():
     parser.add_argument('-o', '--output', default='', help='output file')
     parser.add_argument('-q', '--quiet', default=False, action='store_true',
                         help='run compiler in quiet mode')
-    parser.add_argument('-v', '--outversion', default='v2',
-                        help='output format')
+    parser.add_argument('-v', '--outversion', default=OutputVersion.V20.value,
+                        help='Output format: "2.0.0", "2.1.0"')
     parser.add_argument('-w', '--workdir', default=os.curdir,
                         help='work directory')
 

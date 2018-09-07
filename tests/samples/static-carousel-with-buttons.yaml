@@ -1,0 +1,40 @@
+flows:
+- actions:
+  - send_carousel:
+      cards:
+      - buttons:
+        - label: Wizeline
+          payload: http://www.wizeline.com
+          type: open_url
+        - label: Select Option
+          payload:
+            action: you clicked the first card
+          type: postback
+        - label: Simple Button
+          payload: Hey! you clicked the first card
+          type: postback
+        - label: Message I
+          payload: Hey! you clicked the first card
+          type: message
+        description: the first card
+        image_url: http://example.com/images/card-one.jpg
+        title: Card I
+      - buttons:
+        - label: Google
+          payload: http://www.google.com
+          type: open_url
+        - label: Post
+          payload:
+            action: you clicked the second card
+          type: postback
+        - label: Simple Button
+          payload: Hey! you clicked the second card
+          type: postback
+        - label: Message II
+          payload: Hey! you clicked the second card
+          type: message
+        description: the second card
+        image_url: http://example.com/images/card-two.jpg
+        title: Card II
+  name: onboarding
+version: 2.1.0

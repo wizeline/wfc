@@ -1,0 +1,6 @@
+flows:
+- actions:
+  - send_text:
+      text: Hello World
+  name: onboarding
+version: 2.1.0
