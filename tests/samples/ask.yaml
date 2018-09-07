@@ -1,7 +1,14 @@
 flows:
-        - name: greet the user
-          actions:
-                  - send_text:
-                          text: hello user
-                  - send_text:
-                          text: I am a bot
+  - name: onboarding
+    actions:
+      - ask_for_input:
+        text: Some question 
+        var_name: response
+
+      - send_text:
+        text: "The response is: {{$response}}"
+
+      - ask_for_input:
+        text: Some other question
+        var_name: response
+        can_switch_context: false
