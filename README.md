@@ -16,10 +16,10 @@ Language to simplify chatbot script development
 1. Go to [WFC releases](https://github.com/wizeline/wfc/releases) and download
    the most recent release
 
-2. Install the package with pip
+2. Install the package with pip3, since this tool is writen using Python3
 
 ```sh
-$ pip install /path/to/wfc-X.Y.zip
+$ pip3 install /path/to/wfc-X.Y.zip
 ```
 
 ## Usage
@@ -66,6 +66,25 @@ And you'll get a new file `hello.json` with this contents:
 }
 ```
 
+Or:
+
+```sh
+$ wfc -v 2.1.0 < hello.flow > hello.yaml
+```
+
+And you'll get a new file `hello.yaml` with this contents:
+
+```yaml
+flows:
+- actions:
+  - send_text:
+      text: Hello World!
+  - send_text:
+      text: I an a simple bot
+  name: say_hi
+version: 2.1.0
+```
+
 There are some command line options available
 
 - `-o` or `--output` specifies an output path to use rather than the standard
@@ -84,7 +103,7 @@ Examples:
 $ wfc -o my-bot.json module1.flow module2.flow main.flow
 ```
 ```sh
-$ wfc -v 2.1.0 module1.flow module2.flow main.flow
+$ wfc -v 2.1.0 -o my-bot.yaml module1.flow module2.flow main.flow
 ```
 
 ### Python Library
