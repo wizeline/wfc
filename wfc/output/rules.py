@@ -1,14 +1,8 @@
-import json
-
 from uuid import uuid4
 from enum import Enum
 
-import jsonschema
-
-from jsonschema.exceptions import ValidationError
 from parglare.actions import pass_none
 
-from wfc.commons import asset_path
 from wfc.errors import (
     CompilationError,
     ComponentNotDefined,
@@ -543,6 +537,7 @@ def button_definition_value(_, nodes):
     """
     return nodes[1]
 
+
 def build_actions() -> dict:
     return {
         'ACTION': action_value,
@@ -595,6 +590,7 @@ def build_actions() -> dict:
         'VARIABLE': prefixed_value,
     }
 
+
 def build_commands() -> list:
     commands = []
 
@@ -622,10 +618,6 @@ def build_intentions() -> list:
             )
         intents.append(intent)
     return intents
-
-
-def build_flows() -> list:
-    return list(flows.values())
 
 
 def set_script(script):

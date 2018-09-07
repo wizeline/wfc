@@ -1,21 +1,13 @@
 import json
 
 from uuid import uuid4
-from enum import Enum
 
 import jsonschema
 
 from jsonschema.exceptions import ValidationError
-from parglare.actions import pass_none
 
 from wfc.commons import asset_path
-from wfc.errors import (
-    CompilationError,
-    ComponentNotDefined,
-    DynamicCarouselMissingSource,
-    StaticCarouselWithSource,
-    UndefinedCarousel
-)
+from wfc.errors import CompilationError
 from wfc.output import rules
 
 _script = None

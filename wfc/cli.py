@@ -31,10 +31,14 @@ def main():
     return rc
 
 
+MAIN_HELP = ('Compiles chatbot scripts written in flow language into'
+             'YSON or YAML format.')
+
+
 def make_argument_parser():
     parser = ArgumentParser(
         prog='wfc',
-        description='Compiles .flow files into a chatbotscript'
+        description=MAIN_HELP
     )
     parser.add_argument('flows', metavar='flow', type=str, nargs='*',
                         help='input .flow files')
@@ -42,7 +46,7 @@ def make_argument_parser():
     parser.add_argument('-q', '--quiet', default=False, action='store_true',
                         help='run compiler in quiet mode')
     parser.add_argument('-v', '--outversion', default=OutputVersion.V20.value,
-                        help='output format')
+                        help='Output format: "2.0.0", "2.1.0"')
     parser.add_argument('-w', '--workdir', default=os.curdir,
                         help='work directory')
 

@@ -1,17 +1,6 @@
-from enum import Enum
-
 import yaml
 
-from parglare.actions import pass_none
-
-from wfc.commons import asset_path
-from wfc.errors import (
-    CompilationError,
-    ComponentNotDefined,
-    DynamicCarouselMissingSource,
-    StaticCarouselWithSource,
-    UndefinedCarousel
-)
+from wfc.errors import CompilationError
 from wfc.output import rules
 
 _script = None
@@ -70,11 +59,6 @@ def build_flows() -> list:
         flows = list(flows.values())
 
     return flows
-
-
-def load_output_schema() -> dict:
-    with open(asset_path('schema.json')) as schema:
-        return json.loads(schema.read())
 
 
 def get_script():
