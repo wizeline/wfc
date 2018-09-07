@@ -44,9 +44,9 @@ class CompilerTestCase(unittest.TestCase, mixins.TmpIOHandler):
         expected_script = self._load_json_script(f'{test_target}.json')
         self.assertDictEqual(expected_script, script)
 
-        # script = self._compile_sample(test_target, '2.1.0')
-        # expected_script = self._load_yaml_script(f'{test_target}.yaml')
-        # self.assertDictEqual(expected_script, script)
+        script = self._compile_sample(test_target, '2.1.0')
+        expected_script = self._load_yaml_script(f'{test_target}.yaml')
+        self.assertDictEqual(expected_script, script)
 
     def _compile_with_failure(self, test_target):
         with self.assertRaises(AssertionError):
