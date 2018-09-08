@@ -1,3 +1,6 @@
+commands:
+- flow: entry_point_flow
+  keyword: /help
 flows:
 - actions:
   - send_text:

@@ -33,6 +33,8 @@ def build_commands() -> list:
                     command['dialog']
                 )
             )
+        flow = command.pop('dialog')
+        command['flow'] = flow
         commands.append(command)
 
     return commands
@@ -46,6 +48,13 @@ def build_intentions() -> list:
                 None,
                 'Intent not used: {}'.format(intent['name'])
             )
+
+        flow = intent.pop('dialog')
+        intent['flow'] = flow
+
+        if not intent['examples']:
+            intent.pop('examples')
+
         intents.append(intent)
     return intents
 
@@ -65,8 +74,17 @@ def get_script():
     _script.perform_sanity_checks()
     script = {
         'version': '2.1.0',
-        'flows': build_flows()
+        'flows': build_flows(),
     }
+
+    intentions = build_intentions()
+    if intentions:
+        script.update({'intents': intentions})
+
+    commands = build_commands()
+    if commands:
+        script.update({'commands': commands})
+
     return yaml.dump(script, default_flow_style=False)
 
 

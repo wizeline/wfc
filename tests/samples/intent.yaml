@@ -3,4 +3,9 @@ flows:
   - send_text:
       text: Hello World
   name: onboarding
+intents:
+- examples:
+  - Hi
+  flow: onboarding
+  name: greeting
 version: 2.1.0

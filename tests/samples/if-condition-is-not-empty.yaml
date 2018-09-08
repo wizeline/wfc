@@ -19,4 +19,7 @@ flows:
   - send_text:
       text: bar is not set
   name: bar_is_not_set
+intents:
+- flow: onboarding
+  name: foo
 version: 2.1.0

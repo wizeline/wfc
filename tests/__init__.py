@@ -30,12 +30,6 @@ class CompilerTestCase(unittest.TestCase, mixins.TmpIOHandler):
         sys.stderr = self._sys_stderr
         self.unlink_tmpio()
 
-    def _mock_output(self, context, tstin, tstout):
-        context.get_input_file = MagicMock(name='get_input_file')
-        context.get_output_file = MagicMock(name='get_output_file')
-        context.get_input_file.return_value = tstin
-        context.get_output_file.return_value = tstout
-
     def _compile(self, test_target):
         script = self._compile_sample(test_target, '2.0.0')
         self._prune_action_ids(script)
