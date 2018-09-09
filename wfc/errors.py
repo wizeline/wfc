@@ -96,6 +96,11 @@ class StaticCarouselWithSource(CompilationError):
         return f'Static carousel "{self.args[0]}" must not have content source'
 
 
+class QNAFlowRedefinition(CompilationError):
+    def _build_error_message(self):
+        return f'QNA flow must be uniq: [{self.args[0]}] [{self.args[1]}]'
+
+
 class UndefinedCarousel(CompilationError):
     def _build_error_message(self):
         return f'Carousel "{self.args[0]}" is not defined'

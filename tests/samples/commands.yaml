@@ -1,0 +1,9 @@
+commands:
+- flow: entry_point_flow
+  keyword: /help
+flows:
+- actions:
+  - send_text:
+      text: This is a test flow
+  name: entry_point_flow
+version: 2.1.0

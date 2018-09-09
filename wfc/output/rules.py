@@ -1,16 +1,9 @@
-import json
-
 from uuid import uuid4
 from enum import Enum
 
-import jsonschema
-
-from jsonschema.exceptions import ValidationError
 from parglare.actions import pass_none
 
-from wfc.commons import asset_path
 from wfc.errors import (
-    CompilationError,
     ComponentNotDefined,
     DynamicCarouselMissingSource,
     StaticCarouselWithSource,
@@ -349,10 +342,10 @@ def block_value(_, nodes):
 
 def flow_value(context, nodes):
     """
-    fallback? flow IDENTIFIER FLOW_INTENT? BLOCK
+    FLOW_TYPE? flow IDENTIFIER FLOW_INTENT? BLOCK
     """
 
-    fallback, _, name, flow_intention, block = nodes
+    flow_type, _, name, flow_intention, block = nodes
     value = {
         'name': name,
         'actions': block
@@ -366,9 +359,20 @@ def flow_value(context, nodes):
         except ComponentNotDefined:
             pass
 
-    value['is_fallback'] = True if fallback else False
+    value['is_fallback'] = True if flow_type == 'fallback' else False
+    value['is_qna'] = True if flow_type == 'qna' else False
+
     _script.add_component(context, 'flow', name, value)
+
     return value
+
+
+def flow_type_value(context, nodes):
+    """
+    'fallback' | 'qna'
+    """
+
+    return nodes[0]
 
 
 def call_function_value(_, nodes):
@@ -572,6 +576,7 @@ def build_actions() -> dict:
         'EQUALS': equals_value,
         'FALLBACK': fallback_value,
         'FLOW': flow_value,
+        'FLOW_type': flow_type_value,
         'IF': if_statement_value,
         'IF_BODY': if_body_value,
         'INTEGER': integer_value,
@@ -595,79 +600,6 @@ def build_actions() -> dict:
         'SCALAR_BUTTON': scalar_button_value,
         'VARIABLE': prefixed_value,
     }
-
-
-def build_commands() -> list:
-    commands = []
-
-    for command in _script.get_components_by_type('command').values():
-        if not _script.has_component('flow', command['dialog']):
-            raise CompilationError(
-                None,
-                'Command linked to unexisting flow: {} -> {}'.format(
-                    command['keyword'],
-                    command['dialog']
-                )
-            )
-        commands.append(command)
-
-    return commands
-
-
-def build_intentions() -> list:
-    intents = []
-    for intent in _script.get_components_by_type('intent').values():
-        if 'dialog' not in intent:
-            raise CompilationError(
-                None,
-                'Intent not used: {}'.format(intent['name'])
-            )
-        intents.append(intent)
-    return intents
-
-
-def build_flows() -> list:
-    try:
-        flows = _script.get_components_by_type('flow')
-        onboarding = flows.pop('onboarding')
-        flows = [onboarding] + list(flows.values())
-    except KeyError:
-        flows = list(flows.values())
-
-    return flows
-
-
-def load_output_schema() -> dict:
-    with open(asset_path('schema.json')) as schema:
-        return json.loads(schema.read())
-
-
-def get_script():
-    _script.perform_sanity_checks()
-    try:
-        script = {
-            'version': "2.0.0",
-            'intentions': build_intentions(),
-            'entities': [],
-            'dialogs': build_flows(),
-            'qa': []
-        }
-        commands = build_commands()
-        if commands:
-            script['commands'] = commands
-
-        fallback_flow = _script.get_fallback_flow()
-        if fallback_flow:
-            script['nlp_fallback'] = fallback_flow
-
-        jsonschema.validate(script, load_output_schema())
-        return json.dumps(script, indent=2)
-    except ValidationError as ex:
-        with open('/tmp/invalid.json', 'w') as invalid_script:
-            invalid_script.write(json.dumps(script, indent=2))
-
-        raise ValueError('Generated script does not match with schema',
-                         script)
 
 
 def set_script(script):

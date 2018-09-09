@@ -8,22 +8,25 @@ from wfc.errors import (
     ErrorContext,
     FallbackFlowRedefinition,
     InvalidOutputFormat,
+    QNAFlowRedefinition,
     UndefinedCarousel,
     UndefinedFlow
 )
-from wfc.output import v2
+from wfc.commons import OutputVersion
+from wfc.output import v20, v21
 
-_FORMATS = {
-    'v2': v2
+_VERSIONS = {
+    OutputVersion.V20: v20,
+    OutputVersion.V21: v21
 }
 
 
 class OutputBuilder:
-    def __init__(self, script, format_name):
-        if format_name not in _FORMATS:
-            raise InvalidOutputFormat(format_name)
+    def __init__(self, script, version):
+        if version not in _VERSIONS:
+            raise InvalidOutputFormat(version)
 
-        self._output_module = _FORMATS[format_name]
+        self._output_module = _VERSIONS[version]
         self._output_module.set_script(script)
         self._actions = self._output_module.build_actions()
 
@@ -49,6 +52,7 @@ class Script:
         self._asked_components = []
         self._components = {}
         self._fallback_flow = ''
+        self._qna_flow = ''
         self.compiler_context = compiler_context
 
     def _get_current_file(self):
@@ -84,6 +88,17 @@ class Script:
                             component['name']
                         )
 
+                is_qna = component.pop('is_qna')
+                if is_qna:
+                    if self._qna_flow == '':
+                        self._qna_flow = component['name']
+                    else:
+                        raise QNAFlowRedefinition(
+                            context,
+                            self._fallback_flow,
+                            component['name']
+                        )
+
             components = self._components.get(component_type, {})
 
             if name in components:
@@ -114,6 +129,9 @@ class Script:
 
     def get_fallback_flow(self):
         return self._fallback_flow
+
+    def get_qna_flow(self):
+        return self._qna_flow
 
     def has_component(self, component_type, name):
         try:

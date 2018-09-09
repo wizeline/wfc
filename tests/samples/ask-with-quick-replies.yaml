@@ -1,0 +1,58 @@
+flows:
+- actions:
+  - ask_for_input:
+      expect:
+        entities:
+        - 'yes'
+        - 'no'
+        fallback: Did not get that
+      quick_replies:
+      - Of course
+      - No way
+      text: Some question
+      var_name: response
+  - send_text:
+      text: 'response is: {{$response}}'
+  name: scenario1
+- actions:
+  - ask_for_input:
+      expect:
+        entities:
+        - 'yes'
+        - 'no'
+        - other_entity
+        fallback: Did not get that
+      quick_replies:
+      - Of course
+      - No way
+      text: Some question
+      var_name: response
+  - send_text:
+      text: 'response is: {{$response}}'
+  name: scenario2
+- actions:
+  - ask_for_input:
+      expect:
+        entities:
+        - 'yes'
+        - 'no'
+        - other_entity
+        fallback: Did not get that
+      text: Some question
+      var_name: response
+  - send_text:
+      text: 'response is: {{$response}}'
+  name: scenario3
+- actions:
+  - ask_for_input:
+      can_switch_context: false
+      quick_replies:
+      - Answer1
+      - Answer2
+      - Answer3
+      text: Some question
+      var_name: response
+  - send_text:
+      text: 'response is: {{$response}}'
+  name: scenario4
+version: 2.1.0

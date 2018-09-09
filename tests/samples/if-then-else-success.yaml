@@ -1,0 +1,80 @@
+flows:
+- actions:
+  - condition:
+    - $variable
+    - is_empty
+    send_text:
+      text: The variable is empty
+  - condition:
+    - $variable
+    - is_not_empty
+    send_text:
+      text: The variable is not empty
+  - condition:
+    - $variable2
+    - is_not_empty
+    send_text:
+      text: anything
+  name: conditional0
+- actions:
+  - condition: &id001
+    - $variable
+    - is_empty
+    send_text:
+      text: The variable is empty
+  - condition: *id001
+    send_text:
+      text: blah
+  - condition:
+    - $variable
+    - is_not_empty
+    send_text:
+      text: The variable is not empty
+  name: conditional1
+- actions:
+  - condition: &id002
+    - $variable
+    - is_empty
+    send_text:
+      text: The variable is empty
+  - condition: *id002
+    send_text:
+      text: blah
+  - condition: &id003
+    - $variable
+    - is_not_empty
+    send_text:
+      text: The variable is not empty
+  - condition: *id003
+    send_text:
+      text: blah
+  name: conditional2
+- actions:
+  - condition:
+    - $variable
+    - is_empty
+    send_text:
+      text: The variable is empty
+  - condition: &id004
+    - $variable
+    - is_not_empty
+    send_text:
+      text: The variable is not empty
+  - condition: *id004
+    send_text:
+      text: blah
+  name: conditional3
+- actions:
+  - condition: &id005
+    - $variable
+    - is_empty
+    send_text:
+      text: The variable is empty
+  - condition: *id005
+    send_text:
+      text: The variable is not empty
+  - condition: *id005
+    send_text:
+      text: blah
+  name: conditional4
+version: 2.1.0

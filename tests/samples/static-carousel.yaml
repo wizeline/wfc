@@ -1,0 +1,12 @@
+flows:
+- actions:
+  - send_carousel:
+      cards:
+      - description: test description
+        image_url: http://example.com/images/card-one.jpg
+        title: One
+      - description: test description
+        image_url: http://example.com/images/card-two.jpg
+        title: Two
+  name: onboarding
+version: 2.1.0

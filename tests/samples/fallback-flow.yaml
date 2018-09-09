@@ -1,0 +1,11 @@
+flows:
+- actions:
+  - send_text:
+      text: Hello
+  name: greeting
+- actions:
+  - send_text:
+      text: What did you mean?
+  name: did_not_get_that
+nlp_fallback: did_not_get_that
+version: 2.1.0

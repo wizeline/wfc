@@ -15,6 +15,11 @@
       "description": "What the bot will say when NLP doesn't recognize an intent",
       "type": "string"
     },
+    "qna_followup": {
+      "description": "The dialog the bot will go to after responding a question with the qna service",
+      "type": "string",
+      "minLength": 1
+    },
     "unexpected_error_dialog": {
       "description": "what the bot will say when an unexpected error happens",
       "type": "string"
@@ -298,7 +303,6 @@
         "function_params": {
           "type": "array",
           "items": {
-            "type": "string",
             "minLength": 1
           }
         },
