@@ -8,7 +8,6 @@ import yaml
 from wfc import core
 from wfc.cli import make_argument_parser
 
-from unittest.mock import MagicMock
 from tests.util import mixins
 
 

@@ -1,0 +1,27 @@
+{
+  "version": "2.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "greeting",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "Hello"
+        }
+      ]
+    },
+    {
+      "name": "helpful",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "This is the QNA flow"
+        }
+      ]
+    }
+  ],
+  "qa": [],
+  "qna_followup": "helpful"
+}

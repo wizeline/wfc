@@ -6,7 +6,7 @@ import jsonschema
 
 from jsonschema.exceptions import ValidationError
 
-from wfc.commons import asset_path
+from wfc.commons import load_output_schema
 from wfc.errors import CompilationError
 from wfc.output import rules
 
@@ -65,11 +65,6 @@ def build_flows() -> list:
     return flows
 
 
-def load_output_schema() -> dict:
-    with open(asset_path('schema.json')) as schema:
-        return json.loads(schema.read())
-
-
 def get_script():
     _script.perform_sanity_checks()
     try:
@@ -88,8 +83,13 @@ def get_script():
         if fallback_flow:
             script['nlp_fallback'] = fallback_flow
 
+        qna_flow = _script.get_qna_flow()
+        if qna_flow:
+            script['qna_followup'] = qna_flow
+
         jsonschema.validate(script, load_output_schema())
         return json.dumps(script, indent=2)
+
     except ValidationError as ex:
         with open('/tmp/invalid.json', 'w') as invalid_script:
             invalid_script.write(json.dumps(script, indent=2))

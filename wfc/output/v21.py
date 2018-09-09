@@ -85,6 +85,14 @@ def get_script():
     if commands:
         script.update({'commands': commands})
 
+    fallback_flow = _script.get_fallback_flow()
+    if fallback_flow:
+        script['nlp_fallback'] = fallback_flow
+
+    qna_flow = _script.get_qna_flow()
+    if qna_flow:
+        script['qna_followup'] = qna_flow
+
     return yaml.dump(script, default_flow_style=False)
 
 

@@ -8,6 +8,7 @@ from wfc.errors import (
     ErrorContext,
     FallbackFlowRedefinition,
     InvalidOutputFormat,
+    QNAFlowRedefinition,
     UndefinedCarousel,
     UndefinedFlow
 )
@@ -51,6 +52,7 @@ class Script:
         self._asked_components = []
         self._components = {}
         self._fallback_flow = ''
+        self._qna_flow = ''
         self.compiler_context = compiler_context
 
     def _get_current_file(self):
@@ -86,6 +88,17 @@ class Script:
                             component['name']
                         )
 
+                is_qna = component.pop('is_qna')
+                if is_qna:
+                    if self._qna_flow == '':
+                        self._qna_flow = component['name']
+                    else:
+                        raise QNAFlowRedefinition(
+                            context,
+                            self._fallback_flow,
+                            component['name']
+                        )
+
             components = self._components.get(component_type, {})
 
             if name in components:
@@ -116,6 +129,9 @@ class Script:
 
     def get_fallback_flow(self):
         return self._fallback_flow
+
+    def get_qna_flow(self):
+        return self._qna_flow
 
     def has_component(self, component_type, name):
         try:

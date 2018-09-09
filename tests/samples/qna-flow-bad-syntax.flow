@@ -1,0 +1,7 @@
+flow greeting do
+  say "Hello"
+done
+
+qna flow do
+  say "What did you mean?"
+done

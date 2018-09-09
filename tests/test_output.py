@@ -23,7 +23,7 @@ class TestScript(unittest.TestCase):
             'button': {},
             'carousel': {},
             'entity': {},
-            'flow': {'is_fallback': False},
+            'flow': {'is_fallback': False, 'is_qna': False},
             'integration': {},
             'intent': {}
         }
@@ -56,6 +56,7 @@ class TestScript(unittest.TestCase):
             'onboarding',
             {
                 'is_fallback': True,
+                'is_qna': False,
                 'name': 'onboarding'
             }
         )
