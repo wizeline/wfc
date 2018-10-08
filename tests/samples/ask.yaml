@@ -6,7 +6,6 @@ flows:
   - send_text:
       text: 'The response is: {{$response}}'
   - ask_for_input:
-      can_switch_context: false
       text: Some other question
       var_name: response
   name: onboarding

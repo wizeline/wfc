@@ -1,2 +1,3 @@
 include wfc/assets/grammar.txt
 include wfc/assets/schema.json
+include wfc/assets/schema21.json
