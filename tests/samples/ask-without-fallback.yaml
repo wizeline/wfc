@@ -1,7 +1,6 @@
 flows:
 - actions:
   - ask_for_input:
-      can_switch_context: false
       quick_replies:
       - Of course
       - No way

@@ -3,12 +3,12 @@ flows:
   - ask_for_input:
       text: Please type 'yes'
       var_name: input
-  - change_dialog:
-      dialog: say_thank_you
-    condition:
-    - $input
-    - equal
-    - 'yes'
+  - change_flow:
+      condition:
+      - $input
+      - equal
+      - 'yes'
+      flow: say_thank_you
   - send_text:
       text: Bye
   name: onboarding
@@ -20,14 +20,14 @@ flows:
   - ask_for_input:
       text: Please type 'yes'
       var_name: input
-  - condition: &id001
-    - $input
-    - equal
-    - 'yes'
-    send_text:
+  - send_text:
+      condition: &id001
+      - $input
+      - equal
+      - 'yes'
       text: You said "yes"
-  - change_dialog:
-      dialog: say_thank_you
-    condition: *id001
+  - change_flow:
+      condition: *id001
+      flow: say_thank_you
   name: with_conditional_blocs
 version: 2.1.0
