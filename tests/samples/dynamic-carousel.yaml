@@ -4,7 +4,7 @@ flows:
       function: get_rooms
       function_params: []
       integration: my_integration
-  - send_carousel:
+  - send_dynamic_carousel:
       card_content: &id001
         description: '{{$room_email}}'
         image_url: '{{$room_picture}}'
@@ -14,7 +14,7 @@ flows:
       function: get_other_rooms
       function_params: []
       integration: your_integration
-  - send_carousel:
+  - send_dynamic_carousel:
       card_content: *id001
       content_source: $your_integration.get_other_rooms
   name: onboarding

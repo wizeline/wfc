@@ -4,7 +4,7 @@ flows:
       function: get_bot_developers
       function_params: []
       integration: wizeline_integration
-  - send_carousel:
+  - send_dynamic_carousel:
       card_content:
         buttons:
         - label: Details

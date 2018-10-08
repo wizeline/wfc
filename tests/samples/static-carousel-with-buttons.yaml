@@ -1,6 +1,6 @@
 flows:
 - actions:
-  - send_carousel:
+  - send_static_carousel:
       cards:
       - buttons:
         - label: Wizeline

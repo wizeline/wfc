@@ -37,6 +37,8 @@ class CompilerTestCase(unittest.TestCase, mixins.TmpIOHandler):
         self.assertDictEqual(expected_script, script)
 
         script = self._compile_sample(test_target, '2.1.0')
+        self._prune_action_ids(script)
+
         expected_script = self._load_yaml_script(f'{test_target}.yaml')
         self.assertDictEqual(expected_script, script)
 
@@ -80,6 +82,12 @@ class CompilerTestCase(unittest.TestCase, mixins.TmpIOHandler):
             return yaml.load(script_file)
 
     def _prune_action_ids(self, script):
-        for dialog in script['dialogs']:
-            for action in dialog['actions']:
-                action.pop('id')
+        if 'dialogs' in script:
+            for dialog in script['dialogs']:
+                for action in dialog['actions']:
+                    action.pop('id')
+
+        if 'flows' in script:
+            for dialog in script['flows']:
+                for action in dialog['actions']:
+                    action.pop('id')
