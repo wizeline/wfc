@@ -37,6 +37,10 @@ class TestMain(CompilerTestCase):
         sys.argv = ['wfc', '-q', '-w', SAMPLES_HOME, 'ask-bad-syntax.flow']
         self.assertEqual(1, cli.main())
 
+    def test_without_arguments(self):
+        sys.argv = ['wfc']
+        self.assertEqual(0, cli.main())
+
 
 class TestArgumentParser(CompilerTestCase):
     def test_parse_with_all_arguments(self):
