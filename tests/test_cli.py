@@ -84,6 +84,16 @@ class TestArgumentParser(CompilerTestCase):
 
         self.assertEquals('', arguments.output)
         self.assertEquals('2.0.0', arguments.outversion)
-        self.assertListEqual([], arguments.flows)
+        self.assertListEqual([None], arguments.flows)
         self.assertEquals(os.curdir, arguments.workdir)
         self.assertTrue(arguments.quiet)
+
+    def test_parse_no_arguments(self):
+        sys.argv = ['wfc']
+
+        arguments = self.arg_parser.parse_args()
+        self.assertEquals('', arguments.output)
+        self.assertEquals('2.0.0', arguments.outversion)
+        self.assertListEqual([None], arguments.flows)
+        self.assertEquals(os.curdir, arguments.workdir)
+        self.assertFalse(arguments.quiet)

@@ -12,36 +12,29 @@ from wfc.precompiler import pre_compile
 
 
 class CompilerContext:
-    def __init__(self, args=None):
+    def __init__(self, args):
         self._current_source = 0
         self._output_file = None
 
-        if args is None:
-            self._flow_paths = [None]
-            self._output_path = None
-            self._output_version = OutputVersion.V20
-            self._verbose = True
-            self._work_dir = os.path.abspath(os.curdir)
-        else:
-            self._work_dir = os.path.abspath(args.workdir)
-            if not os.path.exists(self._work_dir):
-                raise FileNotFoundError(
-                    errno.ENOENT,
-                    "Work directory not found: '{}'".format(self._work_dir)
-                )
+        self._work_dir = os.path.abspath(args.workdir)
+        if not os.path.exists(self._work_dir):
+            raise FileNotFoundError(
+                errno.ENOENT,
+                "Work directory not found: '{}'".format(self._work_dir)
+            )
 
-            if not os.path.isdir(self._work_dir):
-                raise NotADirectoryError(
-                    errno.ENOTDIR,
-                    "Not a directory: '{}'".format(self._work_dir)
-                )
+        if not os.path.isdir(self._work_dir):
+            raise NotADirectoryError(
+                errno.ENOTDIR,
+                "Not a directory: '{}'".format(self._work_dir)
+            )
 
-            self._output_path = args.output
-            self._output_version = OutputVersion(args.outversion)
-            self._verbose = not args.quiet
-            self._flow_paths = [
-                os.path.join(self._work_dir, flow) for flow in args.flows
-            ]
+        self._output_path = args.output
+        self._output_version = OutputVersion(args.outversion)
+        self._verbose = not args.quiet
+        self._flow_paths = [
+            self._build_path(flow) for flow in args.flows
+        ]
 
         self._script = output.Script(self)
         self._output = output.OutputBuilder(self._script, self._output_version)
@@ -68,6 +61,11 @@ class CompilerContext:
 
         if sys.stdout is not self._output_file:
             self._output_file.close()
+
+    def _build_path(self, path):
+        if not path:
+            return
+        return os.path.join(self._work_dir, path)
 
     def add_input_file(self, input_path):
         if input_path not in self._flow_paths:
