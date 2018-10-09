@@ -2,8 +2,6 @@ import errno
 import os
 import sys
 
-from unittest.mock import MagicMock
-
 from wfc import cli
 from tests import CompilerTestCase, SAMPLES_HOME
 
