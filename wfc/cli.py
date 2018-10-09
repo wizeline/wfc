@@ -10,11 +10,8 @@ from wfc.errors import InvalidOutputFormat
 
 
 def main():
-    if len(sys.argv) == 1:
-        args = None
-    else:
-        argument_parser = make_argument_parser()
-        args = argument_parser.parse_args()
+    argument_parser = make_argument_parser()
+    args = argument_parser.parse_args()
 
     if args.version:
         print(f'wfc {get_version()}')
@@ -36,7 +33,7 @@ def main():
 
 
 MAIN_HELP = ('Compiles chatbot scripts written in flow language into'
-             'YSON or YAML format.')
+             'JSON or YAML format.')
 
 
 def make_argument_parser():
@@ -46,7 +43,7 @@ def make_argument_parser():
     )
     parser.add_argument('-V', '--version', default=False, action='store_true')
     parser.add_argument('flows', metavar='flow', type=str, nargs='*',
-                        help='input .flow files')
+                        default=[None], help='input .flow files')
     parser.add_argument('-o', '--output', default='', help='output file')
     parser.add_argument('-q', '--quiet', default=False, action='store_true',
                         help='run compiler in quiet mode')

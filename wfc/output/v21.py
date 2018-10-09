@@ -26,7 +26,9 @@ def action_value(_, nodes):
 
 def bot_asks_value(_, nodes):
     bot_asks = rules.bot_asks_value(_, nodes)
-    bot_asks.pop('can_switch_context', None) # This is not accepted by the schema
+    # TODO: Disabling context switching has a bug for script v2.1.0, the fix is
+    # coming soon. Meanwhile we just remove the option
+    bot_asks.pop('can_switch_context', None)
     return bot_asks
 
 
@@ -42,6 +44,7 @@ def change_flow_value(_, nodes):
 
 def get_action_name(action):
     return (set(action) - {'id'}).pop()
+
 
 def if_statement_value(_, nodes):
     """
@@ -63,16 +66,17 @@ def if_statement_value(_, nodes):
     return actions
 
 
-def send_carousel_value(_, nodes):
-    carousel = rules.send_carousel_value(_, nodes)
+def send_carousel_value(context, nodes):
+    carousel = rules.send_carousel_value(context, nodes)
     if 'cards' in carousel:
         carousel.update({'action': 'send_static_carousel'})
     elif 'card_content' in carousel:
         carousel.update({'action': 'send_dynamic_carousel'})
     else:
-        raise WFCError('invalid carousel')
+        raise CompilationError(context, 'invalid carousel')
 
     return carousel
+
 
 def build_actions() -> dict:
     actions = rules.build_actions()
