@@ -2,6 +2,8 @@ import errno
 import os
 import sys
 
+from unittest.mock import MagicMock
+
 from wfc import cli
 from tests import CompilerTestCase, SAMPLES_HOME
 
@@ -36,10 +38,6 @@ class TestMain(CompilerTestCase):
     def test_compile_with_syntax_errors(self):
         sys.argv = ['wfc', '-q', '-w', SAMPLES_HOME, 'ask-bad-syntax.flow']
         self.assertEqual(1, cli.main())
-
-    def test_without_arguments(self):
-        sys.argv = ['wfc']
-        self.assertEqual(0, cli.main())
 
 
 class TestArgumentParser(CompilerTestCase):
@@ -88,6 +86,16 @@ class TestArgumentParser(CompilerTestCase):
 
         self.assertEquals('', arguments.output)
         self.assertEquals('2.0.0', arguments.outversion)
-        self.assertListEqual([], arguments.flows)
+        self.assertListEqual([None], arguments.flows)
         self.assertEquals(os.curdir, arguments.workdir)
         self.assertTrue(arguments.quiet)
+
+    def test_parse_no_arguments(self):
+        sys.argv = ['wfc']
+
+        arguments = self.arg_parser.parse_args()
+        self.assertEquals('', arguments.output)
+        self.assertEquals('2.0.0', arguments.outversion)
+        self.assertListEqual([None], arguments.flows)
+        self.assertEquals(os.curdir, arguments.workdir)
+        self.assertFalse(arguments.quiet)
