@@ -1,0 +1,54 @@
+{
+  "version": "2.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "math",
+      "actions": [
+        {
+          "action": "set_var",
+          "var_name": "start",
+          "value": 1
+        },
+        {
+          "action": "set_var",
+          "var_name": "start",
+          "value": [
+            "$start",
+            "+",
+            1
+          ]
+        },
+        {
+          "action": "set_var",
+          "var_name": "start",
+          "value": [
+            "$start",
+            "-",
+            1
+          ]
+        },
+        {
+          "action": "set_var",
+          "var_name": "start",
+          "value": [
+            "$start",
+            "*",
+            1
+          ]
+        },
+        {
+          "action": "set_var",
+          "var_name": "start",
+          "value": [
+            "$start",
+            "/",
+            1
+          ]
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

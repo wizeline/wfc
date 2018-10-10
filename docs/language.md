@@ -249,17 +249,33 @@ Example
 wait variable
 ```
 
-#### Set variable
+#### Set Variable
 
 !['set variable' action grammar][var-grammar]
 
+You can store values in custom variables. This operation supports basic
+arithmetic and storing objects
+
 Examples
+```
+var botNmae = 'Robotina'
+```
 ```
 var millenniumStartedOn = 2000
 ```
 ```
 var year = 1955
 var backToTheFuture = $year + 30
+```
+```
+var persona = name: 'Max Power',
+              age: 36
+```
+```
+var nothing = empty
+```
+```
+var none = nil
 ```
 
 #### Change Flow

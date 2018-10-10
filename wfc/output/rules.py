@@ -88,6 +88,9 @@ def prefixed_value(_, nodes):
     return nodes[0] + nodes[1]
 
 
+def member_definiiton_value(_, nodes):
+    return nodes[0], nodes[2]
+
 def is_not_empty_value(_, nodes):
     """
     IS_NOT_EMPTY: VARIABLE is not? empty
@@ -97,6 +100,10 @@ def is_not_empty_value(_, nodes):
         return [variable, 'is_empty']
     else:
         return [variable, 'is_not_empty']
+
+
+def literal_object_value(_, nodes):
+    return {member: value for member, value in nodes[0]}
 
 
 def has_entity_value(_, nodes):
@@ -474,11 +481,20 @@ def set_var_value(context, nodes):
     """
     _, identifier, _, exp = nodes
 
-    return {
+    set_var = {
         'action': 'set_var',
-        'var_name': identifier,
-        'value': exp
+        'var_name': identifier
     }
+    # These are special cases. Right now I don't know if thery're useful, but
+    # I'll keep them here, just in case
+    if exp == 'empty':
+        set_var['value'] = {}
+    elif exp == 'nil':
+        set_var['value'] = None
+    else:
+        set_var['value'] = exp
+
+    return set_var
 
 
 def single_action_value(context, nodes):
@@ -568,22 +584,24 @@ def build_actions() -> dict:
         'COMMAND': define_command_value,
         'COMMENT': pass_none,
         'DEFINITION': definition_value,
-        'ELSE_BODY': else_body_value,
         'ELSE': else_value,
+        'ELSE_BODY': else_body_value,
         'ENTITY': prefixed_value,
+        'EQUALS': equals_value,
         'EXAMPLE_FILE': example_file_value,
         'EXAMPLE_LIST': example_list_value,
-        'EQUALS': equals_value,
         'FALLBACK': fallback_value,
         'FLOW': flow_value,
         'FLOW_type': flow_type_value,
+        'HAS_ENTITY': has_entity_value,
         'IF': if_statement_value,
         'IF_BODY': if_body_value,
         'INTEGER': integer_value,
         'INTENT': prefixed_value,
         'IS_NOT_EMPTY': is_not_empty_value,
-        'HAS_ENTITY': has_entity_value,
+        'LITERAL_OBJECT': literal_object_value,
         'MEMBER': prefixed_value,
+        'MEMBER_DEFINITION': member_definiiton_value,
         'OBJECT': object_value,
         'OPEN_FLOW': open_flow_value,
         'OPERATOR': operator_value,
@@ -593,11 +611,11 @@ def build_actions() -> dict:
         'QUICK_REPLIES': quick_replies_value,
         'REPLY': reply_value,
         'REPLY_BODY': reply_body_value,
+        'SCALAR_BUTTON': scalar_button_value,
         'SEND_CAROUSEL': send_carousel_value,
         'SET_VAR': set_var_value,
         'SINGLE_ACTION': single_action_value,
         'STRING': string_value,
-        'SCALAR_BUTTON': scalar_button_value,
         'VARIABLE': prefixed_value,
     }
 
