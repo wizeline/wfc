@@ -1,0 +1,8 @@
+flow math do
+  var start = 1
+  var start = $start + 1
+  var start = $start - 1
+  var start = $start * 1
+  var start = $start / 1
+  say '{{$start}}'
+done

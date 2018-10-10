@@ -26,7 +26,14 @@ ENTITY: AT OBJECT;
 
 CONSTANT: 'empty' | 'null' | 'nil';
 
-OPERATOR: 'is' | 'is not' | 'equal' | 'not equal' | 'has entity';
+OPERATOR: '+'
+        | '-'
+        | '/'
+        | '*'
+        | 'is not'
+        | 'equal'
+        | 'not equal'
+        | 'has entity';
 E: STRING | INTEGER | VARIABLE | INTENT | ENTITY | CONSTANT | IDENTIFIER;
 
 EXPRESSION: E | E OPERATOR E;
@@ -93,7 +100,7 @@ FLOW_PARAMETER: 'with' 'parameter' EXPRESSION;
 CHANGE_FLOW: 'change' 'flow' IDENTIFIER FLOW_PARAMETER?;
 OPEN_FLOW: 'open' 'flow' IDENTIFIER;
 CALL_FUNCTION: 'call' IDENTIFIER PERIOD IDENTIFIER PARAMETERS?;
-SET_VAR: 'var' IDENTIFIER '=' E;
+SET_VAR: 'var' IDENTIFIER '=' EXPRESSION;
 
 EQUALS: VARIABLE 'equal' EXPRESSION;
 HAS_ENTITY: VARIABLE 'has' 'entity' ENTITY;

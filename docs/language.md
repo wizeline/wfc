@@ -192,7 +192,8 @@ Any of these symbols can have members:
 #### Binary Operation
 Let EXP be a **string**, **number**, **constant**, **variable**, **entity**, **intent**, then:
 
-![Binary Operation grammar][binary-op-grammar]
+![Binary operation][expression-grammar]
+![Operator][operator-grammar]
 
 ## Statements
 ### Actions
@@ -252,9 +253,13 @@ wait variable
 
 !['set variable' action grammar][var-grammar]
 
-Example
+Examples
 ```
 var millenniumStartedOn = 2000
+```
+```
+var year = 1955
+var backToTheFuture = $year + 30
 ```
 
 #### Change Flow
@@ -408,18 +413,19 @@ contents before the compilation process starts.
 
 [action-grammar]: img/grammar/action.svg
 [ask-grammar]: img/grammar/ask.svg
-[binary-op-grammar]: img/grammar/binary-operation.svg
 [block-grammar]: img/grammar/block.svg
 [call-function-grammar]: img/grammar/call-function.svg
 [carousel-grammar]: img/grammar/carousel-definition.svg
 [change-grammar]: img/grammar/change-flow.svg
 [commands-grammar]: img/grammar/commands.svg
 [control-grammar]: img/grammar/control.svg
+[expression-grammar]: img/grammar/expression.svg
 [flow-grammar]: img/grammar/flow.svg
 [install-grammar]: img/grammar/install-integration.svg
 [intent-entity-def]: img/grammar/intent-entity-def.svg
 [intents]: #
 [open-grammar]: img/grammar/open.svg
+[operator-grammar]: img/grammar/operator.svg
 [say-grammar]: img/grammar/say.svg
 [send-carousel-grammar]: img/grammar/send-carousel.svg
 [send-media-grammar]: #
