@@ -1,0 +1,4 @@
+flow undefined_menu do
+  show my_menu
+done
+
