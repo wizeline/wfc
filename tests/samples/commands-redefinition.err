@@ -1,0 +1,29 @@
+Traceback (most recent call last):
+  File "/Users/rodrigo/.venvs/compiler/lib/python3.6/site-packages/wfc/core.py", line 128, in compile
+    compile_string(context, in_script)
+  File "/Users/rodrigo/.venvs/compiler/lib/python3.6/site-packages/wfc/core.py", line 151, in compile_string
+    parser.parse(in_script)
+  File "/Users/rodrigo/.venvs/compiler/lib/python3.6/site-packages/parglare/parser.py", line 380, in parse
+    context)
+  File "/Users/rodrigo/.venvs/compiler/lib/python3.6/site-packages/parglare/parser.py", line 601, in _call_reduce_action
+    result = sem_action(context, subresults)
+  File "/Users/rodrigo/.venvs/compiler/lib/python3.6/site-packages/wfc/output/rules.py", line 245, in define_command_value
+    _script.add_component(context, ComponentType.COMMAND, keyword, command)
+  File "/Users/rodrigo/.venvs/compiler/lib/python3.6/site-packages/wfc/output/__init__.py", line 101, in add_component
+    raise ComponentRedefinition(context, component_type, name)
+wfc.errors.ComponentRedefinition: <exception str() failed>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/rodrigo/.venvs/compiler/bin/wfc", line 11, in <module>
+    load_entry_point('wfc==1.1.0', 'console_scripts', 'wfc')()
+  File "/Users/rodrigo/.venvs/compiler/lib/python3.6/site-packages/wfc/cli.py", line 22, in main
+    rc = core.compile(context)
+  File "/Users/rodrigo/.venvs/compiler/lib/python3.6/site-packages/wfc/core.py", line 132, in compile
+    sys.stderr.write(f'{error}\n')
+  File "/Users/rodrigo/.venvs/compiler/lib/python3.6/site-packages/wfc/errors.py", line 64, in __str__
+    message = self._build_error_message()
+  File "/Users/rodrigo/.venvs/compiler/lib/python3.6/site-packages/wfc/errors.py", line 130, in _build_error_message
+    return f'Redefinition of {self.args[0]} "{self.args[1]}"'
+IndexError: tuple index out of range

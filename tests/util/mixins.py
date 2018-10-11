@@ -1,6 +1,9 @@
 import os
 import tempfile
 
+HERE = os.path.abspath(os.path.dirname(__file__))
+SAMPLES_HOME = os.path.join(HERE, '../samples')
+
 
 class TmpIOHandler:
     def _open_tmpfile(self, mode):
@@ -30,3 +33,9 @@ class TmpIOHandler:
             if not self._tmp_file.closed:
                 self._tmp_file.close()
             self._unlink_tmp_file()
+
+
+class SampleHandler:
+    def load_sample(self, sample_name):
+        sample_path = os.path.join(SAMPLES_HOME, sample_name)
+        return open(sample_path, 'r')
