@@ -64,7 +64,11 @@ class Script:
 
     def add_component(self, context, component_type, name, component):
         if not isinstance(component_type, ComponentType):
-            raise ComponentNotSupprted(context, component_type)
+            raise ComponentNotSupprted(
+                context,
+                self.compiler_context.get_input_path(),
+                component_type
+            )
 
         if component_type == ComponentType.FLOW:
             is_fallback = component.pop('is_fallback')
@@ -74,6 +78,7 @@ class Script:
                 else:
                     raise FallbackFlowRedefinition(
                         context,
+                        self.compiler_context.get_input_path(),
                         self._fallback_flow,
                         component['name']
                     )
@@ -85,6 +90,7 @@ class Script:
                 else:
                     raise QNAFlowRedefinition(
                         context,
+                        self.compiler_context.get_input_path(),
                         self._fallback_flow,
                         component['name']
                     )
@@ -102,7 +108,11 @@ class Script:
         try:
             return components[name]
         except KeyError:
-            raise ComponentNotDefined(context, name)
+            raise ComponentNotDefined(
+                context,
+                self.compiler_context.get_input_path(),
+                name
+            )
 
     def get_components_by_type(self, component_type):
         return self._components.get(component_type, {})
@@ -115,13 +125,19 @@ class Script:
 
     def has_component(self, component_type, name):
         if not isinstance(component_type, ComponentType):
-            raise ComponentNotSupprted(context, component_type)
+            raise ComponentNotSupprted(
+                self.compiler_context,
+                self.compiler_context.get_input_path(),
+                component_type
+            )
         return name in self._components.get(component_type, {})
 
     def perform_sanity_checks(self):
         while self._asked_components:
             component_type, name, context = self._asked_components.pop()
             if not self.has_component(component_type, name):
-                self._raise_missing_component_error(component_type,
-                                                    name,
-                                                    context)
+                self._raise_missing_component_error(
+                    component_type,
+                    name,
+                    context
+                )

@@ -50,7 +50,7 @@ class ParseError(WFCError):
 
 
 class CompilationError(Exception):
-    def __init__(self, context, *args):
+    def __init__(self, context, input_path='', *args):
         super().__init__(*args)
 
         if isinstance(context, ErrorContext):
@@ -58,9 +58,12 @@ class CompilationError(Exception):
         else:
             self.context = ErrorContext(context=context)
 
+        self.input_path = input_path or context.input_path
+
     def __str__(self):
         message = self._build_error_message()
-        return f'{self.context.input_path}:{self.context.line}:{message}'
+        input_path = os.path.basename(self.input_path)
+        return f'{input_path}:{self.context.line}:{message}'
 
     def _build_error_message(self):
         return super().__str__()
@@ -78,12 +81,18 @@ class ComponentNotSupprted(CompilationError):
 
 class FallbackFlowRedefinition(CompilationError):
     def _build_error_message(self):
-        return f'Fallback flow must be uniq: [{self.args[0]}] [{self.args[1]}]'
+        return ('Fallback flow must be unique: '
+                f'[{self.args[0]}] [{self.args[1]}]')
 
 
 class FlowNotDefined(CompilationError):
     def _build_error_message(self):
         return f'Flow {self.args[0]} is not defined'
+
+
+class UnusedIntent(CompilationError):
+    def _build_error_message(self):
+        return f'Intent not used: {self.args[0]}'
 
 
 class DynamicCarouselMissingSource(CompilationError):
@@ -104,6 +113,11 @@ class QNAFlowRedefinition(CompilationError):
 class UndefinedCarousel(CompilationError):
     def _build_error_message(self):
         return f'Carousel "{self.args[0]}" is not defined'
+
+
+class UndefinedComponent(CompilationError):
+    def _build_error_message(self):
+        return f'Component "{self.args[0]}" is not defined'
 
 
 class UndefinedFlow(CompilationError):

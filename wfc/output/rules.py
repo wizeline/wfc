@@ -1,5 +1,4 @@
 from uuid import uuid4
-from enum import Enum
 
 from parglare.actions import pass_none
 
@@ -7,7 +6,7 @@ from wfc.errors import (
     ComponentNotDefined,
     DynamicCarouselMissingSource,
     StaticCarouselWithSource,
-    UndefinedCarousel
+    UndefinedComponent
 )
 from wfc.types import ComponentType, FlowType, InputSource
 
@@ -87,6 +86,16 @@ def prefixed_value(_, nodes):
 
 def member_definiiton_value(_, nodes):
     return nodes[0], nodes[2]
+
+
+def define_menu_value(context, nodes):
+    """
+    MENU: 'menu' IDENTIFIER COLON BUTTON_DEFINITION+[SEPARATOR] 'end'
+    """
+    _, name, _, buttons, _ = nodes
+    _script.add_component(context, ComponentType.MENU, name, buttons)
+    return nodes
+
 
 def is_not_empty_value(_, nodes):
     """
@@ -443,7 +452,12 @@ def define_carousel_value(context, nodes):
     CAROUSEL: 'carousel' IDENTIFIER COLON CAROUSEL_BODY 'end';
     """
     _, identifier, _, carousel_body, _ = nodes
-    _script.add_component(context, ComponentType.CAROUSEL, identifier, carousel_body)
+    _script.add_component(
+        context,
+        ComponentType.CAROUSEL,
+        identifier,
+        carousel_body
+    )
 
 
 def carousel_content_source_value(_, nodes):
@@ -453,16 +467,26 @@ def carousel_content_source_value(_, nodes):
     return nodes[1]
 
 
-def send_carousel_value(context, nodes):
+def show_component_value(context, nodes):
     """
-    SEND_CAROUSEL: 'show' IDENTIFIER ['using' EXPRESSION];
+    SHOW_COMPONENT: 'show' IDENTIFIER ['using' EXPRESSION];
     """
     _, name, source = nodes
-    try:
-        carousel = _script.get_component(context, ComponentType.CAROUSEL, name)
-    except ComponentNotDefined as ex:
-        raise UndefinedCarousel(context, name)
 
+    if _script.has_component(ComponentType.CAROUSEL, name):
+        return send_carousel_value(context, name, source)
+    elif _script.has_component(ComponentType.MENU, name):
+        return send_menu_value(context, name)
+
+    raise UndefinedComponent(
+        context,
+        _script.compiler_context.get_input_path(),
+        name
+    )
+
+
+def send_carousel_value(context, name, source):
+    carousel = _script.get_component(context, ComponentType.CAROUSEL, name)
     send_carousel = {'action': 'send_carousel'}
     send_carousel.update(carousel)
 
@@ -476,6 +500,14 @@ def send_carousel_value(context, nodes):
         raise StaticCarouselWithSource(context, name)
 
     return send_carousel
+
+
+def send_menu_value(context, name):
+    menu = _script.get_component(context, ComponentType.MENU, name)
+    return {
+        'action': 'send_menu',
+        'buttons': menu
+    }
 
 
 def set_var_value(context, nodes):
@@ -605,6 +637,7 @@ def build_actions() -> dict:
         'LITERAL_OBJECT': literal_object_value,
         'MEMBER': prefixed_value,
         'MEMBER_DEFINITION': member_definiiton_value,
+        'MENU': define_menu_value,
         'OBJECT': object_value,
         'OPEN_FLOW': open_flow_value,
         'OPERATOR': operator_value,
@@ -615,8 +648,8 @@ def build_actions() -> dict:
         'REPLY': reply_value,
         'REPLY_BODY': reply_body_value,
         'SCALAR_BUTTON': scalar_button_value,
-        'SEND_CAROUSEL': send_carousel_value,
         'SET_VAR': set_var_value,
+        'SHOW_COMPONENT': show_component_value,
         'SINGLE_ACTION': single_action_value,
         'STRING': string_value,
         'VARIABLE': prefixed_value,

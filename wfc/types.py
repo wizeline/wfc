@@ -4,7 +4,7 @@ from enum import Enum
 class __WFCEnum(Enum):
     @classmethod
     def is_valid(cls, value):
-        return any(value == member.value for service in cls)
+        return any(value == member.value for member in cls)
 
 
 class ComponentType(__WFCEnum):

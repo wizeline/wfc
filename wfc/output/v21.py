@@ -67,16 +67,14 @@ def if_statement_value(_, nodes):
     return actions
 
 
-def send_carousel_value(context, nodes):
-    carousel = rules.send_carousel_value(context, nodes)
-    if 'cards' in carousel:
-        carousel.update({'action': 'send_static_carousel'})
-    elif 'card_content' in carousel:
-        carousel.update({'action': 'send_dynamic_carousel'})
-    else:
-        raise CompilationError(context, 'invalid carousel')
+def show_component_value(context, nodes):
+    component = rules.show_component_value(context, nodes)
+    if 'cards' in component:
+        component.update({'action': 'send_static_carousel'})
+    elif 'card_content' in component:
+        component.update({'action': 'send_dynamic_carousel'})
 
-    return carousel
+    return component
 
 
 def build_actions() -> dict:
@@ -86,18 +84,21 @@ def build_actions() -> dict:
         'BOT_ASKS': bot_asks_value,
         'CHANGE_FLOW': change_flow_value,
         'IF': if_statement_value,
-        'SEND_CAROUSEL': send_carousel_value
+        'SHOW_COMPONENT': show_component_value
     })
     return actions
 
 
 def build_commands() -> list:
     commands = []
+    registered_commands = _script.get_components_by_type(
+        ComponentType.COMMAND
+    ).values()
 
-    for command in _script.get_components_by_type(ComponentType.COMMAND).values():
+    for command in registered_commands:
         if not _script.has_component(ComponentType.FLOW, command['dialog']):
             raise CompilationError(
-                None,
+                _script.compiler_context,
                 'Command linked to unexisting flow: {} -> {}'.format(
                     command['keyword'],
                     command['dialog']
@@ -112,7 +113,10 @@ def build_commands() -> list:
 
 def build_intentions() -> list:
     intents = []
-    for intent in _script.get_components_by_type(ComponentType.INTENT).values():
+    registered_intents = _script.get_components_by_type(
+        ComponentType.INTENT
+    ).values()
+    for intent in registered_intents:
         if 'dialog' not in intent:
             raise CompilationError(
                 None,
