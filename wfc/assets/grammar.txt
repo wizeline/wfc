@@ -26,10 +26,20 @@ ENTITY: AT OBJECT;
 
 CONSTANT: 'empty' | 'null' | 'nil';
 
-OPERATOR: 'is' | 'is not' | 'equal' | 'not equal' | 'has entity';
+OPERATOR: '+'
+        | '-'
+        | '/'
+        | '*'
+        | 'is not'
+        | 'equal'
+        | 'not equal'
+        | 'has entity';
 E: STRING | INTEGER | VARIABLE | INTENT | ENTITY | CONSTANT | IDENTIFIER;
 
 EXPRESSION: E | E OPERATOR E;
+
+MEMBER_DEFINITION: IDENTIFIER COLON E;
+LITERAL_OBJECT: MEMBER_DEFINITION+[SEPARATOR];
 
 COMMAND: 'when' 'read' STRING 'do' IDENTIFIER;
 
@@ -93,7 +103,9 @@ FLOW_PARAMETER: 'with' 'parameter' EXPRESSION;
 CHANGE_FLOW: 'change' 'flow' IDENTIFIER FLOW_PARAMETER?;
 OPEN_FLOW: 'open' 'flow' IDENTIFIER;
 CALL_FUNCTION: 'call' IDENTIFIER PERIOD IDENTIFIER PARAMETERS?;
-SET_VAR: 'var' IDENTIFIER '=' E;
+
+VAR_BODY: EXPRESSION | LITERAL_OBJECT;
+SET_VAR: 'var' IDENTIFIER '=' VAR_BODY;
 
 EQUALS: VARIABLE 'equal' EXPRESSION;
 HAS_ENTITY: VARIABLE 'has' 'entity' ENTITY;
