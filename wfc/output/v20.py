@@ -9,6 +9,7 @@ from jsonschema.exceptions import ValidationError
 from wfc.commons import load_output_schema
 from wfc.errors import CompilationError
 from wfc.output import rules
+from wfc.types import ComponentType
 
 _script = None
 
@@ -28,8 +29,8 @@ def build_actions() -> dict:
 def build_commands() -> list:
     commands = []
 
-    for command in _script.get_components_by_type('command').values():
-        if not _script.has_component('flow', command['dialog']):
+    for command in _script.get_components_by_type(ComponentType.COMMAND).values():
+        if not _script.has_component(ComponentType.FLOW, command['dialog']):
             raise CompilationError(
                 None,
                 'Command linked to unexisting flow: {} -> {}'.format(
@@ -44,7 +45,7 @@ def build_commands() -> list:
 
 def build_intentions() -> list:
     intents = []
-    for intent in _script.get_components_by_type('intent').values():
+    for intent in _script.get_components_by_type(ComponentType.INTENT).values():
         if 'dialog' not in intent:
             raise CompilationError(
                 None,
@@ -56,7 +57,7 @@ def build_intentions() -> list:
 
 def build_flows() -> list:
     try:
-        flows = _script.get_components_by_type('flow')
+        flows = _script.get_components_by_type(ComponentType.FLOW)
         onboarding = flows.pop('onboarding')
         flows = [onboarding] + list(flows.values())
     except KeyError:

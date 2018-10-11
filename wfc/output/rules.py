@@ -9,13 +9,9 @@ from wfc.errors import (
     StaticCarouselWithSource,
     UndefinedCarousel
 )
+from wfc.types import ComponentType, FlowType, InputSource
 
 _script = None
-
-
-class InputSource(Enum):
-    INLINE = 0
-    FILE = 1
 
 
 def read_examples(examples):
@@ -55,11 +51,12 @@ def definition_value(context, nodes):
     """
     DEFINE /intent|entity/ IDENTIFIER EXAMPLES
     """
-    _, def_type, def_name, examples = nodes
+    _, def_type_name, def_name, examples = nodes
     value = {
         'name': def_name,
         'examples': read_examples(examples)
     }
+    def_type = ComponentType(def_type_name)
     _script.add_component(context, def_type, def_name, value)
     return value
 
@@ -213,8 +210,8 @@ def change_flow_value(context, nodes):
     """
     _, _, flow, _ = nodes
 
-    if not _script.has_component('flow', flow):
-        _script.ask_missing_component('flow', flow, context)
+    if not _script.has_component(ComponentType.FLOW, flow):
+        _script.ask_missing_component(ComponentType.FLOW, flow, context)
 
     return {
         'action': 'change_dialog',  # Right now the action is change_dialog
@@ -228,15 +225,15 @@ def define_command_value(context, nodes):
     """
     _, _, keyword, _, flow = nodes
 
-    if not _script.has_component('flow', flow):
-        _script.ask_missing_component('flow', flow, context)
+    if not _script.has_component(ComponentType.FLOW, flow):
+        _script.ask_missing_component(ComponentType.FLOW, flow, context)
 
     command = {
         'keyword': keyword,
         'dialog': flow
     }
 
-    _script.add_component(context, 'command', keyword, command)
+    _script.add_component(context, ComponentType.COMMAND, keyword, command)
 
 
 def open_flow_value(context, nodes):
@@ -245,8 +242,8 @@ def open_flow_value(context, nodes):
     """
     _, _, flow = nodes
 
-    if not _script.has_component('flow', flow):
-        _script.ask_missing_component('flow', flow, context)
+    if not _script.has_component(ComponentType.FLOW, flow):
+        _script.ask_missing_component(ComponentType.FLOW, flow, context)
 
     return {
         'action': 'open_flow',  # Right now the action is change_dialog
@@ -352,24 +349,30 @@ def flow_value(context, nodes):
     FLOW_TYPE? flow IDENTIFIER FLOW_INTENT? BLOCK
     """
 
-    flow_type, _, name, flow_intention, block = nodes
+    flow_type_name, _, name, flow_intention, block = nodes
     value = {
         'name': name,
         'actions': block
     }
 
+    flow_type = FlowType(flow_type_name)
+
     if flow_intention is not None:
         intent = flow_intention[1][1:]
         try:
-            intent_component = _script.get_component(context, 'intent', intent)
+            intent_component = _script.get_component(
+                context,
+                ComponentType.INTENT,
+                intent
+            )
             intent_component['dialog'] = name
         except ComponentNotDefined:
             pass
 
-    value['is_fallback'] = True if flow_type == 'fallback' else False
-    value['is_qna'] = True if flow_type == 'qna' else False
+    value['is_fallback'] = True if flow_type == FlowType.FALLBACK else False
+    value['is_qna'] = True if flow_type == FlowType.QNA else False
 
-    _script.add_component(context, 'flow', name, value)
+    _script.add_component(context, ComponentType.FLOW, name, value)
 
     return value
 
@@ -440,7 +443,7 @@ def define_carousel_value(context, nodes):
     CAROUSEL: 'carousel' IDENTIFIER COLON CAROUSEL_BODY 'end';
     """
     _, identifier, _, carousel_body, _ = nodes
-    _script.add_component(context, 'carousel', identifier, carousel_body)
+    _script.add_component(context, ComponentType.CAROUSEL, identifier, carousel_body)
 
 
 def carousel_content_source_value(_, nodes):
@@ -456,7 +459,7 @@ def send_carousel_value(context, nodes):
     """
     _, name, source = nodes
     try:
-        carousel = _script.get_component(context, 'carousel', name)
+        carousel = _script.get_component(context, ComponentType.CAROUSEL, name)
     except ComponentNotDefined as ex:
         raise UndefinedCarousel(context, name)
 
