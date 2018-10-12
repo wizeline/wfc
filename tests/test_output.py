@@ -7,6 +7,7 @@ from wfc.errors import (
     ComponentRedefinition
 )
 from wfc.output import Script
+from wfc.types import ComponentType
 
 
 class TestScript(unittest.TestCase):
@@ -20,12 +21,12 @@ class TestScript(unittest.TestCase):
 
     def test_script_add_component_success(self):
         components = {
-            'button': {},
-            'carousel': {},
-            'entity': {},
-            'flow': {'is_fallback': False, 'is_qna': False},
-            'integration': {},
-            'intent': {}
+            ComponentType.BUTTON: {},
+            ComponentType.CAROUSEL: {},
+            ComponentType.ENTITY: {},
+            ComponentType.FLOW: {'is_fallback': False, 'is_qna': False},
+            ComponentType.INTEGRATION: {},
+            ComponentType.INTENT: {}
         }
 
         for component_type, component in components.items():
@@ -42,9 +43,14 @@ class TestScript(unittest.TestCase):
             self.script.add_component(None, 'blah', 'any_name', {})
 
     def test_script_redefine_component(self):
-        self.script.add_component(None, 'button', 'my_button', {})
+        self.script.add_component(None, ComponentType.BUTTON, 'my_button', {})
         with self.assertRaises(ComponentRedefinition):
-            self.script.add_component(None, 'button', 'my_button', {})
+            self.script.add_component(
+                None,
+                ComponentType.BUTTON,
+                'my_button',
+                {}
+            )
 
     def test_script_get_unexisting_component(self):
         with self.assertRaises(ComponentNotDefined):
@@ -52,7 +58,7 @@ class TestScript(unittest.TestCase):
 
         self.script.add_component(
             None,
-            'flow',
+            ComponentType.FLOW,
             'onboarding',
             {
                 'is_fallback': True,

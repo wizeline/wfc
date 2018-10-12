@@ -1,35 +1,29 @@
 import json
 
-from uuid import uuid4
-
 import jsonschema
 
 from jsonschema.exceptions import ValidationError
 
 from wfc.commons import load_output_schema
-from wfc.errors import CompilationError
+from wfc.errors import CompilationError, UnusedIntent
 from wfc.output import rules
+from wfc.types import ComponentType
 
 _script = None
 
 
-def action_value(_, nodes):
-    action = nodes[0]
-    action['id'] = str(uuid4())
-    return action
-
-
 def build_actions() -> dict:
-    actions = rules.build_actions()
-    actions.update({'ACTION': action_value})
-    return actions
+    return rules.build_actions()
 
 
 def build_commands() -> list:
     commands = []
+    registered_commands = _script.get_components_by_type(
+        ComponentType.COMMAND
+    ).values()
 
-    for command in _script.get_components_by_type('command').values():
-        if not _script.has_component('flow', command['dialog']):
+    for command in registered_commands:
+        if not _script.has_component(ComponentType.FLOW, command['dialog']):
             raise CompilationError(
                 None,
                 'Command linked to unexisting flow: {} -> {}'.format(
@@ -44,10 +38,14 @@ def build_commands() -> list:
 
 def build_intentions() -> list:
     intents = []
-    for intent in _script.get_components_by_type('intent').values():
+    registered_intents = _script.get_components_by_type(
+        ComponentType.INTENT
+    ).values()
+    for intent in registered_intents:
         if 'dialog' not in intent:
-            raise CompilationError(
+            raise UnusedIntent(
                 None,
+                _script.compiler_context.get_input_path(),
                 'Intent not used: {}'.format(intent['name'])
             )
         intents.append(intent)
@@ -56,7 +54,7 @@ def build_intentions() -> list:
 
 def build_flows() -> list:
     try:
-        flows = _script.get_components_by_type('flow')
+        flows = _script.get_components_by_type(ComponentType.FLOW)
         onboarding = flows.pop('onboarding')
         flows = [onboarding] + list(flows.values())
     except KeyError:

@@ -1,0 +1,8 @@
+menu _ :
+  button message('adaf')
+end
+
+flow my_menu do
+  show _
+done
+
