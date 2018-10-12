@@ -50,7 +50,7 @@ class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
 
     def test_change_flow_with_bad_syntax(self):
         self.run_test('change-flow-bad-syntax.err',
-                      'change-flow-syntax.flow')
+                      'change-flow-bad-syntax.flow')
 
     def test_change_unexisting_flow(self):
         self.run_test('change-unexisting-flow.err',

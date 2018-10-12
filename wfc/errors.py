@@ -2,24 +2,19 @@ import os
 import re
 
 import parglare
+from parglare.parser import Context as ParglareContext
 
 
 class ErrorContext:
     """Extracts meaningful information from parglare context"""
-    def __init__(self, input_path='', context=None):
-        self.input_path = os.path.basename(input_path)
+    def __init__(self, input_path, context):
+        self.input_path = os.path.abspath(input_path)
         if context:
             position = parglare.pos_to_line_col(context.input_str,
                                                 context.start_position)
             self.line, self.column = position
         else:
             self.line, self.column = None, None
-
-    def has_input_path(self):
-        return len(self.input_path) > 0
-
-    def set_intpu_path(self, input_path):
-        self.input_path = input_path
 
 
 class InvalidOutputFormat(Exception):
@@ -50,19 +45,14 @@ class ParseError(WFCError):
 
 
 class CompilationError(Exception):
-    def __init__(self, context, input_path='', *args):
+    def __init__(self, context, *args):
+        assert isinstance(context, ErrorContext), f'Context is a {type(context)}'
         super().__init__(*args)
-
-        if isinstance(context, ErrorContext):
-            self.context = context
-        else:
-            self.context = ErrorContext(context=context)
-
-        self.input_path = input_path or context.input_path
+        self.context = context
 
     def __str__(self):
         message = self._build_error_message()
-        input_path = os.path.basename(self.input_path)
+        input_path = os.path.basename(self.context.input_path)
         return f'{input_path}:{self.context.line}:{message}'
 
     def _build_error_message(self):
