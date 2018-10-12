@@ -1,0 +1,11 @@
+carousel invalid_carousel:
+  set title "",
+  set description "{{$alias}}",
+  set image_url "{{$avatar}}"
+  button url('More Details', 'http://www.wizeline.com/profile')
+end
+
+flow onboarding do
+  call wizeline_integration.get_bot_developers()
+  show nerds using $wizeline_integration.get_bot_developers
+done

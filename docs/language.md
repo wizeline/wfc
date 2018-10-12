@@ -111,7 +111,20 @@ carousel contacts_carousel:
 end
 ```
 
-For details see [carousels](#) documentation.
+#### Menu Definition
+
+![Menu definition][menu-grammar]
+
+Menus are lists of buttons indentified by a name. Once they're defined you can
+use them later.
+
+```
+menu mainOptions:
+  button message('Option One'),
+  button postback('Option Two', 'clicked the second button'),
+  button url('External Option', 'http://example.com/document.txt')
+end
+```
 
 #### Intent and Entity Definition
 ![Intent and Entity definition][intent-entity-def]
@@ -192,7 +205,8 @@ Any of these symbols can have members:
 #### Binary Operation
 Let EXP be a **string**, **number**, **constant**, **variable**, **entity**, **intent**, then:
 
-![Binary Operation grammar][binary-op-grammar]
+![Binary operation][expression-grammar]
+![Operator][operator-grammar]
 
 ## Statements
 ### Actions
@@ -248,13 +262,33 @@ Example
 wait variable
 ```
 
-#### Set variable
+#### Set Variable
 
 !['set variable' action grammar][var-grammar]
 
-Example
+You can store values in custom variables. This operation supports basic
+arithmetic and storing objects
+
+Examples
+```
+var botNmae = 'Robotina'
+```
 ```
 var millenniumStartedOn = 2000
+```
+```
+var year = 1955
+var backToTheFuture = $year + 30
+```
+```
+var persona = name: 'Max Power',
+              age: 36
+```
+```
+var nothing = empty
+```
+```
+var none = nil
 ```
 
 #### Change Flow
@@ -269,7 +303,7 @@ change flow menu
 !['open flow' action grammar][open-grammar]
 
 ```
-open flow menu
+open flow menuFlow
 ```
 
 
@@ -281,35 +315,25 @@ Example
 call outlook.get_collaborator_by_name(name, tag)
 ```
 
-#### Send Menu
-![Send menu grammar][send-menu-grammar]
+#### Show Components
 
-Example
+![Show component grammar][show-component-grammar]
 ```
-TODO: Add example
+SHOW_COMPONENT: 'show' IDENTIFIER ['using' EXPRESSION]? ;
 ```
 
-#### Send Carousel
-![Send carousel grammar][send-carousel-grammar]
+The supported components are carousels and menus. The `using EXPRESION` syntax
+is valid for carousels only.
 
-Example
-```
-SEND_CAROUSEL: 'show' IDENTIFIER ['using' EXPRESSION]? ;
-```
+Examples
 ```
 show contacts_carousel using $outlook.get_collaborators and pick name
 ```
-
-
-#### Send Media
-![Send media grammar][send-media-grammar]
-
-Example
 ```
-TODO: Add example
+show onboarding_options -- This is a menu
 ```
+
 #### Open Flow
-> **THIS ACTION IS NOT SUPPORTED YET**
 
 ![Open flow grammar][open-flow-grammar]
 
@@ -408,21 +432,21 @@ contents before the compilation process starts.
 
 [action-grammar]: img/grammar/action.svg
 [ask-grammar]: img/grammar/ask.svg
-[binary-op-grammar]: img/grammar/binary-operation.svg
 [block-grammar]: img/grammar/block.svg
 [call-function-grammar]: img/grammar/call-function.svg
 [carousel-grammar]: img/grammar/carousel-definition.svg
 [change-grammar]: img/grammar/change-flow.svg
 [commands-grammar]: img/grammar/commands.svg
 [control-grammar]: img/grammar/control.svg
+[expression-grammar]: img/grammar/expression.svg
 [flow-grammar]: img/grammar/flow.svg
 [install-grammar]: img/grammar/install-integration.svg
 [intent-entity-def]: img/grammar/intent-entity-def.svg
 [intents]: #
+[menu-grammar]: img/grammar/menu-definition.svg
 [open-grammar]: img/grammar/open.svg
+[operator-grammar]: img/grammar/operator.svg
 [say-grammar]: img/grammar/say.svg
-[send-carousel-grammar]: img/grammar/send-carousel.svg
-[send-media-grammar]: #
-[send-menu-grammar]: #
+[show-component-grammar]: img/grammar/show-component.svg
 [var-grammar]: img/grammar/var.svg
 [wait-grammar]: img/grammar/wait.svg

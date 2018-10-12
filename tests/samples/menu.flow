@@ -1,0 +1,10 @@
+menu onboarding_options:
+  button postback('Details', id: "{{$nerd_id}}"),
+  button postback('Something', "Any random text"),
+  button message('ping', 'pong'),
+  button url('More Details', 'http://www.wizeline.com/profile')
+end
+
+flow main do
+  show onboarding_options
+done

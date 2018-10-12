@@ -1,21 +1,18 @@
 from uuid import uuid4
-from enum import Enum
 
 from parglare.actions import pass_none
 
 from wfc.errors import (
+    CardTitleEmptyError,
     ComponentNotDefined,
     DynamicCarouselMissingSource,
+    ErrorContext,
     StaticCarouselWithSource,
-    UndefinedCarousel
+    UndefinedComponent,
 )
+from wfc.types import ComponentType, FlowType, InputSource
 
 _script = None
-
-
-class InputSource(Enum):
-    INLINE = 0
-    FILE = 1
 
 
 def read_examples(examples):
@@ -55,11 +52,12 @@ def definition_value(context, nodes):
     """
     DEFINE /intent|entity/ IDENTIFIER EXAMPLES
     """
-    _, def_type, def_name, examples = nodes
+    _, def_type_name, def_name, examples = nodes
     value = {
         'name': def_name,
         'examples': read_examples(examples)
     }
+    def_type = ComponentType(def_type_name)
     _script.add_component(context, def_type, def_name, value)
     return value
 
@@ -88,6 +86,19 @@ def prefixed_value(_, nodes):
     return nodes[0] + nodes[1]
 
 
+def member_definiiton_value(_, nodes):
+    return nodes[0], nodes[2]
+
+
+def define_menu_value(context, nodes):
+    """
+    MENU: 'menu' IDENTIFIER COLON BUTTON_DEFINITION+[SEPARATOR] 'end'
+    """
+    _, name, _, buttons, _ = nodes
+    _script.add_component(context, ComponentType.MENU, name, buttons)
+    return nodes
+
+
 def is_not_empty_value(_, nodes):
     """
     IS_NOT_EMPTY: VARIABLE is not? empty
@@ -97,6 +108,10 @@ def is_not_empty_value(_, nodes):
         return [variable, 'is_empty']
     else:
         return [variable, 'is_not_empty']
+
+
+def literal_object_value(_, nodes):
+    return {member: value for member, value in nodes[0]}
 
 
 def has_entity_value(_, nodes):
@@ -206,8 +221,8 @@ def change_flow_value(context, nodes):
     """
     _, _, flow, _ = nodes
 
-    if not _script.has_component('flow', flow):
-        _script.ask_missing_component('flow', flow, context)
+    if not _script.has_component(ComponentType.FLOW, flow):
+        _script.ask_missing_component(ComponentType.FLOW, flow, context)
 
     return {
         'action': 'change_dialog',  # Right now the action is change_dialog
@@ -221,15 +236,23 @@ def define_command_value(context, nodes):
     """
     _, _, keyword, _, flow = nodes
 
-    if not _script.has_component('flow', flow):
-        _script.ask_missing_component('flow', flow, context)
+    if not _script.has_component(ComponentType.FLOW, flow):
+        _script.ask_missing_component(ComponentType.FLOW, flow, context)
 
     command = {
         'keyword': keyword,
         'dialog': flow
     }
 
-    _script.add_component(context, 'command', keyword, command)
+    _script.add_component(
+        ErrorContext(
+            _script.get_current_file(),
+            context,
+        ),
+        ComponentType.COMMAND,
+        keyword,
+        command
+    )
 
 
 def open_flow_value(context, nodes):
@@ -238,8 +261,8 @@ def open_flow_value(context, nodes):
     """
     _, _, flow = nodes
 
-    if not _script.has_component('flow', flow):
-        _script.ask_missing_component('flow', flow, context)
+    if not _script.has_component(ComponentType.FLOW, flow):
+        _script.ask_missing_component(ComponentType.FLOW, flow, context)
 
     return {
         'action': 'open_flow',  # Right now the action is change_dialog
@@ -345,24 +368,38 @@ def flow_value(context, nodes):
     FLOW_TYPE? flow IDENTIFIER FLOW_INTENT? BLOCK
     """
 
-    flow_type, _, name, flow_intention, block = nodes
+    flow_type_name, _, name, flow_intention, block = nodes
     value = {
         'name': name,
         'actions': block
     }
 
+    flow_type = FlowType(flow_type_name)
+
     if flow_intention is not None:
         intent = flow_intention[1][1:]
         try:
-            intent_component = _script.get_component(context, 'intent', intent)
+            intent_component = _script.get_component(
+                context,
+                ComponentType.INTENT,
+                intent
+            )
             intent_component['dialog'] = name
         except ComponentNotDefined:
             pass
 
-    value['is_fallback'] = True if flow_type == 'fallback' else False
-    value['is_qna'] = True if flow_type == 'qna' else False
+    value['is_fallback'] = True if flow_type == FlowType.FALLBACK else False
+    value['is_qna'] = True if flow_type == FlowType.QNA else False
 
-    _script.add_component(context, 'flow', name, value)
+    _script.add_component(
+        ErrorContext(
+            _script.get_current_file(),
+            context,
+        ),
+        ComponentType.FLOW,
+        name,
+        value
+    )
 
     return value
 
@@ -398,13 +435,20 @@ def attribute_value(_, nodes):
     return nodes[1], nodes[2]
 
 
-def card_body_value(_, nodes):
+def card_body_value(context, nodes):
     """
     CARD_BODY: ATTRIBUTE+[SEPARATOR] BUTTON_DEFINITION*[SEPARATOR];
     """
     attributes, buttons = nodes[0], nodes[1]
 
     card_body = {name: value for name, value in attributes}
+    if not card_body.get('title'):
+        raise CardTitleEmptyError(
+            ErrorContext(
+                _script.get_current_file(),
+                context
+            )
+        )
     if buttons:
         card_body['buttons'] = buttons
 
@@ -433,7 +477,12 @@ def define_carousel_value(context, nodes):
     CAROUSEL: 'carousel' IDENTIFIER COLON CAROUSEL_BODY 'end';
     """
     _, identifier, _, carousel_body, _ = nodes
-    _script.add_component(context, 'carousel', identifier, carousel_body)
+    _script.add_component(
+        context,
+        ComponentType.CAROUSEL,
+        identifier,
+        carousel_body
+    )
 
 
 def carousel_content_source_value(_, nodes):
@@ -443,29 +492,61 @@ def carousel_content_source_value(_, nodes):
     return nodes[1]
 
 
-def send_carousel_value(context, nodes):
+def show_component_value(context, nodes):
     """
-    SEND_CAROUSEL: 'show' IDENTIFIER ['using' EXPRESSION];
+    SHOW_COMPONENT: 'show' IDENTIFIER ['using' EXPRESSION];
     """
     _, name, source = nodes
-    try:
-        carousel = _script.get_component(context, 'carousel', name)
-    except ComponentNotDefined as ex:
-        raise UndefinedCarousel(context, name)
 
+    if _script.has_component(ComponentType.CAROUSEL, name):
+        return send_carousel_value(context, name, source)
+    elif _script.has_component(ComponentType.MENU, name):
+        return send_menu_value(context, name)
+
+    raise UndefinedComponent(
+        ErrorContext(
+            _script.get_current_file(),
+            context
+        ),
+        name
+    )
+
+
+def send_carousel_value(context, name, source):
+    carousel = _script.get_component(context, ComponentType.CAROUSEL, name)
     send_carousel = {'action': 'send_carousel'}
     send_carousel.update(carousel)
 
     if 'card_content' in carousel:
         if not source:
-            raise DynamicCarouselMissingSource(context, name)
+            raise DynamicCarouselMissingSource(
+                ErrorContext(
+                    _script.get_current_file(),
+                    context
+                ),
+                name
+            )
 
         send_carousel.update({'content_source': source})
 
     elif source:
-        raise StaticCarouselWithSource(context, name)
+        raise StaticCarouselWithSource(
+            ErrorContext(
+                _script.get_current_file(),
+                context
+            ),
+            name
+        )
 
     return send_carousel
+
+
+def send_menu_value(context, name):
+    menu = _script.get_component(context, ComponentType.MENU, name)
+    return {
+        'action': 'send_menu',
+        'buttons': menu
+    }
 
 
 def set_var_value(context, nodes):
@@ -474,11 +555,20 @@ def set_var_value(context, nodes):
     """
     _, identifier, _, exp = nodes
 
-    return {
+    set_var = {
         'action': 'set_var',
-        'var_name': identifier,
-        'value': exp
+        'var_name': identifier
     }
+    # These are special cases. Right now I don't know if thery're useful, but
+    # I'll keep them here, just in case
+    if exp == 'empty':
+        set_var['value'] = {}
+    elif exp == 'nil':
+        set_var['value'] = None
+    else:
+        set_var['value'] = exp
+
+    return set_var
 
 
 def single_action_value(context, nodes):
@@ -568,22 +658,25 @@ def build_actions() -> dict:
         'COMMAND': define_command_value,
         'COMMENT': pass_none,
         'DEFINITION': definition_value,
-        'ELSE_BODY': else_body_value,
         'ELSE': else_value,
+        'ELSE_BODY': else_body_value,
         'ENTITY': prefixed_value,
+        'EQUALS': equals_value,
         'EXAMPLE_FILE': example_file_value,
         'EXAMPLE_LIST': example_list_value,
-        'EQUALS': equals_value,
         'FALLBACK': fallback_value,
         'FLOW': flow_value,
         'FLOW_type': flow_type_value,
+        'HAS_ENTITY': has_entity_value,
         'IF': if_statement_value,
         'IF_BODY': if_body_value,
         'INTEGER': integer_value,
         'INTENT': prefixed_value,
         'IS_NOT_EMPTY': is_not_empty_value,
-        'HAS_ENTITY': has_entity_value,
+        'LITERAL_OBJECT': literal_object_value,
         'MEMBER': prefixed_value,
+        'MEMBER_DEFINITION': member_definiiton_value,
+        'MENU': define_menu_value,
         'OBJECT': object_value,
         'OPEN_FLOW': open_flow_value,
         'OPERATOR': operator_value,
@@ -593,11 +686,11 @@ def build_actions() -> dict:
         'QUICK_REPLIES': quick_replies_value,
         'REPLY': reply_value,
         'REPLY_BODY': reply_body_value,
-        'SEND_CAROUSEL': send_carousel_value,
+        'SCALAR_BUTTON': scalar_button_value,
         'SET_VAR': set_var_value,
+        'SHOW_COMPONENT': show_component_value,
         'SINGLE_ACTION': single_action_value,
         'STRING': string_value,
-        'SCALAR_BUTTON': scalar_button_value,
         'VARIABLE': prefixed_value,
     }
 

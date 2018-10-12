@@ -1,0 +1,1 @@
+var-bad-syntax.flow:2:Syntax error. " do\n  var *3 = other_".

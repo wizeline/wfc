@@ -1,0 +1,17 @@
+flows:
+- actions:
+  - set_var:
+      value: null
+      var_name: nulo
+  - set_var:
+      value: {}
+      var_name: nada
+  - set_var:
+      value:
+        age: 36
+        name: Max Power
+      var_name: persona
+  - send_text:
+      text: My name is {{$persona.name}}, and I'm {{$persona.age}} years old
+  name: hola
+version: 2.1.0

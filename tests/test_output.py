@@ -4,9 +4,11 @@ from unittest.mock import MagicMock
 from wfc.errors import (
     ComponentNotDefined,
     ComponentNotSupprted,
-    ComponentRedefinition
+    ComponentRedefinition,
+    ErrorContext
 )
 from wfc.output import Script
+from wfc.types import ComponentType
 
 
 class TestScript(unittest.TestCase):
@@ -14,45 +16,65 @@ class TestScript(unittest.TestCase):
         unittest.TestCase.setUp(self)
         self.component = {'any': 'object'}
         self.name = 'any-object'
-        self.context = MagicMock()
-        self.script = Script(self.context)
-        self.context.get_input_path.return_value = '/tmp/file.flow'
+        self.error_context = ErrorContext('script.flow', MagicMock())
+        self.compiler_context = MagicMock()
+        self.compiler_context.get_input_path.return_value = 'script.flow'
+        self.script = Script(self.compiler_context)
 
     def test_script_add_component_success(self):
         components = {
-            'button': {},
-            'carousel': {},
-            'entity': {},
-            'flow': {'is_fallback': False, 'is_qna': False},
-            'integration': {},
-            'intent': {}
+            ComponentType.BUTTON: {},
+            ComponentType.CAROUSEL: {},
+            ComponentType.ENTITY: {},
+            ComponentType.FLOW: {'is_fallback': False, 'is_qna': False},
+            ComponentType.INTEGRATION: {},
+            ComponentType.INTENT: {}
         }
 
         for component_type, component in components.items():
-            self.script.add_component(None,
-                                      component_type,
-                                      self.name,
-                                      component)
-            stored_component = self.script.get_component(None, component_type,
-                                                         self.name)
+            self.script.add_component(
+                self.error_context,
+                component_type,
+                self.name,
+                component
+            )
+            stored_component = self.script.get_component(
+                self.error_context,
+                component_type,
+                self.name
+            )
             self.assertEqual(stored_component, component)
 
     def test_script_add_unsupported_component(self):
         with self.assertRaises(ComponentNotSupprted):
-            self.script.add_component(None, 'blah', 'any_name', {})
+            self.script.add_component(
+                self.error_context,
+                'blah',
+                'any_name',
+                {}
+            )
 
     def test_script_redefine_component(self):
-        self.script.add_component(None, 'button', 'my_button', {})
+        self.script.add_component(None, ComponentType.BUTTON, 'my_button', {})
         with self.assertRaises(ComponentRedefinition):
-            self.script.add_component(None, 'button', 'my_button', {})
+            self.script.add_component(
+                self.error_context,
+                ComponentType.BUTTON,
+                'my_button',
+                {}
+            )
 
     def test_script_get_unexisting_component(self):
         with self.assertRaises(ComponentNotDefined):
-            self.script.get_component(None, 'button', 'button')
+            self.script.get_component(
+                self.error_context,
+                'button',
+                'button'
+            )
 
         self.script.add_component(
             None,
-            'flow',
+            ComponentType.FLOW,
             'onboarding',
             {
                 'is_fallback': True,
@@ -61,4 +83,4 @@ class TestScript(unittest.TestCase):
             }
         )
         with self.assertRaises(ComponentNotDefined):
-            self.script.get_component(None, 'flow', 'not_a_flow')
+            self.script.get_component(self.error_context, 'flow', 'not_a_flow')
