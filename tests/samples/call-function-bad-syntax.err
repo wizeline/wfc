@@ -1,0 +1,1 @@
+call-function-bad-syntax.flow:2:Syntax error. "do\n  call *$some_inte".

@@ -39,14 +39,12 @@ class OutputBuilder:
 
 class Script:
     def __init__(self, compiler_context):
+        assert not isinstance(compiler_context, ErrorContext), 'Ooops!'
         self._asked_components = []
         self._components = {}
         self._fallback_flow = ''
         self._qna_flow = ''
         self.compiler_context = compiler_context
-
-    def _get_current_file(self):
-        return os.path.basename(self.compiler_context.get_input_path())
 
     def _raise_missing_component_error(self, component_type, name, context):
         if component_type == ComponentType.CAROUSEL:
@@ -59,14 +57,13 @@ class Script:
         self._asked_components.append((
             component_type,
             name,
-            ErrorContext(self._get_current_file(), context)
+            ErrorContext(self.get_current_file(), context)
         ))
 
     def add_component(self, context, component_type, name, component):
         if not isinstance(component_type, ComponentType):
             raise ComponentNotSupprted(
                 context,
-                self.compiler_context.get_input_path(),
                 component_type
             )
 
@@ -78,7 +75,6 @@ class Script:
                 else:
                     raise FallbackFlowRedefinition(
                         context,
-                        self.compiler_context.get_input_path(),
                         self._fallback_flow,
                         component['name']
                     )
@@ -90,8 +86,7 @@ class Script:
                 else:
                     raise QNAFlowRedefinition(
                         context,
-                        self.compiler_context.get_input_path(),
-                        self._fallback_flow,
+                        self._qna_flow,
                         component['name']
                     )
 
@@ -110,12 +105,15 @@ class Script:
         except KeyError:
             raise ComponentNotDefined(
                 context,
-                self.compiler_context.get_input_path(),
+                self.get_current_file(),
                 name
             )
 
     def get_components_by_type(self, component_type):
         return self._components.get(component_type, {})
+
+    def get_current_file(self):
+        return os.path.basename(self.compiler_context.get_input_path())
 
     def get_fallback_flow(self):
         return self._fallback_flow
@@ -127,7 +125,7 @@ class Script:
         if not isinstance(component_type, ComponentType):
             raise ComponentNotSupprted(
                 self.compiler_context,
-                self.compiler_context.get_input_path(),
+                self.compiler_context.input_path,
                 component_type
             )
         return name in self._components.get(component_type, {})

@@ -5,8 +5,9 @@ from parglare.actions import pass_none
 from wfc.errors import (
     ComponentNotDefined,
     DynamicCarouselMissingSource,
+    ErrorContext,
     StaticCarouselWithSource,
-    UndefinedComponent
+    UndefinedComponent,
 )
 from wfc.types import ComponentType, FlowType, InputSource
 
@@ -242,7 +243,15 @@ def define_command_value(context, nodes):
         'dialog': flow
     }
 
-    _script.add_component(context, ComponentType.COMMAND, keyword, command)
+    _script.add_component(
+        ErrorContext(
+            _script.get_current_file(),
+            context,
+        ),
+        ComponentType.COMMAND,
+        keyword,
+        command
+    )
 
 
 def open_flow_value(context, nodes):
@@ -381,7 +390,15 @@ def flow_value(context, nodes):
     value['is_fallback'] = True if flow_type == FlowType.FALLBACK else False
     value['is_qna'] = True if flow_type == FlowType.QNA else False
 
-    _script.add_component(context, ComponentType.FLOW, name, value)
+    _script.add_component(
+        ErrorContext(
+            _script.get_current_file(),
+            context,
+        ),
+        ComponentType.FLOW,
+        name,
+        value
+    )
 
     return value
 
@@ -479,8 +496,10 @@ def show_component_value(context, nodes):
         return send_menu_value(context, name)
 
     raise UndefinedComponent(
-        context,
-        _script.compiler_context.get_input_path(),
+        ErrorContext(
+            _script.get_current_file(),
+            context
+        ),
         name
     )
 
@@ -492,12 +511,24 @@ def send_carousel_value(context, name, source):
 
     if 'card_content' in carousel:
         if not source:
-            raise DynamicCarouselMissingSource(context, name)
+            raise DynamicCarouselMissingSource(
+                ErrorContext(
+                    _script.get_current_file(),
+                    context
+                ),
+                name
+            )
 
         send_carousel.update({'content_source': source})
 
     elif source:
-        raise StaticCarouselWithSource(context, name)
+        raise StaticCarouselWithSource(
+            ErrorContext(
+                _script.get_current_file(),
+                context
+            ),
+            name
+        )
 
     return send_carousel
 
