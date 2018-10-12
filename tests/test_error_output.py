@@ -9,7 +9,7 @@ from tests.util import mixins
 
 class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
     def setUp(self):
-        self.maxDiff= None
+        self.maxDiff = None
         self.output = '/tmp/errores.txt'
 
     def try_to_compile(self, *flows):

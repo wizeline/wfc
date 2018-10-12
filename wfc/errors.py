@@ -2,7 +2,6 @@ import os
 import re
 
 import parglare
-from parglare.parser import Context as ParglareContext
 
 
 class ErrorContext:
@@ -46,7 +45,8 @@ class ParseError(WFCError):
 
 class CompilationError(Exception):
     def __init__(self, context, *args):
-        assert isinstance(context, ErrorContext), f'Context is a {type(context)}'
+        assert isinstance(context,
+                          ErrorContext), f'Bad context {type(context)}'
         super().__init__(*args)
         self.context = context
 

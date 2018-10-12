@@ -47,7 +47,12 @@ class TestScript(unittest.TestCase):
 
     def test_script_add_unsupported_component(self):
         with self.assertRaises(ComponentNotSupprted):
-            self.script.add_component(self.error_context, 'blah', 'any_name', {})
+            self.script.add_component(
+                self.error_context,
+                'blah',
+                'any_name',
+                {}
+            )
 
     def test_script_redefine_component(self):
         self.script.add_component(None, ComponentType.BUTTON, 'my_button', {})
