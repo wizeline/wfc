@@ -3,6 +3,7 @@ from uuid import uuid4
 from parglare.actions import pass_none
 
 from wfc.errors import (
+    CardTitleEmptyError,
     ComponentNotDefined,
     DynamicCarouselMissingSource,
     ErrorContext,
@@ -434,13 +435,20 @@ def attribute_value(_, nodes):
     return nodes[1], nodes[2]
 
 
-def card_body_value(_, nodes):
+def card_body_value(context, nodes):
     """
     CARD_BODY: ATTRIBUTE+[SEPARATOR] BUTTON_DEFINITION*[SEPARATOR];
     """
     attributes, buttons = nodes[0], nodes[1]
 
     card_body = {name: value for name, value in attributes}
+    if not card_body.get('title'):
+        raise CardTitleEmptyError(
+            ErrorContext(
+                _script.get_current_file(),
+                context
+            )
+        )
     if buttons:
         card_body['buttons'] = buttons
 

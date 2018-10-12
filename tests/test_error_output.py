@@ -76,6 +76,10 @@ class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
         self.run_test('dynamic-carousel-without-source.err',
                       'dynamic-carousel-without-source.flow')
 
+    def test_dynamic_carousel_with_empty_title(self):
+        self.run_test('dynamic-carousel-with-empty-title.err',
+                      'dynamic-carousel-with-empty-title.flow')
+
     def test_error(self):
         self.run_test('error.err',
                       'error.flow')

@@ -118,3 +118,8 @@ class UndefinedFlow(CompilationError):
 class ComponentRedefinition(CompilationError):
     def _build_error_message(self):
         return f'Redefinition of {self.args[0]} "{self.args[1]}"'
+
+
+class CardTitleEmptyError(CompilationError):
+    def _build_error_message(self):
+        return f'Card title should not be empty'
