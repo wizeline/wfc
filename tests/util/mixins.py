@@ -1,5 +1,7 @@
+import json
 import os
 import tempfile
+import yaml
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 SAMPLES_HOME = os.path.join(HERE, '../samples')
@@ -39,3 +41,11 @@ class SampleHandler:
     def load_sample(self, sample_name):
         sample_path = os.path.join(SAMPLES_HOME, sample_name)
         return open(sample_path, 'r')
+
+    def load_json_script(self, script_name):
+        with self.load_sample(script_name) as script_file:
+            return json.load(script_file)
+
+    def load_yaml_script(self, script_name):
+        with self.load_sample(script_name) as script_file:
+            return yaml.load(script_file)

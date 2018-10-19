@@ -1,0 +1,7 @@
+Script does not meet schema for version 2.1.0 at action onboarding[0]
+{
+  "meh": {
+    "text": "Does not matter"
+  },
+  "id": "any"
+}

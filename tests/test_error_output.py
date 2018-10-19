@@ -10,10 +10,13 @@ from tests.util import mixins
 class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
     def setUp(self):
         self.maxDiff = None
-        self.output = '/tmp/errores.txt'
+        self.output = '/tmp/errors.txt'
+        self.stderr = sys.stderr
+
+    def tearDown(self):
+        sys.stderr = self.stderr
 
     def try_to_compile(self, *flows):
-        stderr = sys.stderr
         with open(self.output, 'w') as output:
             sys.stderr = output
             sys.argv = [
@@ -22,7 +25,6 @@ class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
                 ' '.join(flows)
             ]
             cli.main()
-        sys.stderr = stderr
 
     def load_output(self):
         with open(self.output) as output:

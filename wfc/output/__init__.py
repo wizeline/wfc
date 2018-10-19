@@ -11,9 +11,8 @@ from wfc.errors import (
     UndefinedCarousel,
     UndefinedFlow
 )
-from wfc.commons import OutputVersion
 from wfc.output import v20, v21
-from wfc.types import ComponentType
+from wfc.types import ComponentType, OutputVersion
 
 _VERSIONS = {
     OutputVersion.V20: v20,

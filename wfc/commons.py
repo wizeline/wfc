@@ -1,16 +1,11 @@
 import json
 import os
 
-from enum import Enum
-
 import parglare
 
+from wfc.types import OutputVersion
+
 __home__ = os.path.abspath(os.path.dirname(__file__))
-
-
-class OutputVersion(Enum):
-    V20 = '2.0.0'
-    V21 = '2.1.0'
 
 
 def asset_path(asset: str) -> str:
