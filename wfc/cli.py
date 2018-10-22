@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import yaml
 import os
 import sys
 
@@ -9,6 +10,16 @@ from wfc import core, get_version
 from wfc.commons import OutputVersion
 from wfc.errors import InvalidOutputFormat, SchemaViolationError
 from wfc.schema import SchemaValidator
+
+
+def load_compiled_script(input_file):
+    input_script = input_file.read()
+    if input_script[0] in '{["':
+        script = json.loads(input_script)
+    else:
+        script = yaml.load(input_script)
+
+    return script
 
 
 def main():
@@ -24,7 +35,7 @@ def main():
             validator = SchemaValidator()
             for script_file_name in args.check_schema:
                 with open(script_file_name) as script_file:
-                    validator.execute(json.load(script_file))
+                    validator.execute(load_compiled_script(script_file))
             return 0
 
         else:
