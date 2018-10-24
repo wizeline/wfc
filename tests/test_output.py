@@ -19,6 +19,7 @@ class TestScript(unittest.TestCase):
         self.error_context = ErrorContext('script.flow', MagicMock())
         self.compiler_context = MagicMock()
         self.compiler_context.get_input_path.return_value = 'script.flow'
+        self.parser_context = MagicMock()
         self.script = Script(self.compiler_context)
 
     def test_script_add_component_success(self):
@@ -33,12 +34,12 @@ class TestScript(unittest.TestCase):
 
         for component_type, component in components.items():
             self.script.add_component(
-                self.error_context,
+                self.parser_context,
                 component_type,
                 self.name,
                 component
             )
-            stored_component = self.script.get_component(
+            stored_component, _ = self.script.get_component(
                 self.error_context,
                 component_type,
                 self.name
@@ -48,7 +49,7 @@ class TestScript(unittest.TestCase):
     def test_script_add_unsupported_component(self):
         with self.assertRaises(ComponentNotSupprted):
             self.script.add_component(
-                self.error_context,
+                self.parser_context,
                 'blah',
                 'any_name',
                 {}
@@ -58,7 +59,7 @@ class TestScript(unittest.TestCase):
         self.script.add_component(None, ComponentType.BUTTON, 'my_button', {})
         with self.assertRaises(ComponentRedefinition):
             self.script.add_component(
-                self.error_context,
+                self.parser_context,
                 ComponentType.BUTTON,
                 'my_button',
                 {}
@@ -73,7 +74,7 @@ class TestScript(unittest.TestCase):
             )
 
         self.script.add_component(
-            None,
+            self.parser_context,
             ComponentType.FLOW,
             'onboarding',
             {

@@ -58,6 +58,7 @@ def definition_value(context, nodes):
         'examples': read_examples(examples)
     }
     def_type = ComponentType(def_type_name)
+
     _script.add_component(context, def_type, def_name, value)
     return value
 
@@ -245,10 +246,7 @@ def define_command_value(context, nodes):
     }
 
     _script.add_component(
-        ErrorContext(
-            _script.get_current_file(),
-            context,
-        ),
+        context,
         ComponentType.COMMAND,
         keyword,
         command
@@ -379,7 +377,7 @@ def flow_value(context, nodes):
     if flow_intention is not None:
         intent = flow_intention[1][1:]
         try:
-            intent_component = _script.get_component(
+            intent_component, _ = _script.get_component(
                 context,
                 ComponentType.INTENT,
                 intent
@@ -392,10 +390,7 @@ def flow_value(context, nodes):
     value['is_qna'] = True if flow_type == FlowType.QNA else False
 
     _script.add_component(
-        ErrorContext(
-            _script.get_current_file(),
-            context,
-        ),
+        context,
         ComponentType.FLOW,
         name,
         value
@@ -513,7 +508,7 @@ def show_component_value(context, nodes):
 
 
 def send_carousel_value(context, name, source):
-    carousel = _script.get_component(context, ComponentType.CAROUSEL, name)
+    carousel, _ = _script.get_component(context, ComponentType.CAROUSEL, name)
     send_carousel = {'action': 'send_carousel'}
     send_carousel.update(carousel)
 
@@ -542,7 +537,7 @@ def send_carousel_value(context, name, source):
 
 
 def send_menu_value(context, name):
-    menu = _script.get_component(context, ComponentType.MENU, name)
+    menu, _ = _script.get_component(context, ComponentType.MENU, name)
     return {
         'action': 'send_menu',
         'buttons': menu
@@ -636,6 +631,17 @@ def button_definition_value(_, nodes):
     BUTTON_DEFINITION: 'button' BUTTON;
     """
     return nodes[1]
+
+
+def build_flows() -> list:
+    try:
+        flows = _script.get_components_by_type(ComponentType.FLOW)
+        onboarding = flows.pop('onboarding')
+        flows = [onboarding] + list(flows.values())
+    except KeyError:
+        flows = list(flows.values())
+
+    return [flow for flow, _ in flows]
 
 
 def build_actions() -> dict:

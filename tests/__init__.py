@@ -35,13 +35,13 @@ class CompilerTestCase(unittest.TestCase,
         script = self._compile_sample(test_target, '2.0.0')
         self._prune_action_ids(script)
 
-        expected_script = self._load_json_script(f'{test_target}.json')
+        expected_script = self.load_json_script(f'{test_target}.json')
         self.assertDictEqual(expected_script, script)
 
         script = self._compile_sample(test_target, '2.1.0')
         self._prune_action_ids(script)
 
-        expected_script = self._load_yaml_script(f'{test_target}.yaml')
+        expected_script = self.load_yaml_script(f'{test_target}.yaml')
         self.assertDictEqual(expected_script, script)
 
     def _compile_with_failure(self, test_target):
@@ -70,14 +70,6 @@ class CompilerTestCase(unittest.TestCase,
         with core.CompilerContext(self.arg_parser.parse_args(args)) as context:
             context.set_quiet()
             return core.compile(context)
-
-    def _load_json_script(self, script_name):
-        with self.load_sample(script_name) as script_file:
-            return json.load(script_file)
-
-    def _load_yaml_script(self, script_name):
-        with self.load_sample(script_name) as script_file:
-            return yaml.load(script_file)
 
     def _prune_action_ids(self, script):
         if 'dialogs' in script:

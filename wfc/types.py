@@ -6,6 +6,9 @@ class __WFCEnum(Enum):
     def is_valid(cls, value):
         return any(value == member.value for member in cls)
 
+    def __str__(self):
+        return self.value
+
 
 class ComponentType(__WFCEnum):
     BUTTON = 'button'
@@ -27,3 +30,14 @@ class FlowType(__WFCEnum):
 class InputSource(__WFCEnum):
     INLINE = 0
     FILE = 1
+
+
+class OutputVersion(__WFCEnum):
+    V20 = '2.0.0'
+    V21 = '2.1.0'
+
+
+class ComponentDefinitionContext:
+    def __init__(self, path, line):
+        self.path = path
+        self.line = line

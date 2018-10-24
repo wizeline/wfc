@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import json
+import yaml
 import os
 import sys
 
@@ -6,7 +8,18 @@ from argparse import ArgumentParser
 
 from wfc import core, get_version
 from wfc.commons import OutputVersion
-from wfc.errors import InvalidOutputFormat
+from wfc.errors import InvalidOutputFormat, SchemaViolationError
+from wfc.schema import SchemaValidator
+
+
+def load_compiled_script(input_file):
+    input_script = input_file.read()
+    if input_script[0] in '{["':
+        script = json.loads(input_script)
+    else:
+        script = yaml.load(input_script)
+
+    return script
 
 
 def main():
@@ -18,13 +31,22 @@ def main():
         return 0
 
     try:
-        with core.CompilerContext(args) as context:
-            rc = core.compile(context)
+        if args.check_schema:
+            validator = SchemaValidator()
+            for script_file_name in args.check_schema:
+                with open(script_file_name) as script_file:
+                    validator.execute(load_compiled_script(script_file))
+            return 0
+
+        else:
+            with core.CompilerContext(args) as context:
+                rc = core.compile(context)
     except (
         FileNotFoundError,
         IsADirectoryError,
         NotADirectoryError,
-        InvalidOutputFormat
+        InvalidOutputFormat,
+        SchemaViolationError
     ) as ex:
         sys.stderr.write(f'{ex}\n')
         rc = getattr(ex, 'errno', 1)
@@ -51,5 +73,7 @@ def make_argument_parser():
                         help='Output format: "2.0.0", "2.1.0"')
     parser.add_argument('-w', '--workdir', default=os.curdir,
                         help='work directory')
+    parser.add_argument('--check-schema', nargs='+',
+                        help='Validate if compiled script meets schema')
 
     return parser

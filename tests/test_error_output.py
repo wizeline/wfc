@@ -10,10 +10,13 @@ from tests.util import mixins
 class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
     def setUp(self):
         self.maxDiff = None
-        self.output = '/tmp/errores.txt'
+        self.output = '/tmp/errors.txt'
+        self.stderr = sys.stderr
+
+    def tearDown(self):
+        sys.stderr = self.stderr
 
     def try_to_compile(self, *flows):
-        stderr = sys.stderr
         with open(self.output, 'w') as output:
             sys.stderr = output
             sys.argv = [
@@ -22,7 +25,6 @@ class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
                 ' '.join(flows)
             ]
             cli.main()
-        sys.stderr = stderr
 
     def load_output(self):
         with open(self.output) as output:
@@ -99,6 +101,10 @@ class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
     def test_intent_bad_syntax(self):
         self.run_test('intent-bad-syntax.err',
                       'intent-bad-syntax.flow')
+
+    def test_intent_not_used(self):
+        self.run_test('intent-not-used.err',
+                      'intent-not-used.flow')
 
     def test_open_flow_bad_syntax(self):
         self.run_test('open-flow-bad-syntax.err',

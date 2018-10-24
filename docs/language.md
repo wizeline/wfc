@@ -193,14 +193,14 @@ Right now there is support for integer numbers only
 The identifiers are used to express more complex symbols like:
 
 - **variables**: `$identifier`
-- **entities**: `#identifier`
-- **intents**: `@identifier`
+- **entities**: `@identifier`
+- **intents**: `#identifier`
 
 Any of these symbols can have members:
 
 - `$integration.method.member`
-- `#entity.instance`
-- `@intent.value`
+- `@entity.instance`
+- `#intent.value`
 
 #### Binary Operation
 Let EXP be a **string**, **number**, **constant**, **variable**, **entity**, **intent**, then:
@@ -404,7 +404,7 @@ flow say_hi do
 done
 ```
 ```
-flow say_hi given @greeting do
+flow say_hi given #greeting do
   ask "What can I help you with?" as user_response
   if $user_response equals 'show menu' change dialog menu
 done

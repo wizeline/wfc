@@ -51,7 +51,7 @@ class TestArgumentParser(CompilerTestCase):
         self.assertEquals(SAMPLES_HOME, arguments.workdir)
         self.assertListEqual(['main.flow', 'module.flow'], arguments.flows)
         self.assertTrue(arguments.quiet)
-        self.assertTrue(arguments.version)
+        self.assertIsNone(arguments.check_schema)
 
     def test_parse_without_output_file(self):
         arguments = self.arg_parser.parse_args(['-v', '2.0.0',
@@ -61,6 +61,7 @@ class TestArgumentParser(CompilerTestCase):
         self.assertEquals('2.0.0', arguments.outversion)
         self.assertEquals(os.curdir, arguments.workdir)
         self.assertListEqual(['main.flow', 'module.flow'], arguments.flows)
+        self.assertIsNone(arguments.check_schema)
 
     def test_parse_without_output_format(self):
         arguments = self.arg_parser.parse_args(['-o', 'script.json',
@@ -70,6 +71,7 @@ class TestArgumentParser(CompilerTestCase):
         self.assertEquals('2.0.0', arguments.outversion)
         self.assertEquals(os.curdir, arguments.workdir)
         self.assertListEqual(['main.flow', 'module.flow'], arguments.flows)
+        self.assertIsNone(arguments.check_schema)
 
     def test_parse_with_modules_only(self):
         arguments = self.arg_parser.parse_args(['main.flow', 'module.flow'])
@@ -78,6 +80,7 @@ class TestArgumentParser(CompilerTestCase):
         self.assertEquals('2.0.0', arguments.outversion)
         self.assertEquals(os.curdir, arguments.workdir)
         self.assertListEqual(['main.flow', 'module.flow'], arguments.flows)
+        self.assertIsNone(arguments.check_schema)
 
     def test_parse_arguments_with_quiet_mode_only(self):
         arguments = self.arg_parser.parse_args(['-q'])
@@ -87,6 +90,7 @@ class TestArgumentParser(CompilerTestCase):
         self.assertListEqual([None], arguments.flows)
         self.assertEquals(os.curdir, arguments.workdir)
         self.assertTrue(arguments.quiet)
+        self.assertIsNone(arguments.check_schema)
 
     def test_parse_no_arguments(self):
         sys.argv = ['wfc']
@@ -97,3 +101,4 @@ class TestArgumentParser(CompilerTestCase):
         self.assertListEqual([None], arguments.flows)
         self.assertEquals(os.curdir, arguments.workdir)
         self.assertFalse(arguments.quiet)
+        self.assertIsNone(arguments.check_schema)

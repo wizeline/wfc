@@ -1,7 +1,10 @@
+import json
 import os
 import re
 
 import parglare
+
+from wfc.types import OutputVersion
 
 
 class ErrorContext:
@@ -14,6 +17,30 @@ class ErrorContext:
             self.line, self.column = position
         else:
             self.line, self.column = None, None
+
+
+class SchemaViolationError(Exception):
+    def __init__(self, validation_error, script, version):
+        self.error = validation_error
+        self.script = script
+        self.version = version
+
+    def _get_action_index(self):
+        return self.error.path[1]
+
+    def _get_flow_name(self):
+        if self.version == OutputVersion.V20:
+            return self.script[self.error.path[0]][self.error.path[1]]['name']
+        elif self.version == OutputVersion.V21:
+            return self.script[self.error.path[0]][self.error.path[1]]['name']
+
+    def __str__(self):
+        flow_name = self._get_flow_name()
+        action_index = self._get_action_index()
+        failed_instance = json.dumps(self.error.instance, indent=2)
+        return (f'Script does not meet schema for version {self.version} '
+                f'at action {flow_name}[{action_index}]\n'
+                f'{failed_instance}')
 
 
 class InvalidOutputFormat(Exception):
@@ -82,7 +109,7 @@ class FlowNotDefined(CompilationError):
 
 class UnusedIntent(CompilationError):
     def _build_error_message(self):
-        return f'Intent not used: {self.args[0]}'
+        return f'Intent "{self.args[0]}" is not used'
 
 
 class DynamicCarouselMissingSource(CompilationError):
