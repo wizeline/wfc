@@ -38,7 +38,6 @@ class OutputBuilder:
 
 class Script:
     def __init__(self, compiler_context):
-        assert not isinstance(compiler_context, ErrorContext), 'Ooops!'
         self._asked_components = []
         self._components = {}
         self._fallback_flow = ''
@@ -60,9 +59,10 @@ class Script:
         ))
 
     def add_component(self, context, component_type, name, component):
+        definition_context = ErrorContext(self.get_current_file(), context)
         if not isinstance(component_type, ComponentType):
             raise ComponentNotSupprted(
-                context,
+                definition_context,
                 component_type
             )
 
@@ -73,7 +73,7 @@ class Script:
                     self._fallback_flow = component['name']
                 else:
                     raise FallbackFlowRedefinition(
-                        context,
+                        definition_context,
                         self._fallback_flow,
                         component['name']
                     )
@@ -84,7 +84,7 @@ class Script:
                     self._qna_flow = component['name']
                 else:
                     raise QNAFlowRedefinition(
-                        context,
+                        definition_context,
                         self._qna_flow,
                         component['name']
                     )
@@ -92,9 +92,11 @@ class Script:
         components = self._components.get(component_type, {})
 
         if name in components:
-            raise ComponentRedefinition(context, component_type, name)
+            raise ComponentRedefinition(definition_context,
+                                        component_type,
+                                        name)
 
-        components[name] = component
+        components[name] = component, definition_context
         self._components.update({component_type: components})
 
     def get_component(self, context, component_type, name):

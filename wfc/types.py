@@ -35,3 +35,9 @@ class InputSource(__WFCEnum):
 class OutputVersion(__WFCEnum):
     V20 = '2.0.0'
     V21 = '2.1.0'
+
+
+class ComponentDefinitionContext:
+    def __init__(self, path, line):
+        self.path = path
+        self.line = line

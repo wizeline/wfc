@@ -38,7 +38,7 @@ class TestScript(unittest.TestCase):
                 self.name,
                 component
             )
-            stored_component = self.script.get_component(
+            stored_component, _ = self.script.get_component(
                 self.error_context,
                 component_type,
                 self.name

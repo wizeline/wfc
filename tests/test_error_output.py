@@ -102,6 +102,10 @@ class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
         self.run_test('intent-bad-syntax.err',
                       'intent-bad-syntax.flow')
 
+    def test_intent_not_used(self):
+        self.run_test('intent-not-used.err',
+                      'intent-not-used.flow')
+
     def test_open_flow_bad_syntax(self):
         self.run_test('open-flow-bad-syntax.err',
                       'open-flow-bad-syntax.flow')

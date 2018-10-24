@@ -18,10 +18,10 @@ def build_commands() -> list:
         ComponentType.COMMAND
     ).values()
 
-    for command in registered_commands:
+    for command, definition_context in registered_commands:
         if not _script.has_component(ComponentType.FLOW, command['dialog']):
             raise CompilationError(
-                None,
+                definition_context,
                 'Command linked to unexisting flow: {} -> {}'.format(
                     command['keyword'],
                     command['dialog']
@@ -37,26 +37,11 @@ def build_intentions() -> list:
     registered_intents = _script.get_components_by_type(
         ComponentType.INTENT
     ).values()
-    for intent in registered_intents:
+    for intent, definition_context in registered_intents:
         if 'dialog' not in intent:
-            raise UnusedIntent(
-                None,
-                _script.compiler_context.get_input_path(),
-                'Intent not used: {}'.format(intent['name'])
-            )
+            raise UnusedIntent(definition_context, intent['name'])
         intents.append(intent)
     return intents
-
-
-def build_flows() -> list:
-    try:
-        flows = _script.get_components_by_type(ComponentType.FLOW)
-        onboarding = flows.pop('onboarding')
-        flows = [onboarding] + list(flows.values())
-    except KeyError:
-        flows = list(flows.values())
-
-    return flows
 
 
 def get_script():
@@ -65,7 +50,7 @@ def get_script():
         'version': "2.0.0",
         'intentions': build_intentions(),
         'entities': [],
-        'dialogs': build_flows(),
+        'dialogs': rules.build_flows(),
         'qa': []
     }
     commands = build_commands()

@@ -109,7 +109,7 @@ class FlowNotDefined(CompilationError):
 
 class UnusedIntent(CompilationError):
     def _build_error_message(self):
-        return f'Intent not used: {self.args[0]}'
+        return f'Intent "{self.args[0]}" is not used'
 
 
 class DynamicCarouselMissingSource(CompilationError):

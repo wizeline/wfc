@@ -1,0 +1,20 @@
+define intent help
+
+carousel menu_options:
+  card:
+    set title "Ask a question or select an option! "
+    button message("Schedule a visit", "visit"),
+    button message("Submit a Customer Care and Warranty request", "customer care"),
+    button message("Find a home", "new customer")
+end
+
+flow onboarding do
+  say "Hi, I'm the Lennar virtual assistant."
+  say "What can I help you with today? "
+done
+
+flow main_menu do
+  show menu_options
+  wait selected_option
+done
+
