@@ -8,7 +8,6 @@
       "actions": [
         {
           "action": "ask_for_input",
-          "can_switch_context": false,
           "text": "Some question",
           "var_name": "response",
           "quick_replies": [

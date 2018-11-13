@@ -199,9 +199,6 @@ def bot_asks_value(_, nodes):
 
         if expect:
             value['expect'] = expect
-        else:
-            # TODO: REVIEW THE RIGHT USE OF THIS
-            value['can_switch_context'] = False
 
     if context_switch is not None:
         value['can_switch_context'] = False

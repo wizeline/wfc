@@ -8,5 +8,6 @@ flows:
   - ask_for_input:
       text: Some other question
       var_name: response
+      can_switch_context: false
   name: onboarding
 version: 2.1.0
