@@ -161,9 +161,6 @@
         "fallback": {
           "type": "string",
           "minLength": 1
-        },
-        "can_switch_content": {
-          "type": "boolean"
         }
       },
       "required": ["fallback"],
@@ -195,7 +192,7 @@
           }
         }
       },
-      "required": ["id", "send_text"],
+      "required": ["send_text"],
       "additionalProperties": false
     },
     "waitInput": {
@@ -215,13 +212,16 @@
             },
             "expect": {
               "$ref": "#/definitions/expect"
+            },
+            "can_switch_context": {
+              "type": "boolean"
             }
           },
           "required": ["var_name"],
           "additionalProperties": false
         }
       },
-      "required": ["id", "wait_input"],
+      "required": ["wait_input"],
       "additionalProperties": false
     },
     "askForInput": {
@@ -253,13 +253,16 @@
             },
             "expect": {
               "$ref": "#/definitions/expect"
+            },
+            "can_switch_context": {
+              "type": "boolean"
             }
           },
           "required": ["var_name", "text"],
           "additionalProperties": false
         }
       },
-      "required": ["id", "ask_for_input"],
+      "required": ["ask_for_input"],
       "additionalProperties": false
     },
     "openFlow": {
@@ -282,7 +285,7 @@
           "additionalProperties": false
         }
       },
-      "required": ["id", "open_flow"],
+      "required": ["open_flow"],
       "additionalProperties": false
     },
     "setVar": {
@@ -308,7 +311,7 @@
           "additionalProperties": false
         }
       },
-      "required": ["id", "set_var"],
+      "required": ["set_var"],
       "additionalProperties": false
     },
     "changeFlow": {
@@ -331,7 +334,7 @@
           "additionalProperties": false
         }
       },
-      "required": ["id", "change_flow"],
+      "required": ["change_flow"],
       "additionalProperties": false
     },
     "sendMenu": {
@@ -357,7 +360,7 @@
           "additionalProperties": false
         }
       },
-      "required": ["id", "send_menu"],
+      "required": ["send_menu"],
       "additionalProperties": false
     },
     "sendMedia": {
@@ -391,7 +394,7 @@
           "additionalProperties": false
         }
       },
-      "required": ["id", "send_media"],
+      "required": ["send_media"],
       "additionalProperties": false
     },
     "subscribeFeed": {
@@ -414,7 +417,7 @@
           "additionalProperties": false
         }
       },
-      "required": ["id", "subscribe_feed"],
+      "required": ["subscribe_feed"],
       "additionalProperties": false
     },
     "unsubscribeFeed": {
@@ -437,7 +440,7 @@
           "additionalProperties": false
         }
       },
-      "required": ["id", "unsubscribe_feed"],
+      "required": ["unsubscribe_feed"],
       "additionalProperties": false
     },
     "handoff": {
@@ -460,7 +463,7 @@
           "additionalProperties": false
         }
       },
-      "required": ["id", "handoff"],
+      "required": ["handoff"],
       "additionalProperties": false
     },
     "callIntegration": {
@@ -510,7 +513,7 @@
           "additionalProperties": false
         }
       },
-      "required": ["id", "call_integration"],
+      "required": ["call_integration"],
       "additionalProperties": false
     },
     "sendDynamicCarousel": {
@@ -547,7 +550,6 @@
                   "$ref": "#/definitions/buttons"
                 }
               },
-              "required": ["title"],
               "additionalProperties": false
             }
           },
@@ -555,7 +557,7 @@
           "additionalProperties": false
         }
       },
-      "required": ["id", "send_dynamic_carousel"],
+      "required": ["send_dynamic_carousel"],
       "additionalProperties": false
     },
     "sendStaticCarousel": {
@@ -589,15 +591,14 @@
                   "buttons": {
                     "$ref": "#/definitions/buttons"
                   }
-                },
-                "required": ["title"]
+                }
               }
             }
           },
           "required": ["cards"]
         }
       },
-      "required": ["id", "send_static_carousel"],
+      "required": ["send_static_carousel"],
       "additionalProperties": false
     },
     "if": {
@@ -623,7 +624,7 @@
           "required": ["condition", "then"]
         }
       },
-      "required": ["id", "if"],
+      "required": ["if"],
       "additionalProperties": false
     },
     "unaryOperators": {
@@ -632,7 +633,7 @@
     },
     "binaryOperators": {
       "type": "string",
-      "enum": ["equal", "not_equal", "has_entity"]
+      "enum": ["equal", "not_equal", "has_entity", "+"]
     },
     "operands": {
       "anyOf": [
