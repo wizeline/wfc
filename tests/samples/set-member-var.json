@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "hola",
+      "actions": [
+        {
+          "action": "set_var",
+          "var_name": "persona",
+          "value": {
+            "name": "Homer J. Simpson",
+            "age": 36
+          }
+        },
+        {
+          "action": "set_var",
+          "var_name": "persona.name",
+          "value": "Max Power"
+        },
+        {
+          "action": "set_var",
+          "var_name": "persona.address",
+          "value": {
+            "city": "Springfield",
+            "street": "Evergreen",
+            "number": 742
+          }
+        }
+      ]
+    }
+  ],
+  "qa": []
+}
