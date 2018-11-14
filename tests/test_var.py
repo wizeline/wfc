@@ -13,3 +13,6 @@ class TestVar(CompilerTestCase):
 
     def test_arithmetic_var(self):
         self._compile('arithmetic')
+
+    def test_member_var(self):
+        self._compile('set-member-var')

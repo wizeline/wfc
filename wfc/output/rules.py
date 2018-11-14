@@ -543,13 +543,13 @@ def send_menu_value(context, name):
 
 def set_var_value(context, nodes):
     """
-    SET_VAR: 'var' IDENTIFIER '=' E;
+    SET_VAR: 'var' OBJECT '=' E;
     """
-    _, identifier, _, exp = nodes
+    _, object_, _, exp = nodes
 
     set_var = {
         'action': 'set_var',
-        'var_name': identifier
+        'var_name': object_
     }
     # These are special cases. Right now I don't know if thery're useful, but
     # I'll keep them here, just in case

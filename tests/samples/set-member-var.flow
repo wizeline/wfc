@@ -1,0 +1,8 @@
+flow hola do
+  var persona = name: 'Homer J. Simpson',
+                age: 36
+  var persona.name = 'Max Power'
+  var persona.address = city: 'Springfield',
+                        street: 'Evergreen',
+                        number: 742
+done
