@@ -7,7 +7,6 @@
       "name": "main",
       "actions": [
         {
-          "action": "send_menu",
           "buttons": [
             {
               "label": "Details",
@@ -31,7 +30,33 @@
               "payload": "http://www.wizeline.com/profile",
               "type": "open_url"
             }
-          ]
+          ],
+          "action": "send_menu"
+        }
+      ]
+    },
+    {
+      "name": "other_menu",
+      "actions": [
+        {
+          "buttons": [
+            {
+              "label": "Option1",
+              "payload": {
+                "option_id": "foo"
+              },
+              "type": "postback"
+            },
+            {
+              "label": "Option2",
+              "payload": {
+                "option_id": "bar"
+              },
+              "type": "postback"
+            }
+          ],
+          "text": "Please choice an option",
+          "action": "send_menu"
         }
       ]
     }

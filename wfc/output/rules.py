@@ -93,10 +93,15 @@ def member_definiiton_value(_, nodes):
 
 def define_menu_value(context, nodes):
     """
-    MENU: 'menu' IDENTIFIER COLON BUTTON_DEFINITION+[SEPARATOR] 'end'
+    MENU: 'menu' IDENTIFIER STRING? COLON BUTTON_DEFINITION+[SEPARATOR] 'end'
     """
-    _, name, _, buttons, _ = nodes
-    _script.add_component(context, ComponentType.MENU, name, buttons)
+    _, name, text, _, buttons, _ = nodes
+
+    menu = {'buttons': buttons}
+    if text:
+        menu['text'] = text
+
+    _script.add_component(context, ComponentType.MENU, name, menu)
     return nodes
 
 
@@ -535,10 +540,8 @@ def send_carousel_value(context, name, source):
 
 def send_menu_value(context, name):
     menu, _ = _script.get_component(context, ComponentType.MENU, name)
-    return {
-        'action': 'send_menu',
-        'buttons': menu
-    }
+    menu['action'] = 'send_menu'
+    return menu
 
 
 def set_var_value(context, nodes):
