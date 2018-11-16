@@ -43,9 +43,14 @@ def example_list_value(_, nodes):
 
 def equals_value(_, nodes):
     """
-    EQUALS: OBJECT 'equals' EXPRESSION;
+    EQUALS: VARIABLE 'not'? 'equal' EXPRESSION;
     """
-    return nodes
+    variable, negative, _, expression = nodes
+
+    if negative is None:
+        return [variable, 'equal', expression]
+    else:
+        return [variable, 'not_equal', expression]
 
 
 def definition_value(context, nodes):
@@ -105,9 +110,9 @@ def define_menu_value(context, nodes):
     return nodes
 
 
-def is_not_empty_value(_, nodes):
+def is_empty_value(_, nodes):
     """
-    IS_NOT_EMPTY: VARIABLE is not? empty
+    IS_EMPTY: VARIABLE is not? empty
     """
     variable, _, negative, _ = nodes
     if negative is None:
@@ -324,7 +329,8 @@ def if_closure_value(_, nodes):
 def not_condition(condition):
     negatives = {
         'is_empty': 'is_not_empty',
-        'has_entity': 'has_not_entity'
+        'has_entity': 'has_not_entity',
+        'equal': 'not_equal'
     }
     not_condition = list(condition)
     not_condition[1] = negatives[condition[1]]
@@ -678,7 +684,7 @@ def build_actions() -> dict:
         'IF_BODY': if_body_value,
         'INTEGER': integer_value,
         'INTENT': prefixed_value,
-        'IS_NOT_EMPTY': is_not_empty_value,
+        'IS_EMPTY': is_empty_value,
         'LITERAL_OBJECT': literal_object_value,
         'MEMBER': prefixed_value,
         'MEMBER_DEFINITION': member_definiiton_value,
