@@ -1,0 +1,49 @@
+{
+  "version": "2.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "test_equal",
+      "actions": [
+        {
+          "action": "send_text",
+          "text": "something",
+          "condition": [
+            "$variable",
+            "equal",
+            "random string"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "{{$variable}}",
+          "condition": [
+            "$varialbe",
+            "not_equal",
+            "other string"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "equal",
+          "condition": [
+            "$variable",
+            "equal",
+            "something"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "different",
+          "condition": [
+            "$variable",
+            "not_equal",
+            "something"
+          ]
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

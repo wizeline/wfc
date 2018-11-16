@@ -5,6 +5,15 @@ menu onboarding_options:
   button url('More Details', 'http://www.wizeline.com/profile')
 end
 
+menu with_instructions 'Please choice an option':
+  button postback('Option1', option_id: "foo"),
+  button postback('Option2', option_id: "bar")
+end
+
 flow main do
   show onboarding_options
+done
+
+flow other_menu do
+  show with_instructions
 done

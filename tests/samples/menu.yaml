@@ -16,4 +16,17 @@ flows:
         payload: http://www.wizeline.com/profile
         type: open_url
   name: main
+- actions:
+  - send_menu:
+      buttons:
+      - label: Option1
+        payload:
+          option_id: foo
+        type: postback
+      - label: Option2
+        payload:
+          option_id: bar
+        type: postback
+      text: Please choice an option
+  name: other_menu
 version: 2.1.0
