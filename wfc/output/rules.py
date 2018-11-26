@@ -43,9 +43,14 @@ def example_list_value(_, nodes):
 
 def equals_value(_, nodes):
     """
-    EQUALS: OBJECT 'equals' EXPRESSION;
+    EQUALS: VARIABLE 'not'? 'equal' EXPRESSION;
     """
-    return nodes
+    variable, negative, _, expression = nodes
+
+    if negative is None:
+        return [variable, 'equal', expression]
+    else:
+        return [variable, 'not_equal', expression]
 
 
 def definition_value(context, nodes):
@@ -93,16 +98,21 @@ def member_definiiton_value(_, nodes):
 
 def define_menu_value(context, nodes):
     """
-    MENU: 'menu' IDENTIFIER COLON BUTTON_DEFINITION+[SEPARATOR] 'end'
+    MENU: 'menu' IDENTIFIER STRING? COLON BUTTON_DEFINITION+[SEPARATOR] 'end'
     """
-    _, name, _, buttons, _ = nodes
-    _script.add_component(context, ComponentType.MENU, name, buttons)
+    _, name, text, _, buttons, _ = nodes
+
+    menu = {'buttons': buttons}
+    if text:
+        menu['text'] = text
+
+    _script.add_component(context, ComponentType.MENU, name, menu)
     return nodes
 
 
-def is_not_empty_value(_, nodes):
+def is_empty_value(_, nodes):
     """
-    IS_NOT_EMPTY: VARIABLE is not? empty
+    IS_EMPTY: VARIABLE is not? empty
     """
     variable, _, negative, _ = nodes
     if negative is None:
@@ -199,9 +209,6 @@ def bot_asks_value(_, nodes):
 
         if expect:
             value['expect'] = expect
-        else:
-            # TODO: REVIEW THE RIGHT USE OF THIS
-            value['can_switch_context'] = False
 
     if context_switch is not None:
         value['can_switch_context'] = False
@@ -322,7 +329,8 @@ def if_closure_value(_, nodes):
 def not_condition(condition):
     negatives = {
         'is_empty': 'is_not_empty',
-        'has_entity': 'has_not_entity'
+        'has_entity': 'has_not_entity',
+        'equal': 'not_equal'
     }
     not_condition = list(condition)
     not_condition[1] = negatives[condition[1]]
@@ -538,21 +546,19 @@ def send_carousel_value(context, name, source):
 
 def send_menu_value(context, name):
     menu, _ = _script.get_component(context, ComponentType.MENU, name)
-    return {
-        'action': 'send_menu',
-        'buttons': menu
-    }
+    menu['action'] = 'send_menu'
+    return menu
 
 
 def set_var_value(context, nodes):
     """
-    SET_VAR: 'var' IDENTIFIER '=' E;
+    SET_VAR: 'var' OBJECT '=' E;
     """
-    _, identifier, _, exp = nodes
+    _, object_, _, exp = nodes
 
     set_var = {
         'action': 'set_var',
-        'var_name': identifier
+        'var_name': object_
     }
     # These are special cases. Right now I don't know if thery're useful, but
     # I'll keep them here, just in case
@@ -678,7 +684,7 @@ def build_actions() -> dict:
         'IF_BODY': if_body_value,
         'INTEGER': integer_value,
         'INTENT': prefixed_value,
-        'IS_NOT_EMPTY': is_not_empty_value,
+        'IS_EMPTY': is_empty_value,
         'LITERAL_OBJECT': literal_object_value,
         'MEMBER': prefixed_value,
         'MEMBER_DEFINITION': member_definiiton_value,

@@ -20,14 +20,6 @@ def action_value(_, nodes):
     return action
 
 
-def bot_asks_value(_, nodes):
-    bot_asks = rules.bot_asks_value(_, nodes)
-    # TODO: Disabling context switching has a bug for script v2.1.0, the fix is
-    # coming soon. Meanwhile we just remove the option
-    bot_asks.pop('can_switch_context', None)
-    return bot_asks
-
-
 def change_flow_value(_, nodes):
     change_flow = rules.change_flow_value(_, nodes)
     flow_name = change_flow.pop('dialog')
@@ -76,7 +68,6 @@ def build_actions() -> dict:
     actions = rules.build_actions()
     actions.update({
         'ACTION': action_value,
-        'BOT_ASKS': bot_asks_value,
         'CHANGE_FLOW': change_flow_value,
         'IF': if_statement_value,
         'SHOW_COMPONENT': show_component_value

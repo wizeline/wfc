@@ -119,7 +119,7 @@ Menus are lists of buttons indentified by a name. Once they're defined you can
 use them later.
 
 ```
-menu mainOptions:
+menu mainOptions 'Please pick an option':
   button message('Option One'),
   button postback('Option Two', 'clicked the second button'),
   button url('External Option', 'http://example.com/document.txt')

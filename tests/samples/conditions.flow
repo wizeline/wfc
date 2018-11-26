@@ -1,0 +1,12 @@
+flow test_equal do
+  if $variable equal 'random string':
+    say 'something'
+
+  if $varialbe not equal 'other string':
+    say '{{$variable}}'
+
+  if $variable equal 'something':
+    say 'equal'
+  else:
+    say 'different'
+done

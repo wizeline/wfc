@@ -87,8 +87,7 @@
             "Answer1",
             "Answer2",
             "Answer3"
-          ],
-          "can_switch_context": false
+          ]
         },
         {
           "action": "send_text",
