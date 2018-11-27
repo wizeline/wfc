@@ -1,4 +1,4 @@
-import json
+import yaml
 import os
 
 from tests import CompilerTestCase, SAMPLES_HOME
@@ -11,7 +11,7 @@ class TestModules(CompilerTestCase):
     def test_compile_several_modules(self):
         rc = self._compile_with_args([
             '-o',
-            self.get_tmp_path(),
+            self.get_tmp_path(), #test with local path
             '-w',
             SAMPLES_HOME,
             'module.flow',
@@ -21,7 +21,9 @@ class TestModules(CompilerTestCase):
 
         with self.open_tmpin() as compiled_script:
             expected = self.load_json_script('root.json')
-            compiled = json.load(compiled_script)
+            buf = compiled_script.read()
+            print(buf)
+            compiled = yaml.load(buf)
             self._prune_action_ids(compiled)
             self.assertDictEqual(expected, compiled)
 
