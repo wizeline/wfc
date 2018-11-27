@@ -141,3 +141,19 @@ class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
     def test_var_bad_syntax(self):
         self.run_test('var-bad-syntax.err',
                       'var-bad-syntax.flow')
+
+    def test_wait_to_set_a_constant(self):
+        self.run_test('wait-to-set-constant.err',
+                      'wait-to-set-constant.flow')
+
+    def test_wait_with_quick_replies1(self):
+        self.run_test('wait-with-quick-replies1.err',
+                      'wait-with-quick-replies1.flow')
+
+    def test_wait_with_quick_replies2(self):
+        self.run_test('wait-with-quick-replies2.err',
+                      'wait-with-quick-replies2.flow')
+
+    def test_wait_with_quick_replies3(self):
+        self.run_test('wait-with-quick-replies3.err',
+                      'wait-with-quick-replies3.flow')

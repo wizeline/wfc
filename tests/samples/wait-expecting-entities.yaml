@@ -1,0 +1,14 @@
+flows:
+- actions:
+  - wait_input:
+      expect:
+        entities:
+        - 'yes'
+        - 'no'
+        - other_entity
+        fallback: Did not get that
+      var_name: response
+  - send_text:
+      text: 'response is: {{$response}}'
+  name: wait_for_entities
+version: 2.1.0

@@ -1,0 +1,4 @@
+flow onboarding do
+  wait input keeping context
+  say "You just said '{{$input}}'"
+done

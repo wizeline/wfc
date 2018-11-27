@@ -1,0 +1,8 @@
+flow wait_for_entities do
+  wait response with:
+    reply @yes,
+    reply @no,
+    reply @other_entity
+    fallback "Did not get that"
+  say "response is: {{$response}}"
+done
