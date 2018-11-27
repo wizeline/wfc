@@ -20,7 +20,7 @@ class TestModules(CompilerTestCase):
         assert rc == 0, 'Compilation should pass: rc=[{}]'.format(rc)
 
         with self.open_tmpin() as compiled_script:
-            expected = self.load_json_script('root.json')
+            expected = self.load_json_script('root.yaml')
             buf = compiled_script.read()
             print(buf)
             compiled = yaml.load(buf)
