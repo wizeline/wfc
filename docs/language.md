@@ -257,9 +257,26 @@ ask "Would your like to recive offers? as variable with:
 #### Bot Waits
 !['wait' action grammar][wait-grammar]
 
-Example
+This action reads a value from the user without prompting any question. The wait
+action supports expecting a list of entities, so the grammar reuses the quick
+replies grammar but the compiler dos not allow setting text to the expected
+entities.
+
+Wait action also supports disabling context switching using the `keeping
+context` keywords
+
+Examples
 ```
 wait variable
+```
+```
+wait variable keeping context
+```
+```
+wait variable with:
+  reply @yes,
+  reply @no
+  fallback "I didn't understand you, did you mean yes or no?"
 ```
 
 #### Set Variable
