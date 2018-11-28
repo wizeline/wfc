@@ -14,10 +14,10 @@ class SchemaValidator:
 
     def _load_output_schema(self, version):
         if version not in self._schemas:
-            if version == OutputVersion.V20:
-                schema_file = 'schema.json'
-            elif version == OutputVersion.V21:
+            if version == OutputVersion.V21:
                 schema_file = 'schema21.json'
+            elif version == OutputVersion.V20:
+                schema_file = 'schema.json'
             else:
                 raise ValueError('Invalid version', version)
 

@@ -1,4 +1,4 @@
-import json
+import yaml
 import os
 
 from tests import CompilerTestCase, SAMPLES_HOME
@@ -20,8 +20,8 @@ class TestModules(CompilerTestCase):
         assert rc == 0, 'Compilation should pass: rc=[{}]'.format(rc)
 
         with self.open_tmpin() as compiled_script:
-            expected = self.load_json_script('root.json')
-            compiled = json.load(compiled_script)
+            expected = self.load_yaml_script('root.yaml')
+            compiled = yaml.load(compiled_script)
             self._prune_action_ids(compiled)
             self.assertDictEqual(expected, compiled)
 

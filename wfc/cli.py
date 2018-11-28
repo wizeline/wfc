@@ -69,8 +69,8 @@ def make_argument_parser():
     parser.add_argument('-o', '--output', default='', help='output file')
     parser.add_argument('-q', '--quiet', default=False, action='store_true',
                         help='run compiler in quiet mode')
-    parser.add_argument('-v', '--outversion', default=OutputVersion.V20.value,
-                        help='Output format: "2.0.0", "2.1.0"')
+    parser.add_argument('-v', '--outversion', default=OutputVersion.V21.value,
+                        help='Output format: "2.1.0", "2.0.0"')
     parser.add_argument('-w', '--workdir', default=os.curdir,
                         help='work directory')
     parser.add_argument('--check-schema', nargs='+',

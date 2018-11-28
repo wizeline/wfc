@@ -20,12 +20,12 @@ def get_position_from_context(context):
     return parglare.pos_to_line_col(context.input_str, context.start_position)
 
 
-def load_output_schema(version_name='2.0.0') -> dict:
+def load_output_schema(version_name='2.1.0') -> dict:
     version = OutputVersion(version_name)
-    if version == OutputVersion.V20:
-        schema_file = 'schema.json'
-    elif version == OutputVersion.V21:
+    if version == OutputVersion.V21:
         schema_file = 'schema21.json'
+    elif version == OutputVersion.V20:
+        schema_file = 'schema.json'
     else:
         raise ValueError('Invalid schema', version)
 

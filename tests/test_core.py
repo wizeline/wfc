@@ -26,7 +26,7 @@ class TestContext(CompilerTestCase):
         with core.CompilerContext(args) as context:
             self.assertIs(sys.stdout, context.get_output_file())
             self.assertIs(sys.stdin, context.get_input_file())
-            self.assertEqual('2.0.0', context.get_output_version())
+            self.assertEqual('2.1.0', context.get_output_version())
             self.assertEqual(os.path.abspath('.'),
                              context.get_work_directory())
             self.assertTrue(context.is_verbose())

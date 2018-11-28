@@ -1,0 +1,12 @@
+flows:
+- actions:
+  - send_text:
+      text: Hello
+  - change_flow:
+      flow: second
+  name: onboarding
+- actions:
+  - send_text:
+      text: something
+  name: second
+version: 2.1.0
