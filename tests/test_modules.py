@@ -11,7 +11,8 @@ class TestModules(CompilerTestCase):
     def test_compile_several_modules(self):
         rc = self._compile_with_args([
             '-o',
-            self.get_tmp_path(), #test with local path
+            #self.get_tmp_path(), #test with local path
+            local_path = ('/Users/rosa.munoz/Wizeline/bots/wfc/tests/samples/root.yaml')
             '-w',
             SAMPLES_HOME,
             'module.flow',
