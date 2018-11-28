@@ -29,13 +29,34 @@ $ pip3 install /path/to/wfc-X.Y.zip
 With the snipet shown at [Hello World](#hello-world) section saved as `hellow.flow` do:
 
 ```sh
-$ python -m wfc < hello.flow > hello.json
+$ python -m wfc < hello.flow > hello.yaml
 ```
 
 Or:
 
 ```sh
-$ wfc < hello.flow > hello.json
+$ wfc < hello.flow > hello.yaml
+```
+
+And you'll get a new file `hello.yaml` with this contents:
+
+```yaml
+flows:
+- actions:
+  - id: b5db42a1-9601-4d4d-8fa2-8af3dfe3d834
+    send_text:
+      text: Hello World!
+  - id: f87c73eb-40ca-46a6-b54d-71daa6c55b71
+    send_text:
+      text: I am a simple bot
+  name: say_hi
+version: 2.1.0
+```
+
+Or:
+
+```sh
+$ wfc -v 2.0.0 < hello.flow > hello.json
 ```
 
 And you'll get a new file `hello.json` with this contents:
@@ -52,37 +73,18 @@ And you'll get a new file `hello.json` with this contents:
         {
           "action": "send_text",
           "text": "Hello World!",
-          "id": "2bc394e5-cf6e-465a-aa70-44bff7b33546"
+          "id": "2c3ab83b-a100-4bed-a68f-976c439ee945"
         },
         {
           "action": "send_text",
           "text": "I am a simple bot",
-          "id": "70cacd6e-090c-40ef-ba64-6ec4f61ae811"
+          "id": "c2666e82-e213-4b09-94eb-41ca7a47e2f5"
         }
       ]
     }
   ],
   "qa": []
 }
-```
-
-Or:
-
-```sh
-$ wfc -v 2.1.0 < hello.flow > hello.yaml
-```
-
-And you'll get a new file `hello.yaml` with this contents:
-
-```yaml
-flows:
-- actions:
-  - send_text:
-      text: Hello World!
-  - send_text:
-      text: I an a simple bot
-  name: say_hi
-version: 2.1.0
 ```
 
 There are some command line options available
