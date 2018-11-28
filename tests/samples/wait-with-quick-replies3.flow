@@ -1,0 +1,7 @@
+flow scenario3 do
+  wait response with:
+    reply 'Answer1',
+    reply 'Answer2',
+    reply 'Answer3'
+  say "response is: {{$response}}"
+done

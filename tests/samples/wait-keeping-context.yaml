@@ -1,0 +1,9 @@
+flows:
+- actions:
+  - wait_input:
+      can_switch_context: false
+      var_name: input
+  - send_text:
+      text: You just said '{{$input}}'
+  name: onboarding
+version: 2.1.0

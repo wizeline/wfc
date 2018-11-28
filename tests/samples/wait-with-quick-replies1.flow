@@ -1,0 +1,7 @@
+flow scenario1 do
+  wait response with:
+    reply "Of course" as @yes,
+    reply "No way" as @no
+    fallback "Did not get that"
+  say "response is: {{$response}}"
+done
