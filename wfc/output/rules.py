@@ -211,7 +211,7 @@ def bot_asks_value(_, nodes):
         if expect:
             value['expect'] = expect
 
-    if context_switch is not None:
+    if context_switch:
         value['can_switch_context'] = False
 
     return value
@@ -243,7 +243,7 @@ def bot_waits_value(context, nodes):
         if expect:
             value['expect'] = expect
 
-    if context_switch is not None:
+    if context_switch:
         value['can_switch_context'] = False
 
     return value

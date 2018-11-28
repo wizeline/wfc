@@ -257,12 +257,12 @@ ask "Would your like to recive offers? as variable with:
 #### Bot Waits
 !['wait' action grammar][wait-grammar]
 
-This action reads a value from the user without prompting any question. The wait
-action supports expecting a list of entities, so the grammar reuses the quick
-replies grammar but the compiler dos not allow setting text to the expected
+This action reads a value from the user without prompting any question.
+The wait action expects a list of entities, so quick replies' grammar is being
+reused. In addition, the compiler does not allow setting text to the expected
 entities.
 
-Wait action also supports disabling context switching using the `keeping
+Plus, it supports supports disabling context switching using the `keeping
 context` keywords
 
 Examples
