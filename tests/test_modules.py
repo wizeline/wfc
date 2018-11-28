@@ -11,8 +11,7 @@ class TestModules(CompilerTestCase):
     def test_compile_several_modules(self):
         rc = self._compile_with_args([
             '-o',
-            #self.get_tmp_path(), #test with local path
-            local_path = ('/Users/rosa.munoz/Wizeline/bots/wfc/tests/samples/root.yaml')
+            self.get_tmp_path(),
             '-w',
             SAMPLES_HOME,
             'module.flow',
@@ -21,10 +20,8 @@ class TestModules(CompilerTestCase):
         assert rc == 0, 'Compilation should pass: rc=[{}]'.format(rc)
 
         with self.open_tmpin() as compiled_script:
-            expected = self.load_json_script('root.yaml')
-            buf = compiled_script.read()
-            print(buf)
-            compiled = yaml.load(buf)
+            expected = self.load_yaml_script('root.yaml')
+            compiled = yaml.load(compiled_script)
             self._prune_action_ids(compiled)
             self.assertDictEqual(expected, compiled)
 
