@@ -91,7 +91,7 @@ KEEP_CONTEXT: 'keeping' 'context';
 
 BOT_ASKS: 'ask' STRING+ 'as' OBJECT KEEP_CONTEXT? QUICK_REPLIES?;
 BOT_SAYS: 'say' STRING+;
-BOT_WAITS: 'wait' IDENTIFIER;
+BOT_WAITS: 'wait' IDENTIFIER KEEP_CONTEXT? QUICK_REPLIES?;
 
 
 /* Experimental, not implemented */

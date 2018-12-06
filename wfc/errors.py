@@ -29,9 +29,9 @@ class SchemaViolationError(Exception):
         return self.error.path[1]
 
     def _get_flow_name(self):
-        if self.version == OutputVersion.V20:
+        if self.version == OutputVersion.V21:
             return self.script[self.error.path[0]][self.error.path[1]]['name']
-        elif self.version == OutputVersion.V21:
+        elif self.version == OutputVersion.V20:
             return self.script[self.error.path[0]][self.error.path[1]]['name']
 
     def __str__(self):
@@ -150,3 +150,8 @@ class ComponentRedefinition(CompilationError):
 class CardTitleEmptyError(CompilationError):
     def _build_error_message(self):
         return f'Card title should not be empty'
+
+
+class WaitInputWithQuickReplies(CompilationError):
+    def _build_error_message(self):
+        return f'Wait action does not support quick replies'

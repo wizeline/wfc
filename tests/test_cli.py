@@ -54,11 +54,11 @@ class TestArgumentParser(CompilerTestCase):
         self.assertIsNone(arguments.check_schema)
 
     def test_parse_without_output_file(self):
-        arguments = self.arg_parser.parse_args(['-v', '2.0.0',
+        arguments = self.arg_parser.parse_args(['-v', '2.1.0',
                                                 'main.flow', 'module.flow'])
 
         self.assertEquals('', arguments.output)
-        self.assertEquals('2.0.0', arguments.outversion)
+        self.assertEquals('2.1.0', arguments.outversion)
         self.assertEquals(os.curdir, arguments.workdir)
         self.assertListEqual(['main.flow', 'module.flow'], arguments.flows)
         self.assertIsNone(arguments.check_schema)
@@ -68,7 +68,7 @@ class TestArgumentParser(CompilerTestCase):
                                                 'main.flow', 'module.flow'])
 
         self.assertEquals('script.json', arguments.output)
-        self.assertEquals('2.0.0', arguments.outversion)
+        self.assertEquals('2.1.0', arguments.outversion)
         self.assertEquals(os.curdir, arguments.workdir)
         self.assertListEqual(['main.flow', 'module.flow'], arguments.flows)
         self.assertIsNone(arguments.check_schema)
@@ -77,7 +77,7 @@ class TestArgumentParser(CompilerTestCase):
         arguments = self.arg_parser.parse_args(['main.flow', 'module.flow'])
 
         self.assertEquals('', arguments.output)
-        self.assertEquals('2.0.0', arguments.outversion)
+        self.assertEquals('2.1.0', arguments.outversion)
         self.assertEquals(os.curdir, arguments.workdir)
         self.assertListEqual(['main.flow', 'module.flow'], arguments.flows)
         self.assertIsNone(arguments.check_schema)
@@ -86,7 +86,7 @@ class TestArgumentParser(CompilerTestCase):
         arguments = self.arg_parser.parse_args(['-q'])
 
         self.assertEquals('', arguments.output)
-        self.assertEquals('2.0.0', arguments.outversion)
+        self.assertEquals('2.1.0', arguments.outversion)
         self.assertListEqual([None], arguments.flows)
         self.assertEquals(os.curdir, arguments.workdir)
         self.assertTrue(arguments.quiet)
@@ -97,7 +97,7 @@ class TestArgumentParser(CompilerTestCase):
 
         arguments = self.arg_parser.parse_args()
         self.assertEquals('', arguments.output)
-        self.assertEquals('2.0.0', arguments.outversion)
+        self.assertEquals('2.1.0', arguments.outversion)
         self.assertListEqual([None], arguments.flows)
         self.assertEquals(os.curdir, arguments.workdir)
         self.assertFalse(arguments.quiet)

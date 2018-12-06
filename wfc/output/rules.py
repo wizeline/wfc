@@ -9,6 +9,7 @@ from wfc.errors import (
     ErrorContext,
     StaticCarouselWithSource,
     UndefinedComponent,
+    WaitInputWithQuickReplies
 )
 from wfc.types import ComponentType, FlowType, InputSource
 
@@ -192,7 +193,7 @@ def fallback_value(_, nodes):
 
 def bot_asks_value(_, nodes):
     """
-    ask STRING+ as IDENTIFIER QUICK_REPLIES?
+    ask STRING+ as IDENTIFIER KEEP_CONTEXT? QUICK_REPLIES?
     """
     _, questions, _, var_name, context_switch, replies = nodes
     value = {
@@ -210,17 +211,42 @@ def bot_asks_value(_, nodes):
         if expect:
             value['expect'] = expect
 
-    if context_switch is not None:
+    if context_switch:
         value['can_switch_context'] = False
 
     return value
 
 
-def bot_waits_value(_, nodes):
+def bot_waits_value(context, nodes):
     """
-    wait IDENTIFIER
+    wait IDENTIFIER KEEP_CONTEXT? QUICK_REPLIES?
     """
-    return {'action': 'wait_input', 'var_name': nodes[1]}
+    # wait_input action does not support quick replies but it supports
+    # expecting entities. So we admit quick replies from the grammar but only
+    # keep the expect and context switching features.
+    _, variable, context_switch, replies = nodes
+
+    value = {
+        'action': 'wait_input',
+        'var_name': variable
+    }
+
+    if replies:
+        quick_replies, expect = replies
+
+        if quick_replies:
+            raise WaitInputWithQuickReplies(ErrorContext(
+                _script.get_current_file(),
+                context
+            ))
+
+        if expect:
+            value['expect'] = expect
+
+    if context_switch:
+        value['can_switch_context'] = False
+
+    return value
 
 
 def change_flow_value(context, nodes):

@@ -1,0 +1,1 @@
+wait-to-set-constant.flow:2:Syntax error. "do\n  wait *1\ndone\n".
