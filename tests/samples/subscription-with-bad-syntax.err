@@ -1,0 +1,1 @@
+subscription-with-bad-syntax.flow:2:Syntax error. "subscribe *feed_name\n".

@@ -24,6 +24,20 @@ def string_value(_, value):
     return value[1:-1]
 
 
+def subscribe_feed_value(_, nodes):
+    return {
+        'action': 'subscribe_feed',
+        'feed': nodes[1]
+    }
+
+
+def unsubscribe_feed_value(_, nodes):
+    return {
+        'action': 'unsubscribe_feed',
+        'feed': nodes[1]
+    }
+
+
 def operator_value(_, value):
     return value[0].replace(' ', '_')
 
@@ -729,6 +743,8 @@ def build_actions() -> dict:
         'SHOW_COMPONENT': show_component_value,
         'SINGLE_ACTION': single_action_value,
         'STRING': string_value,
+        'SUBSCRIBE_FEED': subscribe_feed_value,
+        'UNSUBSCRIBE_FEED': unsubscribe_feed_value,
         'VARIABLE': prefixed_value,
     }
 
