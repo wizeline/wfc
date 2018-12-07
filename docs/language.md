@@ -356,7 +356,21 @@ show onboarding_options -- This is a menu
 
 Example
 ```
-TODO: Add example
+open flow followup
+```
+#### Subscriptions
+
+Users of Facebook bots can subscribe to broadcast feeds to receive periodic
+messages from the bot, by declaring an action **subscribe**. The user can also
+be unsubscribed from feeds with **unsubscribe** action. These actions must
+specify an existent feed name.
+
+Examples
+```
+subscribe 'feed name'
+```
+```
+unsubscribe 'feed name'
 ```
 ### Blocks
 ![Block grammar][block-grammar]

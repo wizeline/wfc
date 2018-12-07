@@ -1,0 +1,3 @@
+flow subscriptions do
+  subscribe feed_name
+done
