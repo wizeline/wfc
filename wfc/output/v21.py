@@ -47,7 +47,7 @@ def if_statement_value(_, nodes):
     if else_actions not in (None, 'end'):
         negative = rules.not_condition(condition)
         for else_action in else_actions:
-            name = get_action_name(action)
+            name = get_action_name(else_action)
             else_action[name]['condition'] = negative
         actions += else_actions
 
