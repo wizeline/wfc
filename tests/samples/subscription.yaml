@@ -1,0 +1,8 @@
+flows:
+- actions:
+  - subscribe_feed:
+      feed: feed_name
+  - unsubscribe_feed:
+      feed: other_feed_name
+  name: subscriptions
+version: 2.1.0

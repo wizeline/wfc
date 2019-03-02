@@ -138,6 +138,10 @@ class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
         self.run_test('static-carousel-with-source.err',
                       'static-carousel-with-source.flow')
 
+    def test_static_carousel_with_source(self):
+        self.run_test('subscription-with-bad-syntax.err',
+                      'subscription-with-bad-syntax.flow')
+
     def test_var_bad_syntax(self):
         self.run_test('var-bad-syntax.err',
                       'var-bad-syntax.flow')

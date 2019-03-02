@@ -1,0 +1,4 @@
+flow subscriptions do
+  subscribe 'feed_name'
+  unsubscribe 'other_feed_name'
+done
