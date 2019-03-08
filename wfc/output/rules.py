@@ -68,6 +68,19 @@ def equals_value(_, nodes):
         return [variable, 'not_equal', expression]
 
 
+def constant_value(context, nodes):
+    value = nodes[0]
+    if value == 'false':
+        return False
+    if value == 'true':
+        return True
+    if value == 'nil':
+        return None
+    if value == 'empty':
+        return {}
+    return nodes
+
+
 def definition_value(context, nodes):
     """
     DEFINE /intent|entity/ IDENTIFIER EXAMPLES
@@ -709,6 +722,7 @@ def build_actions() -> dict:
         'CHANGE_FLOW': change_flow_value,
         'COMMAND': define_command_value,
         'COMMENT': pass_none,
+        'CONSTANT': constant_value,
         'DEFINITION': definition_value,
         'ELSE': else_value,
         'ELSE_BODY': else_body_value,
