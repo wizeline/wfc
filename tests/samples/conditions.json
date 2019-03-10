@@ -19,9 +19,45 @@
           "action": "send_text",
           "text": "{{$variable}}",
           "condition": [
-            "$varialbe",
+            "$variable",
             "not_equal",
             "other string"
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "something",
+          "condition": [
+            "$variable",
+            "equal",
+            true
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "something",
+          "condition": [
+            "$variable",
+            "equal",
+            false
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "something",
+          "condition": [
+            "$variable",
+            "not_equal",
+            true
+          ]
+        },
+        {
+          "action": "send_text",
+          "text": "something",
+          "condition": [
+            "$variable",
+            "not_equal",
+            false
           ]
         },
         {
