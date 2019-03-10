@@ -24,7 +24,7 @@ VARIABLE: DOLLAR OBJECT;
 INTENT: HASH OBJECT;
 ENTITY: AT OBJECT;
 
-CONSTANT: 'empty' | 'null' | 'nil';
+CONSTANT: 'empty' | 'nil' | 'true' | 'false';
 
 OPERATOR: '+'
         | '-'

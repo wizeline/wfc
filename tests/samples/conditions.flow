@@ -2,8 +2,20 @@ flow test_equal do
   if $variable equal 'random string':
     say 'something'
 
-  if $varialbe not equal 'other string':
+  if $variable not equal 'other string':
     say '{{$variable}}'
+  
+  if $variable equal true:
+    say "something"
+  
+  if $variable equal false:
+    say "something"
+  
+  if $variable not equal true:
+    say "something"
+  
+  if $variable not equal false:
+    say "something"
 
   if $variable equal 'something':
     say 'equal'
