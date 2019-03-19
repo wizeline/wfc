@@ -3,7 +3,7 @@ import re
 
 
 def remove_comment(line):
-    return re.sub("^ *--.*$", '', line)
+    return re.sub('^ *--.*$', '', line)
 
 
 def include_file(context: object, line: str) -> None:
