@@ -26,13 +26,11 @@ class SchemaViolationError(Exception):
         self.version = version
 
     def _get_action_index(self):
-        return self.error.path[1]
+        return self.error.absolute_path[3]
 
     def _get_flow_name(self):
-        if self.version == OutputVersion.V21:
-            return self.script[self.error.path[0]][self.error.path[1]]['name']
-        elif self.version == OutputVersion.V20:
-            return self.script[self.error.path[0]][self.error.path[1]]['name']
+        path = self.error.absolute_path
+        return self.script[path[0]][path[1]]['name']
 
     def __str__(self):
         flow_name = self._get_flow_name()

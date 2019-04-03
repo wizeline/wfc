@@ -1,6 +1,2 @@
-Script does not meet schema for version 2.0.0 at action onboarding[0]
-{
-  "action": "meh",
-  "text": "The response is: {{$response}}",
-  "id": "any"
-}
+Script does not meet schema for version 2.0.0 at action onboarding[1]
+"meh"
