@@ -1,4 +1,3 @@
-import traceback
 import unittest
 
 from wfc.errors import SchemaViolationError
