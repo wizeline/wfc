@@ -97,6 +97,7 @@ carousel options_carousel:
     set description 'contact_phone',
     set image_url 'http://example-bucket.com/images/contact_avatar.jpg'
     button postback('Label', action:'action-text', id:'option-id'),
+    button postback('Object', action:'action-object', args:$args),
     button url('My Web Site', 'http://example.com')
 end
 ```

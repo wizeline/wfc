@@ -1,0 +1,9 @@
+menu onboarding_options:
+  button postback('Object', args: $object),
+  button postback('String', args: 'String'),
+  button postback('Integer', args: 666)
+end
+
+flow main do
+  show onboarding_options
+done

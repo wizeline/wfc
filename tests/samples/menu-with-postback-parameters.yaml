@@ -1,0 +1,18 @@
+flows:
+- actions:
+  - send_menu:
+      buttons:
+      - label: Object
+        payload:
+          args: $object
+        type: postback
+      - label: String
+        payload:
+          args: String
+        type: postback
+      - label: Integer
+        payload:
+          args: 666
+        type: postback
+  name: main
+version: 2.1.0

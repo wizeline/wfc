@@ -31,7 +31,7 @@ class TestSchemaValidator(unittest.TestCase, mixins.SampleHandler):
         self._insert_action_ids(script)
         self.assertTrue(self.validator.execute(script))
 
-    def test_validate_incorrect_action__v2_0_0(self):
+    def test_validate_incorrect_action_v2_0_0(self):
         script = self.load_json_script('ask.json')
         script['dialogs'][0]['actions'][1]['action'] = 'meh'
         self._insert_action_ids(script)
