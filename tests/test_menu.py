@@ -10,3 +10,6 @@ class TestMenu(CompilerTestCase):
 
     def test_send_menu_success(self):
         self._compile('menu')
+
+    def test_send_menu_with_postback_parameters(self):
+        self._compile('menu-with-postback-parameters')

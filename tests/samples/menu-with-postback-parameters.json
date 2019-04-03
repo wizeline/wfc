@@ -1,0 +1,39 @@
+{
+  "version": "2.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "main",
+      "actions": [
+        {
+          "buttons": [
+            {
+              "label": "Object",
+              "payload": {
+                "args": "$object"
+              },
+              "type": "postback"
+            },
+            {
+              "label": "String",
+              "payload": {
+                "args": "String"
+              },
+              "type": "postback"
+            },
+            {
+              "label": "Integer",
+              "payload": {
+                "args": 666
+              },
+              "type": "postback"
+            }
+          ],
+          "action": "send_menu"
+        }
+      ]
+    }
+  ],
+  "qa": []
+}
