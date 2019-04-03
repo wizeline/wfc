@@ -30,10 +30,7 @@ class SchemaViolationError(Exception):
 
     def _get_flow_name(self):
         path = self.error.absolute_path
-        if self.version == OutputVersion.V21:
-            return self.script[path[0]][path[1]]['name']
-        elif self.version == OutputVersion.V20:
-            return self.script[path[0]][path[1]]['name']
+        return self.script[path[0]][path[1]]['name']
 
     def __str__(self):
         flow_name = self._get_flow_name()
