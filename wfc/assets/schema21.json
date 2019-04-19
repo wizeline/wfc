@@ -106,7 +106,7 @@
   },
   "definitions": {
     "buttons": {
-      "type": "array",
+      "type": ["array", "string"],
       "items": {
         "type": "object",
         "properties": {
@@ -244,12 +244,8 @@
               "minLength": 1
             },
             "quick_replies": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "minLength": 1
-              },
-              "minItems": 1
+              "type": ["array", "string"],
+              "additionalProperties": false
             },
             "expect": {
               "$ref": "#/definitions/expect"
@@ -547,7 +543,33 @@
                   "minLength": 2
                 },
                 "buttons": {
-                  "$ref": "#/definitions/buttons"
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "label": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "payload": {
+                        "type": [
+                          "object",
+                          "string"
+                        ]
+                      },
+                      "type": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "flow": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": ["label"],
+                    "additionalProperties": false
+                  },
+                  "minItems": 1
                 }
               },
               "additionalProperties": false
@@ -637,7 +659,7 @@
     },
     "operands": {
       "anyOf": [
-        { "type": "string" },
+      	{ "type": "string" },
         { "type": "boolean" },
         { "type": "number" },
         { "$ref": "#/definitions/expression" }
