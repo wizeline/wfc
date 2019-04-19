@@ -1,0 +1,5 @@
+menu myMenu 'Please choice an option'
+
+flow main do
+  show myMenu
+done

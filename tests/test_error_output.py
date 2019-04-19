@@ -134,6 +134,10 @@ class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
         self.run_test('send-undefined-carousel.err',
                       'send-undefined-carousel.flow')
 
+    def test_send_empty_menu(self):
+        self.run_test('send-empty-menu.err',
+                      'send-empty-menu.flow')
+
     def test_static_carousel_with_source(self):
         self.run_test('static-carousel-with-source.err',
                       'static-carousel-with-source.flow')
