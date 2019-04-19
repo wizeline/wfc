@@ -127,6 +127,19 @@ menu mainOptions 'Please pick an option':
 end
 ```
 
+You can also define empty menus and populate them with buttons comming from a
+variable. This is useful if you get the button list at runtime through an
+integration call
+
+```
+menu dynamicMenu '{{$dynamicMessageVariable}}'
+```
+
+> If you define an empty menu, you must specify a variable holding the buttons
+> when display the menu: `show dynamicMenju using $buttonList`.
+> 
+> This variable has to honor the shema for button lists
+
 #### Intent and Entity Definition
 ![Intent and Entity definition][intent-entity-def]
 

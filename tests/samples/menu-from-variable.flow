@@ -1,0 +1,6 @@
+menu dynamicMenu 'This is a message'
+
+flow main do
+  call my_integration.get_options()
+  show dynamicMenu using $my_integration.get_options
+done
