@@ -6,6 +6,7 @@ from wfc.errors import (
     CardTitleEmptyError,
     ComponentNotDefined,
     DynamicCarouselMissingSource,
+    EmptyMenuMissingSource,
     ErrorContext,
     StaticCarouselWithSource,
     UndefinedComponent,
@@ -126,11 +127,12 @@ def member_definiiton_value(_, nodes):
 
 def define_menu_value(context, nodes):
     """
-    MENU: 'menu' IDENTIFIER STRING? COLON BUTTON_DEFINITION+[SEPARATOR] 'end'
+    MENU_BODY: COLON BUTTON_DEFINITION+[SEPARATOR] 'end';
+    MENU: 'menu' IDENTIFIER STRING? MENU_BODY?;
     """
-    _, name, text, _, buttons, _ = nodes
+    _, name, text, body = nodes
 
-    menu = {'buttons': buttons}
+    menu = {'buttons': body[1]} if body else {}
     if text:
         menu['text'] = text
 
@@ -557,7 +559,7 @@ def show_component_value(context, nodes):
     if _script.has_component(ComponentType.CAROUSEL, name):
         return send_carousel_value(context, name, source)
     elif _script.has_component(ComponentType.MENU, name):
-        return send_menu_value(context, name)
+        return send_menu_value(context, name, source)
 
     raise UndefinedComponent(
         ErrorContext(
@@ -597,9 +599,20 @@ def send_carousel_value(context, name, source):
     return send_carousel
 
 
-def send_menu_value(context, name):
+def send_menu_value(context, name, source):
     menu, _ = _script.get_component(context, ComponentType.MENU, name)
     menu['action'] = 'send_menu'
+    if source:
+        menu['buttons'] = source
+    elif 'buttons' not in menu:  # Trying to display an empty menu
+        raise EmptyMenuMissingSource(
+            ErrorContext(
+                _script.get_current_file(),
+                context
+            ),
+            name
+        )
+
     return menu
 
 

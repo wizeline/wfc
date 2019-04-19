@@ -141,7 +141,7 @@
                 }
               }
             },
-            "required": ["id", "action"],
+            "required": ["action"],
             "additionalProperties": false
           }
         },
@@ -152,7 +152,7 @@
   },
   "definitions": {
     "buttons": {
-      "type": "array",
+      "type": ["array", "string"],
       "items": {
         "type": "object",
         "properties": {
@@ -178,7 +178,8 @@
         "required": [
           "label"
         ]
-      }
+      },
+      "minItems": 1
     },
     "sendText": {
       "properties": {
@@ -369,10 +370,36 @@
               "minLength": 2
             },
             "buttons": {
-              "$ref": "#/definitions/buttons"
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "payload": {
+                    "type": [
+                      "object",
+                      "string"
+                    ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "flow": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "label"
+                ]
+              },
+              "minItems": 1
             }
           },
-          "required": ["title"],
           "additionalProperties": false
         },
         "cards": {
@@ -392,15 +419,14 @@
               "buttons": {
                 "$ref": "#/definitions/buttons"
               }
-            },
-            "required": ["title"]
+            }
           }
         }
       },
       "oneOf": [{
         "required": ["action", "cards"]
       }, {
-      "required": ["action", "content_source", "card_content"]
+        "required": ["action", "content_source", "card_content"]
       }]
     },
     "askForInput": {
@@ -414,12 +440,8 @@
           "minLength": 1
         },
         "quick_replies": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "minItems": 1
+          "type": ["array", "string"],
+          "aditionalProperties": false
         },
         "action": {
           "enum": ["ask_for_input"]
@@ -440,7 +462,7 @@
               "minLength": 1
             }
           },
-          "required": ["entities", "fallback"]
+          "required": ["fallback"]
         }
       },
       "required": ["action", "var_name", "text"]
@@ -463,7 +485,7 @@
       "oneOf": [{
         "required": ["action", "media_type", "url"]
       }, {
-      "required": ["action", "media_type", "media_id"]
+        "required": ["action", "media_type", "media_id"]
       }]
     },
     "subscribeFeed": {
@@ -502,10 +524,6 @@
       },
       "required": ["action", "assignee"]
     },
-    "unaryOperators": {
-      "type": "string",
-      "enum": ["is_empty", "is_not_empty"]
-    },
     "if": {
       "properties": {
         "then": {
@@ -522,13 +540,17 @@
       },
       "required": ["action", "condition", "then"]
     },
+    "unaryOperators": {
+      "type": "string",
+      "enum": ["is_empty", "is_not_empty"]
+    },
     "binaryOperators": {
       "type": "string",
-      "enum": ["equal", "not_equal", "has_entity"]
+      "enum": ["equal", "not_equal", "has_entity", "+"]
     },
     "operands": {
       "anyOf": [
-        { "type": "string" },
+      	{ "type": "string" },
         { "type": "boolean" },
         { "type": "number" },
         { "$ref": "#/definitions/expression" }

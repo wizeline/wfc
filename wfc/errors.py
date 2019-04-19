@@ -120,6 +120,11 @@ class StaticCarouselWithSource(CompilationError):
         return f'Static carousel "{self.args[0]}" must not have content source'
 
 
+class EmptyMenuMissingSource(CompilationError):
+    def _build_error_message(self):
+        return f'The menu "{self.args[0]}" must contain at least one button'
+
+
 class QNAFlowRedefinition(CompilationError):
     def _build_error_message(self):
         return f'QNA flow must be uniq: [{self.args[0]}] [{self.args[1]}]'
