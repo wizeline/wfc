@@ -349,7 +349,7 @@ call outlook.get_collaborator_by_name(name, tag)
 var params = page: 2,
              per_page : 100
 var request_arguments = params: $params
-call rest.post('githulb', '/user/repos', $request_arguments) as repos
+call rest.post('github', '/user/repos', $request_arguments) as repos
 ```
 
 #### Show Components
