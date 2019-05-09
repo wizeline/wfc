@@ -1,3 +1,4 @@
 flow onboarding do
   call some_integration.somefunction()
+  call other_integration.otherfunction() as result
 done
