@@ -10,14 +10,23 @@ from wfc.types import ComponentType
 _script = None
 
 
-def action_value(_, nodes):
-    action_body = nodes[0]
-    action_name = action_body.pop('action')
+def format_action(raw_action):
+    action_name = raw_action.pop('action')
     action = {
-        action_name: action_body
+        action_name: raw_action
     }
     action['id'] = str(uuid4())
     return action
+
+
+def action_value(_, nodes):
+    action_body = nodes[0]
+    if isinstance(action_body, dict):
+        return format_action(action_body)
+    elif isinstance(action_body, list):
+        return [format_action(a) for a in action_body]
+
+    raise ValueError(f'Invalid action(s): {nodes}')
 
 
 def change_flow_value(_, nodes):

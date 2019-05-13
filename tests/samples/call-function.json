@@ -11,6 +11,17 @@
           "integration": "some_integration",
           "function": "somefunction",
           "function_params": []
+        },
+        {
+          "action": "call_integration",
+          "integration": "other_integration",
+          "function": "otherfunction",
+          "function_params": []
+        },
+        {
+          "action": "set_var",
+          "var_name": "result",
+          "value": "$other_integration.otherfunction"
         }
       ]
     }

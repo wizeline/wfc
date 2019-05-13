@@ -98,8 +98,13 @@ def definition_value(context, nodes):
 
 
 def action_value(_, nodes):
-    action = nodes[0]
-    action['id'] = str(uuid4())
+    action = nodes [0]
+    if isinstance(action, dict):
+        action['id'] = str(uuid4())
+    elif isinstance(action, list):
+        for a in action:
+            a['id'] = str(uuid4())
+
     return action
 
 
@@ -470,11 +475,11 @@ def flow_type_value(context, nodes):
     return nodes[0]
 
 
-def call_function_value(_, nodes):
+def call_function_value(context, nodes):
     """
-    CALL_FUNCTION: 'call' IDENTIFIER PERIOD IDENTIFIER PARAMETERS?;
+    CALL_FUNCTION: 'call' IDENTIFIER PERIOD IDENTIFIER PARAMETERS? AS_VAR;
     """
-    _, integration, _, fname, params = nodes
+    _, integration, _, fname, params, as_var = nodes
 
     value = {
         'action': 'call_integration',
@@ -482,6 +487,15 @@ def call_function_value(_, nodes):
         'function': fname,
         'function_params': params
     }
+
+    if as_var is not None:
+        _, variable_name = as_var
+        set_var_action = {
+            'action': 'set_var',
+            'var_name': variable_name,
+            'value': f'${integration}.{fname}'
+        }
+        return [value, set_var_action]
 
     return value
 
