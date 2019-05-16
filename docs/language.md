@@ -300,24 +300,34 @@ wait variable with:
 You can store values in custom variables. This operation supports basic
 arithmetic and storing objects
 
-Examples
+**Examples**
+
+Specify a literal scalar value
 ```
 var botNmae = 'Robotina'
 ```
 ```
 var millenniumStartedOn = 2000
 ```
+
+Store the value of an arithmetic operation
 ```
 var year = 1955
 var backToTheFuture = $year + 30
 ```
+
+Store an object as a sequence of _key: value_ pairs
 ```
 var persona = name: 'Max Power',
               age: 36
 ```
+
+Store an array as a comma separated list of things
 ```
-var persona = 'Max Power', 36
+var colors = 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet'
 ```
+
+Store an empty value
 ```
 var nothing = empty
 ```
