@@ -8,6 +8,9 @@ class TestVar(CompilerTestCase):
     def test_var_with_bad_syntax(self):
         self._compile_with_failure('var-bad-syntax')
 
+    def test_array_var(self):
+        self._compile('set-array-var')
+
     def test_object_var(self):
         self._compile('set-object-var')
 
