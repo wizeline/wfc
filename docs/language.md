@@ -316,6 +316,9 @@ var persona = name: 'Max Power',
               age: 36
 ```
 ```
+var persona = 'Max Power', 36
+```
+```
 var nothing = empty
 ```
 ```

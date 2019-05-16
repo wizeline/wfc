@@ -1,0 +1,18 @@
+{
+  "version": "2.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "hola",
+      "actions": [
+        {
+          "action": "set_var",
+          "var_name": "valores",
+          "value": ["Max Power", 36]
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

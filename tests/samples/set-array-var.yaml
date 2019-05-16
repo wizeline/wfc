@@ -1,0 +1,9 @@
+flows:
+- actions:
+  - set_var:
+      value:
+        - Max Power
+        - 36
+      var_name: valores
+  name: hola
+version: 2.1.0
