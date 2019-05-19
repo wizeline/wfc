@@ -4,8 +4,6 @@ import re
 
 import parglare
 
-from wfc.types import OutputVersion
-
 
 class ErrorContext:
     """Extracts meaningful information from parglare context"""

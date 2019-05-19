@@ -98,7 +98,7 @@ def definition_value(context, nodes):
 
 
 def action_value(_, nodes):
-    action = nodes [0]
+    action = nodes[0]
     if isinstance(action, dict):
         action['id'] = str(uuid4())
     elif isinstance(action, list):
