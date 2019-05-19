@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-import yaml
+import json
 
 from wfc.errors import CompilationError
 from wfc.output import rules
@@ -152,7 +152,7 @@ def get_script():
         script['qna_followup'] = qna_flow
 
     SchemaValidator().execute(script)
-    return yaml.dump(script, default_flow_style=False)
+    return json.dumps(script, indent=2)
 
 
 def set_script(script):
