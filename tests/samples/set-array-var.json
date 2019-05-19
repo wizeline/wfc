@@ -8,8 +8,35 @@
       "actions": [
         {
           "action": "set_var",
-          "var_name": "valores",
-          "value": ["Max Power", 36]
+          "var_name": "name",
+          "value": [
+            "Max Power"
+          ]
+        },
+        {
+          "action": "set_var",
+          "var_name": "nameAndAge",
+          "value": [
+            "Max Power",
+            36
+          ]
+        },
+        {
+          "action": "set_var",
+          "var_name": "height",
+          "value": {
+            "feets": 5,
+            "inches": 7
+          }
+        },
+        {
+          "action": "set_var",
+          "var_name": "nameAgeAndHeight",
+          "value": [
+            "Max Poser",
+            36,
+            "$height"
+          ]
         }
       ]
     }

@@ -781,6 +781,7 @@ def build_actions() -> dict:
         'REPLY_BODY': reply_body_value,
         'SCALAR_BUTTON': scalar_button_value,
         'SET_VAR': set_var_value,
+        'SET_ARRAY': set_var_value,
         'SHOW_COMPONENT': show_component_value,
         'SINGLE_ACTION': single_action_value,
         'STRING': string_value,

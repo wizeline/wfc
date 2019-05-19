@@ -1,3 +1,9 @@
 flow hola do
-  var valores = 'Max Power', 36
+  array name = 'Max Power'
+  array nameAndAge = 'Max Power', 36
+
+  var height = feets: 5,
+               inches: 7
+
+  array nameAgeAndHeight = 'Max Poser', 36, $height
 done

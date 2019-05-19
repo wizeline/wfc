@@ -324,7 +324,7 @@ var persona = name: 'Max Power',
 
 Store an array as a comma separated list of things
 ```
-var colors = 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet'
+array colors = 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet'
 ```
 
 Store an empty value
