@@ -1,0 +1,25 @@
+{
+  "flows": [
+    {
+      "actions": [
+        {
+          "send_text": {
+            "text": "Nothing"
+          }
+        }
+      ],
+      "name": "one"
+    },
+    {
+      "actions": [
+        {
+          "send_text": {
+            "text": "something"
+          }
+        }
+      ],
+      "name": "second"
+    }
+  ],
+  "version": "2.1.0"
+}

@@ -1,0 +1,26 @@
+{
+  "flows": [
+    {
+      "actions": [
+        {
+          "send_text": {
+            "text": "Hello"
+          }
+        }
+      ],
+      "name": "greeting"
+    },
+    {
+      "actions": [
+        {
+          "send_text": {
+            "text": "This is the QNA flow"
+          }
+        }
+      ],
+      "name": "helpful"
+    }
+  ],
+  "qna_followup": "helpful",
+  "version": "2.1.0"
+}

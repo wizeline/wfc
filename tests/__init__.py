@@ -3,8 +3,6 @@ import os
 import sys
 import unittest
 
-import yaml
-
 from wfc import core
 from wfc.cli import make_argument_parser
 
@@ -35,13 +33,13 @@ class CompilerTestCase(unittest.TestCase,
         script = self._compile_sample(test_target, '2.0.0')
         self._prune_action_ids(script)
 
-        expected_script = self.load_json_script(f'{test_target}.json')
+        expected_script = self.load_json_script(f'{test_target}-200.json')
         self.assertDictEqual(expected_script, script)
 
         script = self._compile_sample(test_target, '2.1.0')
         self._prune_action_ids(script)
 
-        expected_script = self.load_yaml_script(f'{test_target}.yaml')
+        expected_script = self.load_json_script(f'{test_target}-210.json')
         self.assertDictEqual(expected_script, script)
 
     def _compile_with_failure(self, test_target):
@@ -64,7 +62,7 @@ class CompilerTestCase(unittest.TestCase,
             if out_version == '2.0.0':
                 return json.load(compiled_sample)
             elif out_version == '2.1.0':
-                return yaml.load(compiled_sample)
+                return json.load(compiled_sample)
 
     def _compile_with_args(self, args):
         with core.CompilerContext(self.arg_parser.parse_args(args)) as context:

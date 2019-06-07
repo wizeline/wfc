@@ -1,0 +1,23 @@
+{
+  "flows": [
+    {
+      "actions": [
+        {
+          "call_integration": {
+            "function": "get_options",
+            "function_params": [],
+            "integration": "my_integration"
+          }
+        },
+        {
+          "send_menu": {
+            "buttons": "$my_integration.get_options",
+            "text": "This is a message"
+          }
+        }
+      ],
+      "name": "main"
+    }
+  ],
+  "version": "2.1.0"
+}

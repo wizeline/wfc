@@ -1,0 +1,90 @@
+{
+  "flows": [
+    {
+      "actions": [
+        {
+          "send_text": {
+            "condition": [
+              "$variable",
+              "equal",
+              "random string"
+            ],
+            "text": "something"
+          }
+        },
+        {
+          "send_text": {
+            "condition": [
+              "$variable",
+              "not_equal",
+              "other string"
+            ],
+            "text": "{{$variable}}"
+          }
+        },
+        {
+          "send_text": {
+            "condition": [
+              "$variable",
+              "equal",
+              true
+            ],
+            "text": "something"
+          }
+        },
+        {
+          "send_text": {
+            "condition": [
+              "$variable",
+              "equal",
+              false
+            ],
+            "text": "something"
+          }
+        },
+        {
+          "send_text": {
+            "condition": [
+              "$variable",
+              "not_equal",
+              true
+            ],
+            "text": "something"
+          }
+        },
+        {
+          "send_text": {
+            "condition": [
+              "$variable",
+              "not_equal",
+              false
+            ],
+            "text": "something"
+          }
+        },
+        {
+          "send_text": {
+            "condition": [
+              "$variable",
+              "equal",
+              "something"
+            ],
+            "text": "equal"
+          }
+        },
+        {
+          "send_text": {
+            "condition": [
+              "$variable",
+              "not_equal",
+              "something"
+            ],
+            "text": "different"
+          }
+        }
+      ],
+      "name": "test_equal"
+    }
+  ],
+  "version": "2.1.0"
+}

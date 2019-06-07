@@ -1,0 +1,21 @@
+{
+  "flows": [
+    {
+      "actions": [
+        {
+          "call_integration": {
+            "function": "somefunction",
+            "function_params": [
+              "$arg1",
+              "1",
+              "2"
+            ],
+            "integration": "some_integration"
+          }
+        }
+      ],
+      "name": "onboarding"
+    }
+  ],
+  "version": "2.1.0"
+}

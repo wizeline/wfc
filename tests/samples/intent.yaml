@@ -1,9 +1,0 @@
-flows:
-- actions:
-  - send_text:
-      text: Hello World
-  name: onboarding
-intents:
-  - flow: onboarding
-    name: greeting
-version: 2.1.0

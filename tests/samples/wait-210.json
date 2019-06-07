@@ -1,0 +1,20 @@
+{
+  "flows": [
+    {
+      "actions": [
+        {
+          "wait_input": {
+            "var_name": "input"
+          }
+        },
+        {
+          "send_text": {
+            "text": "You just said '{{$input}}'"
+          }
+        }
+      ],
+      "name": "onboarding"
+    }
+  ],
+  "version": "2.1.0"
+}

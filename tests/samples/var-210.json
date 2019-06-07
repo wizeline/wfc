@@ -1,0 +1,21 @@
+{
+  "flows": [
+    {
+      "actions": [
+        {
+          "set_var": {
+            "value": 0,
+            "var_name": "start"
+          }
+        },
+        {
+          "send_text": {
+            "text": "start is: {{$start}}"
+          }
+        }
+      ],
+      "name": "onboarding"
+    }
+  ],
+  "version": "2.1.0"
+}

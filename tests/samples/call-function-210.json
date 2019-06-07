@@ -1,0 +1,30 @@
+{
+  "flows": [
+    {
+      "actions": [
+        {
+          "call_integration": {
+            "function": "somefunction",
+            "function_params": [],
+            "integration": "some_integration"
+          }
+        },
+        {
+          "call_integration": {
+            "function": "otherfunction",
+            "function_params": [],
+            "integration": "other_integration"
+          }
+        },
+        {
+          "set_var": {
+            "value": "$other_integration.otherfunction",
+            "var_name": "result"
+          }
+        }
+      ],
+      "name": "onboarding"
+    }
+  ],
+  "version": "2.1.0"
+}

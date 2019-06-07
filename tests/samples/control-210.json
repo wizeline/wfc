@@ -1,0 +1,72 @@
+{
+  "flows": [
+    {
+      "actions": [
+        {
+          "ask_for_input": {
+            "text": "Please type 'yes'",
+            "var_name": "input"
+          }
+        },
+        {
+          "change_flow": {
+            "condition": [
+              "$input",
+              "equal",
+              "yes"
+            ],
+            "flow": "say_thank_you"
+          }
+        },
+        {
+          "send_text": {
+            "text": "Bye"
+          }
+        }
+      ],
+      "name": "onboarding"
+    },
+    {
+      "actions": [
+        {
+          "send_text": {
+            "text": "Thank you!"
+          }
+        }
+      ],
+      "name": "say_thank_you"
+    },
+    {
+      "actions": [
+        {
+          "ask_for_input": {
+            "text": "Please type 'yes'",
+            "var_name": "input"
+          }
+        },
+        {
+          "send_text": {
+            "condition": [
+              "$input",
+              "equal",
+              "yes"
+            ],
+            "text": "You said \"yes\""
+          }
+        },
+        {
+          "change_flow": {
+            "condition": [
+              "$input",
+              "equal",
+              "yes"
+            ],
+            "flow": "say_thank_you"
+          }
+        }
+      ],
+      "name": "with_conditional_blocs"
+    }
+  ],
+  "version": "2.1.0"
+}
