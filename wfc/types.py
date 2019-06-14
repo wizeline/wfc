@@ -1,3 +1,4 @@
+import json
 from enum import Enum
 
 
@@ -41,3 +42,13 @@ class ComponentDefinitionContext:
     def __init__(self, path, line):
         self.path = path
         self.line = line
+
+
+class ConstantValue(__WFCEnum):
+    NULL = None
+    TRUE = True
+    FALSE = False
+    EMPTY = {}
+
+    def __str__(self):
+        return json.dumps(self.value)
