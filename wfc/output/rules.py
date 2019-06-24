@@ -12,7 +12,7 @@ from wfc.errors import (
     UndefinedComponent,
     WaitInputWithQuickReplies
 )
-from wfc.types import ComponentType, FlowType, InputSource
+from wfc.types import ComponentType, FlowType, InputSource, ConstantValue
 
 _script = None
 
@@ -23,6 +23,12 @@ def read_examples(examples):
 
 def string_value(_, value):
     return value[1:-1]
+
+
+def get_expression_value(expression):
+    if isinstance(expression, ConstantValue):
+        return expression.value
+    return expression
 
 
 def subscribe_feed_value(_, nodes):
@@ -62,23 +68,20 @@ def equals_value(_, nodes):
     EQUALS: VARIABLE 'not'? 'equal' EXPRESSION;
     """
     variable, negative, _, expression = nodes
-
-    if negative is None:
-        return [variable, 'equal', expression]
-    else:
-        return [variable, 'not_equal', expression]
+    operator = 'equal' if negative is None else 'not_equal'
+    return [variable, operator, get_expression_value(expression)]
 
 
 def constant_value(context, nodes):
     value = nodes[0]
     if value == 'false':
-        return False
+        return ConstantValue.FALSE
     if value == 'true':
-        return True
+        return ConstantValue.TRUE
     if value == 'nil':
-        return None
+        return ConstantValue.NULL
     if value == 'empty':
-        return {}
+        return ConstantValue.EMPTY
     return nodes
 
 
@@ -116,7 +119,7 @@ def object_value(_, nodes):
 
 
 def parameters_value(_, nodes):
-    return [str(p) for p in nodes[1]]
+    return list(map(get_expression_value, nodes[1]))
 
 
 def prefixed_value(_, nodes):
@@ -344,7 +347,7 @@ def control_statement_value(_, nodes):
     return action
 
 
-def if_statement_value(_, nodes):
+def if_statement_value(context, nodes):
     """
     if CONDITION IF_BODY
     """
@@ -392,6 +395,7 @@ def not_condition(condition):
         'has_entity': 'has_not_entity',
         'equal': 'not_equal'
     }
+
     not_condition = list(condition)
     not_condition[1] = negatives[condition[1]]
     return not_condition
@@ -638,16 +642,9 @@ def set_var_value(context, nodes):
 
     set_var = {
         'action': 'set_var',
-        'var_name': object_
+        'var_name': object_,
+        'value': get_expression_value(exp)
     }
-    # These are special cases. Right now I don't know if thery're useful, but
-    # I'll keep them here, just in case
-    if exp == 'empty':
-        set_var['value'] = {}
-    elif exp == 'nil':
-        set_var['value'] = None
-    else:
-        set_var['value'] = exp
 
     return set_var
 
