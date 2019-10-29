@@ -19,3 +19,6 @@ class TestVar(CompilerTestCase):
 
     def test_member_var(self):
         self._compile('set-member-var')
+
+    def test_json_var(self):
+        self._compile('set-json-var')

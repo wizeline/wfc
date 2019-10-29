@@ -1,0 +1,32 @@
+{
+  "version": "2.0.0",
+  "intentions": [],
+  "entities": [],
+  "dialogs": [
+    {
+      "name": "main",
+      "actions": [
+        {
+          "action": "set_var",
+          "var_name": "element",
+          "value": {
+            "number": 10,
+            "string": "lorem ipsum dolor",
+            "vector": [
+              0,
+              false,
+              true,
+              "est",
+              [],
+              {}
+            ],
+            "object": {
+              "property": "value"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "qa": []
+}

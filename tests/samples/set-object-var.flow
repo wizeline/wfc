@@ -1,6 +1,6 @@
 flow hola do
   var nulo = nil
-  var nada = empty
+  var nada = {}
   var persona = name: 'Max Power',
                 age: 36
   say "My name is {{$persona.name}}, and I'm {{$persona.age}} years old"

@@ -159,6 +159,31 @@ def is_empty_value(_, nodes):
         return [variable, 'is_not_empty']
 
 
+def key_value_value(context, nodes):
+    key, _, value = nodes
+    return key, value
+
+
+def inner_json_value_value(context, nodes):
+    return get_expression_value(nodes[0])
+
+
+def json_array_value(context, nodes):
+    return nodes[1]
+
+
+def json_object_value(context, nodes):
+    _, members, _ = nodes
+    return {
+        key: value
+        for key, value in members
+    }
+
+
+def json_value_value(context, nodes):
+    return nodes[0]
+
+
 def literal_object_value(_, nodes):
     return {member: value for member, value in nodes[0]}
 
@@ -760,9 +785,14 @@ def build_actions() -> dict:
         'HAS_ENTITY': has_entity_value,
         'IF': if_statement_value,
         'IF_BODY': if_body_value,
+        'INNER_JSON_VALUE': inner_json_value_value,
         'INTEGER': integer_value,
         'INTENT': prefixed_value,
         'IS_EMPTY': is_empty_value,
+        'JSON_ARRAY': json_array_value,
+        'JSON_OBJECT': json_object_value,
+        'JSON_VALUE': json_value_value,
+        'KEY_VALUE': key_value_value,
         'LITERAL_OBJECT': literal_object_value,
         'MEMBER': prefixed_value,
         'MEMBER_DEFINITION': member_definiiton_value,
