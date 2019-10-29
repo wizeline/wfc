@@ -1,0 +1,16 @@
+flow main do
+  var element = {
+    number: 10,
+    string: 'lorem ipsum dolor',
+    vector: [
+      0,
+      false,
+      true,
+      nil,
+      'est',
+      [],
+      {}
+    ],
+    object: { property: 'value' }
+  }
+done
