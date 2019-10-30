@@ -685,10 +685,6 @@ def single_action_value(context, nodes):
     return [nodes[1]]
 
 
-def slice_value(context, nodes):
-    return nodes
-
-
 def scalar_button_value(_, nodes):
     """
     SCALAR_BUTTON: SCALAR_BUTTON_TYPE OPEN STRING SEPARATOR STRING CLOSE;
@@ -820,7 +816,6 @@ def build_actions() -> dict:
         'SET_VAR': set_var_value,
         'SHOW_COMPONENT': show_component_value,
         'SINGLE_ACTION': single_action_value,
-        'SLICE': slice_value,
         'STRING': string_value,
         'SUBSCRIBE_FEED': subscribe_feed_value,
         'UNSUBSCRIBE_FEED': unsubscribe_feed_value,
