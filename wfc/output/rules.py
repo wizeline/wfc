@@ -126,7 +126,7 @@ def prefixed_value(_, nodes):
     """
     PERIOD IDENTIFIER
     """
-    return nodes[0] + nodes[1]
+    return f'{nodes[0]}{nodes[1]}'
 
 
 def member_definiiton_value(_, nodes):
@@ -251,6 +251,10 @@ def quick_replies_value(_, nodes):
 
 def fallback_value(_, nodes):
     return nodes[1]
+
+
+def field_or_slice_value(context, nodes):
+    return nodes[0]
 
 
 def bot_asks_value(_, nodes):
@@ -681,6 +685,10 @@ def single_action_value(context, nodes):
     return [nodes[1]]
 
 
+def slice_value(context, nodes):
+    return nodes
+
+
 def scalar_button_value(_, nodes):
     """
     SCALAR_BUTTON: SCALAR_BUTTON_TYPE OPEN STRING SEPARATOR STRING CLOSE;
@@ -780,6 +788,7 @@ def build_actions() -> dict:
         'EXAMPLE_FILE': example_file_value,
         'EXAMPLE_LIST': example_list_value,
         'FALLBACK': fallback_value,
+        'FIELD_OR_SLICE': field_or_slice_value,
         'FLOW': flow_value,
         'FLOW_type': flow_type_value,
         'HAS_ENTITY': has_entity_value,
@@ -807,10 +816,11 @@ def build_actions() -> dict:
         'REPLY': reply_value,
         'REPLY_BODY': reply_body_value,
         'SCALAR_BUTTON': scalar_button_value,
-        'SET_VAR': set_var_value,
         'SET_ARRAY': set_var_value,
+        'SET_VAR': set_var_value,
         'SHOW_COMPONENT': show_component_value,
         'SINGLE_ACTION': single_action_value,
+        'SLICE': slice_value,
         'STRING': string_value,
         'SUBSCRIBE_FEED': subscribe_feed_value,
         'UNSUBSCRIBE_FEED': unsubscribe_feed_value,

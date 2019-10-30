@@ -22,3 +22,6 @@ class TestVar(CompilerTestCase):
 
     def test_json_var(self):
         self._compile('set-json-var')
+
+    def test_slice_var(self):
+        self._compile('slice')
