@@ -1,0 +1,21 @@
+flow main do
+  var document = {
+   innerArray: [
+     {value: 'one'},
+     {value: 'two'},
+     {value: 'three'},
+     {value: 'four'},
+     {value: 'five'}
+   ]
+  }
+  say 'Variable lista: {{$document}}'
+done
+
+flow setSlice do
+  var slice0 = $document.innerArray.3.value
+  var slice1 = $document.innerArray.2:4.value
+  var slice2 = $document.innerArray.:4.value
+  var slice3 = $document.innerArray.2:.value
+  var slice4 = $document.innerArray.:.value
+  var slice4 = $document.innerArray.*.value
+done
