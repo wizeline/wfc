@@ -685,57 +685,86 @@ def single_action_value(context, nodes):
     return [nodes[1]]
 
 
-def scalar_button_value(_, nodes):
+def message_button_value(context, nodes):
     """
-    SCALAR_BUTTON: SCALAR_BUTTON_TYPE OPEN STRING SEPARATOR STRING CLOSE;
+    MESSAGE_BUTTON: 'message' OPEN STRING SEPARATOR STRING CLOSE;
     """
-    button_type, label, payload = nodes[0], nodes[2], nodes[4]
-
-    if button_type == 'url':
-        return {
-            'label': label,
-            'payload': payload,
-            'type': 'open_url'
-        }
-    elif button_type == 'message':
-        return {
-            'label': label,
-            'payload': payload,
-            'type': 'message'
-        }
-
-
-def postback_attribute_value(_, nodes):
-    """
-    POSTBACK_ATTRIBUTE: IDENTIFIER COLON STRING;
-    """
-    return nodes[0], nodes[2]
-
-
-def postback_button_value(_, nodes):
-    """
-    POSTBACK_BUTTON: 'postback' OPEN
-        STRING SEPARATOR POSTBACK_PARAMS
-    CLOSE;
-    """
-    label, attributes = nodes[2], nodes[4]
-
-    if isinstance(attributes, list):
-        payload = {}
-        for key, name in attributes:
-            payload.update({key: name})
-    else:
-        payload = attributes
+    label, payload = nodes[2], nodes[4]
 
     return {
         'label': label,
         'payload': payload,
-        'type': 'postback'
+        'type': 'message'
     }
+
+
+def postback_button(context, nodes):
+    """
+    BUTTON_WITH_PAYLOAD: 'postback' OPEN
+                           STRING+[SEPARATOR] BUTTON_ATTRIBUTE*
+                         CLOSE;
+    """
+    strings = nodes[2]
+    label = strings[0]
+
+    if len(strings) == 2:
+        payload = strings[1]
+    else:
+        attributes = nodes[3]
+        payload = {name: value for name, value in attributes}
+
+    return {
+        'type': 'postback',
+        'label': label,
+        'payload': payload
+    }
+
+
+def url_button(context, nodes):
+    """
+    BUTTON_WITH_PAYLOAD: 'url' OPEN
+                           STRING+[SEPARATOR] BUTTON_ATTRIBUTE*
+                         CLOSE;
+    """
+    strings, attributes = nodes[2], nodes[3]
+    label, url = strings[0], strings[1]
+
+    if len(attributes) > 0:
+        attributes.append(('url', url))
+        payload = {name: value for name, value in attributes}
+    else:
+        payload = url
+
+    return {
+        'type': 'open_url',
+        'label': label,
+        'payload': payload
+    }
+
+
+def button_with_payload(context, nodes):
+    """
+    BUTTON_WITH_PAYLOAD: BUTTON_TYPE OPEN
+                           STRING+[SEPARATOR] BUTTON_ATTRIBUTE*
+                         CLOSE;
+    """
+    button_type = nodes[0]
+
+    if button_type == 'url':
+        return url_button(context, nodes)
+    elif button_type == 'postback':
+        return postback_button(context, nodes)
 
 
 def button_value(_, nodes):
     return nodes[0]
+
+
+def button_attribute_value(_, nodes):
+    """
+    BUTTON_ATTRIBUTE: SEPARATOR IDENTIFIER COLON E;
+    """
+    return nodes[1], nodes[3]
 
 
 def button_definition_value(_, nodes):
@@ -765,7 +794,9 @@ def build_actions() -> dict:
         'BOT_SAYS': bot_says_value,
         'BOT_WAITS': bot_waits_value,
         'BUTTON': button_value,
+        'BUTTON_ATTRIBUTE': button_attribute_value,
         'BUTTON_DEFINITION': button_definition_value,
+        'BUTTON_WITH_PAYLOAD': button_with_payload,
         'CALL_FUNCTION': call_function_value,
         'CARD': card_value,
         'CARD_BODY': card_body_value,
@@ -802,16 +833,14 @@ def build_actions() -> dict:
         'MEMBER': prefixed_value,
         'MEMBER_DEFINITION': member_definiiton_value,
         'MENU': define_menu_value,
+        'MESSAGE_BUTTON': message_button_value,
         'OBJECT': object_value,
         'OPEN_FLOW': open_flow_value,
         'OPERATOR': operator_value,
         'PARAMETERS': parameters_value,
-        'POSTBACK_ATTRIBUTE': postback_attribute_value,
-        'POSTBACK_BUTTON': postback_button_value,
         'QUICK_REPLIES': quick_replies_value,
         'REPLY': reply_value,
         'REPLY_BODY': reply_body_value,
-        'SCALAR_BUTTON': scalar_button_value,
         'SET_ARRAY': set_var_value,
         'SET_VAR': set_var_value,
         'SHOW_COMPONENT': show_component_value,

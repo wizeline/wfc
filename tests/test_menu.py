@@ -16,3 +16,6 @@ class TestMenu(CompilerTestCase):
 
     def test_send_menu_with_buttons_from_variable(self):
         self._compile('menu-from-variable')
+
+    def test_send_menu_with_webview_buttons(self):
+        self._compile('menu-with-webview-buttons')

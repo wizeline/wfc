@@ -1,0 +1,7 @@
+menu webViewMenu:
+  button url('More Details', 'http://www.wizeline.com/profile', paramOne: 1)
+end
+
+flow main do
+  show webViewMenu
+done
