@@ -11,6 +11,9 @@ flow main do
       [],
       {}
     ],
-    object: { property: 'value' }
+    object: { 
+      property: 'value',
+      string : $var_test
+    }
   }
 done
