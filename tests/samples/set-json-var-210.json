@@ -19,7 +19,8 @@
                 {}
               ],
               "object": {
-                "property": "value"
+                "property": "value",
+                "string": "$var_test"
               }
             }
           }

@@ -55,6 +55,7 @@ INNER_JSON_VALUE: JSON_OBJECT
                 | STRING
                 | INTEGER
                 | CONSTANT
+                | VARIABLE
                 ;
 
 JSON_ARRAY: '[' INNER_JSON_VALUE*[SEPARATOR] ']' ;
