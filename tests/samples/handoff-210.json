@@ -1,0 +1,26 @@
+{
+  "version": "2.1.0",
+  "flows": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "send_text": {
+            "text": "I'm sorry, I couldn't help you"
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "market_id",
+            "value": "MIAMI"
+          }
+        },
+        {
+          "handoff": {
+            "assignee": "$market_id"
+          }
+        }
+      ]
+    }
+  ]
+}

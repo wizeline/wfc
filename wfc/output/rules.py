@@ -508,6 +508,13 @@ def flow_type_value(context, nodes):
     return nodes[0]
 
 
+def handoff_value(context, nodes):
+    return {
+        'action': 'handoff',
+        'assignee': nodes[1]
+    }
+
+
 def call_function_value(context, nodes):
     """
     CALL_FUNCTION: 'call' IDENTIFIER PERIOD IDENTIFIER PARAMETERS? AS_VAR;
@@ -818,6 +825,7 @@ def build_actions() -> dict:
         'FIELD_OR_SLICE': field_or_slice_value,
         'FLOW': flow_value,
         'FLOW_type': flow_type_value,
+        'HANDOFF_ACTION': handoff_value,
         'HAS_ENTITY': has_entity_value,
         'IF': if_statement_value,
         'IF_BODY': if_body_value,
