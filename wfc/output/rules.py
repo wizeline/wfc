@@ -509,9 +509,17 @@ def flow_type_value(context, nodes):
 
 
 def handoff_value(context, nodes):
+    """
+    'HANDOFF_ACTION HANDOFF_ARGUMENT+'
+
+    Note: script version 2.1 only accepts one argument: assignee, so the other
+    arguments are ignored
+    """
+    _, handoff_arguments = nodes
+
     return {
         'action': 'handoff',
-        'assignee': nodes[1]
+        'assignee': handoff_arguments[0]
     }
 
 
