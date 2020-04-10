@@ -1,0 +1,26 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "greeting",
+      "actions": [
+        {
+          "send_text": {
+            "text": "Hello"
+          }
+        }
+      ]
+    },
+    {
+      "name": "did_not_get_that",
+      "actions": [
+        {
+          "send_text": {
+            "text": "What did you mean?"
+          }
+        }
+      ]
+    }
+  ],
+  "nlp_fallback": "did_not_get_that"
+}

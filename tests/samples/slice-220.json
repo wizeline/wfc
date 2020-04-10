@@ -1,0 +1,80 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "main",
+      "actions": [
+        {
+          "set_var": {
+            "var_name": "document",
+            "value": {
+              "innerArray": [
+                {
+                  "value": "one"
+                },
+                {
+                  "value": "two"
+                },
+                {
+                  "value": "three"
+                },
+                {
+                  "value": "four"
+                },
+                {
+                  "value": "five"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "send_text": {
+            "text": "Variable lista: {{$document}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "setSlice",
+      "actions": [
+        {
+          "set_var": {
+            "var_name": "slice0",
+            "value": "$document.innerArray.3.value"
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "slice1",
+            "value": "$document.innerArray.2:4.value"
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "slice2",
+            "value": "$document.innerArray.:4.value"
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "slice3",
+            "value": "$document.innerArray.2:.value"
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "slice4",
+            "value": "$document.innerArray.:.value"
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "slice4",
+            "value": "$document.innerArray.*.value"
+          }
+        }
+      ]
+    }
+  ]
+}

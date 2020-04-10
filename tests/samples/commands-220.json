@@ -1,0 +1,21 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "entry_point_flow",
+      "actions": [
+        {
+          "send_text": {
+            "text": "This is a test flow"
+          }
+        }
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "keyword": "/help",
+      "flow": "entry_point_flow"
+    }
+  ]
+}

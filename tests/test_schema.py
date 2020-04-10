@@ -21,25 +21,10 @@ class TestSchemaValidator(unittest.TestCase, mixins.SampleHandler):
                 for action in dialog['actions']:
                     action['id'] = 'any'
 
-    def test_validate_correct_v2_0_0_script(self):
-        script = self.load_json_script('ask-200.json')
-        self._insert_action_ids(script)
-        self.assertTrue(self.validator.execute(script))
-
     def test_validate_correct_v2_1_0_script(self):
         script = self.load_json_script('ask-210.json')
         self._insert_action_ids(script)
         self.assertTrue(self.validator.execute(script))
-
-    def test_validate_incorrect_action_v2_0_0(self):
-        script = self.load_json_script('ask-200.json')
-        script['dialogs'][0]['actions'][1]['action'] = 'meh'
-        self._insert_action_ids(script)
-        with self.assertRaises(SchemaViolationError) as failure:
-            self.validator.execute(script)
-
-        expected_error = self.load_sample('ask-json.err').read()
-        self.assertEquals(expected_error[:-1], str(failure.exception))
 
     def test_validate_incorrect_action_v2_1_0(self):
         script = self.load_json_script('ask-210.json')

@@ -1,0 +1,28 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "wait_for_entities",
+      "actions": [
+        {
+          "wait_input": {
+            "var_name": "response",
+            "expect": {
+              "fallback": "Did not get that",
+              "entities": [
+                "yes",
+                "no",
+                "other_entity"
+              ]
+            }
+          }
+        },
+        {
+          "send_text": {
+            "text": "response is: {{$response}}"
+          }
+        }
+      ]
+    }
+  ]
+}

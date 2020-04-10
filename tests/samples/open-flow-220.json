@@ -1,0 +1,35 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "send_text": {
+            "text": "Hello"
+          }
+        },
+        {
+          "open_flow": {
+            "flow": "second"
+          }
+        },
+        {
+          "send_text": {
+            "text": "I'm back"
+          }
+        }
+      ]
+    },
+    {
+      "name": "second",
+      "actions": [
+        {
+          "send_text": {
+            "text": "World!"
+          }
+        }
+      ]
+    }
+  ]
+}

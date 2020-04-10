@@ -1,0 +1,74 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "send_static_carousel": {
+            "cards": [
+              {
+                "title": "Card I",
+                "description": "the first card",
+                "image_url": "http://example.com/images/card-one.jpg",
+                "buttons": [
+                  {
+                    "type": "open_url",
+                    "label": "Wizeline",
+                    "payload": "http://www.wizeline.com"
+                  },
+                  {
+                    "type": "postback",
+                    "label": "Select Option",
+                    "payload": {
+                      "action": "you clicked the first card"
+                    }
+                  },
+                  {
+                    "type": "postback",
+                    "label": "Simple Button",
+                    "payload": "Hey! you clicked the first card"
+                  },
+                  {
+                    "label": "Message I",
+                    "payload": "Hey! you clicked the first card",
+                    "type": "message"
+                  }
+                ]
+              },
+              {
+                "title": "Card II",
+                "description": "the second card",
+                "image_url": "http://example.com/images/card-two.jpg",
+                "buttons": [
+                  {
+                    "type": "open_url",
+                    "label": "Google",
+                    "payload": "http://www.google.com"
+                  },
+                  {
+                    "type": "postback",
+                    "label": "Post",
+                    "payload": {
+                      "action": "you clicked the second card"
+                    }
+                  },
+                  {
+                    "type": "postback",
+                    "label": "Simple Button",
+                    "payload": "Hey! you clicked the second card"
+                  },
+                  {
+                    "label": "Message II",
+                    "payload": "Hey! you clicked the second card",
+                    "type": "message"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

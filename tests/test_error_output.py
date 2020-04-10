@@ -165,3 +165,7 @@ class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
     def test_wait_with_quick_replies3(self):
         self.run_test('wait-with-quick-replies3.err',
                       'wait-with-quick-replies3.flow')
+
+    def test_handoff_without_arguments(self):
+        self.run_test('handoff-without-arguments.err',
+                      'handoff-without-arguments.flow')

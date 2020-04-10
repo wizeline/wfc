@@ -1,0 +1,174 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "conditional0",
+      "actions": [
+        {
+          "send_text": {
+            "text": "The variable is empty",
+            "condition": [
+              "$variable",
+              "is_empty"
+            ]
+          }
+        },
+        {
+          "send_text": {
+            "text": "The variable is not empty",
+            "condition": [
+              "$variable",
+              "is_not_empty"
+            ]
+          }
+        },
+        {
+          "send_text": {
+            "text": "anything",
+            "condition": [
+              "$variable2",
+              "is_not_empty"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "conditional1",
+      "actions": [
+        {
+          "send_text": {
+            "text": "The variable is empty",
+            "condition": [
+              "$variable",
+              "is_empty"
+            ]
+          }
+        },
+        {
+          "send_text": {
+            "text": "blah",
+            "condition": [
+              "$variable",
+              "is_empty"
+            ]
+          }
+        },
+        {
+          "send_text": {
+            "text": "The variable is not empty",
+            "condition": [
+              "$variable",
+              "is_not_empty"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "conditional2",
+      "actions": [
+        {
+          "send_text": {
+            "text": "The variable is empty",
+            "condition": [
+              "$variable",
+              "is_empty"
+            ]
+          }
+        },
+        {
+          "send_text": {
+            "text": "blah",
+            "condition": [
+              "$variable",
+              "is_empty"
+            ]
+          }
+        },
+        {
+          "send_text": {
+            "text": "The variable is not empty",
+            "condition": [
+              "$variable",
+              "is_not_empty"
+            ]
+          }
+        },
+        {
+          "send_text": {
+            "text": "blah",
+            "condition": [
+              "$variable",
+              "is_not_empty"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "conditional3",
+      "actions": [
+        {
+          "send_text": {
+            "text": "The variable is empty",
+            "condition": [
+              "$variable",
+              "is_empty"
+            ]
+          }
+        },
+        {
+          "send_text": {
+            "text": "The variable is not empty",
+            "condition": [
+              "$variable",
+              "is_not_empty"
+            ]
+          }
+        },
+        {
+          "send_text": {
+            "text": "blah",
+            "condition": [
+              "$variable",
+              "is_not_empty"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "conditional4",
+      "actions": [
+        {
+          "send_text": {
+            "text": "The variable is empty",
+            "condition": [
+              "$variable",
+              "is_empty"
+            ]
+          }
+        },
+        {
+          "send_text": {
+            "text": "The variable is not empty",
+            "condition": [
+              "$variable",
+              "is_empty"
+            ]
+          }
+        },
+        {
+          "send_text": {
+            "text": "blah",
+            "condition": [
+              "$variable",
+              "is_empty"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

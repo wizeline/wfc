@@ -1,0 +1,22 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "ask_for_input": {
+            "text": "Some question",
+            "var_name": "response",
+            "quick_replies": {
+              "replies": [
+                "Of course",
+                "No way"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

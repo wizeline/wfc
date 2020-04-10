@@ -1,0 +1,54 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "change_flow": {
+            "flow": "bar_is_set",
+            "condition": [
+              "$foo.bar",
+              "is_not_empty"
+            ]
+          }
+        },
+        {
+          "change_flow": {
+            "flow": "bar_is_not_set",
+            "condition": [
+              "$foo.bar",
+              "is_empty"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "bar_is_set",
+      "actions": [
+        {
+          "send_text": {
+            "text": "bar is set"
+          }
+        }
+      ]
+    },
+    {
+      "name": "bar_is_not_set",
+      "actions": [
+        {
+          "send_text": {
+            "text": "bar is not set"
+          }
+        }
+      ]
+    }
+  ],
+  "intents": [
+    {
+      "name": "foo",
+      "flow": "onboarding"
+    }
+  ]
+}

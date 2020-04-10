@@ -1,0 +1,35 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "hola",
+      "actions": [
+        {
+          "set_var": {
+            "var_name": "persona",
+            "value": {
+              "name": "Homer J. Simpson",
+              "age": 36
+            }
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "persona.name",
+            "value": "Max Power"
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "persona.address",
+            "value": {
+              "city": "Springfield",
+              "street": "Evergreen",
+              "number": 742
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

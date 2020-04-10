@@ -1,0 +1,15 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "say_hi",
+      "actions": [
+        {
+          "send_text": {
+            "text": "hi"
+          }
+        }
+      ]
+    }
+  ]
+}

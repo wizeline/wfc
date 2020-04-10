@@ -1,0 +1,114 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "scenario1",
+      "actions": [
+        {
+          "ask_for_input": {
+            "text": "Some question",
+            "var_name": "response",
+            "quick_replies": {
+              "replies": [
+                "Of course",
+                "No way"
+              ]
+            },
+            "expect": {
+              "fallback": "Did not get that",
+              "entities": [
+                "yes",
+                "no"
+              ]
+            }
+          }
+        },
+        {
+          "send_text": {
+            "text": "response is: {{$response}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "scenario2",
+      "actions": [
+        {
+          "ask_for_input": {
+            "text": "Some question",
+            "var_name": "response",
+            "quick_replies": {
+              "replies": [
+                "Of course",
+                "No way"
+              ]
+            },
+            "expect": {
+              "fallback": "Did not get that",
+              "entities": [
+                "yes",
+                "no",
+                "other_entity"
+              ]
+            }
+          }
+        },
+        {
+          "send_text": {
+            "text": "response is: {{$response}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "scenario3",
+      "actions": [
+        {
+          "ask_for_input": {
+            "text": "Some question",
+            "var_name": "response",
+            "quick_replies": {
+              "replies": []
+            },
+            "expect": {
+              "fallback": "Did not get that",
+              "entities": [
+                "yes",
+                "no",
+                "other_entity"
+              ]
+            }
+          }
+        },
+        {
+          "send_text": {
+            "text": "response is: {{$response}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "scenario4",
+      "actions": [
+        {
+          "ask_for_input": {
+            "text": "Some question",
+            "var_name": "response",
+            "quick_replies": {
+              "replies": [
+                "Answer1",
+                "Answer2",
+                "Answer3"
+              ]
+            }
+          }
+        },
+        {
+          "send_text": {
+            "text": "response is: {{$response}}"
+          }
+        }
+      ]
+    }
+  ]
+}

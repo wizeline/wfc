@@ -1,0 +1,21 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "send_text": {
+            "text": "Hello World"
+          }
+        }
+      ]
+    }
+  ],
+  "intents": [
+    {
+      "name": "greeting",
+      "flow": "onboarding"
+    }
+  ]
+}

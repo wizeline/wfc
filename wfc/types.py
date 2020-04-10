@@ -34,8 +34,8 @@ class InputSource(__WFCEnum):
 
 
 class OutputVersion(__WFCEnum):
-    V20 = '2.0.0'
     V21 = '2.1.0'
+    V22 = '2.2.0'
 
 
 class ComponentDefinitionContext:

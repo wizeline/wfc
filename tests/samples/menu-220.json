@@ -1,0 +1,64 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "main",
+      "actions": [
+        {
+          "send_menu": {
+            "buttons": [
+              {
+                "type": "postback",
+                "label": "Details",
+                "payload": {
+                  "id": "{{$nerd_id}}"
+                }
+              },
+              {
+                "type": "postback",
+                "label": "Something",
+                "payload": "Any random text"
+              },
+              {
+                "label": "ping",
+                "payload": "pong",
+                "type": "message"
+              },
+              {
+                "type": "open_url",
+                "label": "More Details",
+                "payload": "http://www.wizeline.com/profile"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "other_menu",
+      "actions": [
+        {
+          "send_menu": {
+            "buttons": [
+              {
+                "type": "postback",
+                "label": "Option1",
+                "payload": {
+                  "option_id": "foo"
+                }
+              },
+              {
+                "type": "postback",
+                "label": "Option2",
+                "payload": {
+                  "option_id": "bar"
+                }
+              }
+            ],
+            "text": "Please choice an option"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "ask_for_input": {
+            "text": "question?",
+            "var_name": "bar"
+          }
+        },
+        {
+          "send_text": {
+            "text": "{{$bar}} has entity foo",
+            "condition": [
+              "$bar",
+              "has_entity",
+              "foo"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

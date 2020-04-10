@@ -1,0 +1,56 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "math",
+      "actions": [
+        {
+          "set_var": {
+            "var_name": "start",
+            "value": 1
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "start",
+            "value": [
+              "$start",
+              "+",
+              1
+            ]
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "start",
+            "value": [
+              "$start",
+              "-",
+              1
+            ]
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "start",
+            "value": [
+              "$start",
+              "*",
+              1
+            ]
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "start",
+            "value": [
+              "$start",
+              "/",
+              1
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

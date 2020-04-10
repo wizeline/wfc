@@ -1,0 +1,51 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "call_integration": {
+            "integration": "wizeline_integration",
+            "function": "get_bot_developers",
+            "function_params": []
+          }
+        },
+        {
+          "send_dynamic_carousel": {
+            "card_content": {
+              "title": "{{$name}}",
+              "description": "{{$alias}}",
+              "image_url": "{{$avatar}}",
+              "buttons": [
+                {
+                  "type": "postback",
+                  "label": "Details",
+                  "payload": {
+                    "id": "{{$nerd_id}}"
+                  }
+                },
+                {
+                  "type": "postback",
+                  "label": "Something",
+                  "payload": "Any random text"
+                },
+                {
+                  "label": "ping",
+                  "payload": "pong",
+                  "type": "message"
+                },
+                {
+                  "type": "open_url",
+                  "label": "More Details",
+                  "payload": "http://www.wizeline.com/profile"
+                }
+              ]
+            },
+            "content_source": "$wizeline_integration.get_bot_developers"
+          }
+        }
+      ]
+    }
+  ]
+}

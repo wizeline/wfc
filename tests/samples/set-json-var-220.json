@@ -1,0 +1,31 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "main",
+      "actions": [
+        {
+          "set_var": {
+            "var_name": "element",
+            "value": {
+              "number": 10,
+              "string": "lorem ipsum dolor",
+              "vector": [
+                0,
+                false,
+                true,
+                "est",
+                [],
+                {}
+              ],
+              "object": {
+                "property": "value",
+                "string": "$var_test"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

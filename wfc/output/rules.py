@@ -100,15 +100,23 @@ def definition_value(context, nodes):
     return value
 
 
-def action_value(_, nodes):
-    action = nodes[0]
-    if isinstance(action, dict):
-        action['id'] = str(uuid4())
-    elif isinstance(action, list):
-        for a in action:
-            a['id'] = str(uuid4())
-
+def format_action(raw_action):
+    action_name = raw_action.pop('action')
+    action = {
+        action_name: raw_action
+    }
+    action['id'] = str(uuid4())
     return action
+
+
+def action_value(_, nodes):
+    action_body = nodes[0]
+    if isinstance(action_body, dict):
+        return format_action(action_body)
+    elif isinstance(action_body, list):
+        return [format_action(a) for a in action_body]
+
+    raise ValueError(f'Invalid action(s): {nodes}')
 
 
 def object_value(_, nodes):
@@ -324,10 +332,7 @@ def change_flow_value(context, nodes):
     if not _script.has_component(ComponentType.FLOW, flow):
         _script.ask_missing_component(ComponentType.FLOW, flow, context)
 
-    return {
-        'action': 'change_dialog',  # Right now the action is change_dialog
-        'dialog': flow
-    }
+    return {'action': 'change_flow', 'flow': flow}
 
 
 def define_command_value(context, nodes):
@@ -376,19 +381,25 @@ def control_statement_value(_, nodes):
     return action
 
 
-def if_statement_value(context, nodes):
+def get_action_name(action):
+    return (set(action) - {'id'}).pop()
+
+
+def if_statement_value(_, nodes):
     """
     if CONDITION IF_BODY
     """
     _, condition, if_body = nodes
     actions, else_actions = if_body
     for action in actions:
-        action['condition'] = condition
+        name = get_action_name(action)
+        action[name]['condition'] = condition
 
     if else_actions not in (None, 'end'):
         negative = not_condition(condition)
         for else_action in else_actions:
-            else_action['condition'] = negative
+            name = get_action_name(else_action)
+            else_action[name]['condition'] = negative
         actions += else_actions
 
     return actions
@@ -517,6 +528,13 @@ def handoff_value(context, nodes):
     """
     _, handoff_arguments = nodes
 
+    if len(handoff_arguments) > 1:
+        return {
+            'action': 'handoff',
+            'assignee': handoff_arguments[0],
+            'user_info': handoff_arguments[1]
+        }
+
     return {
         'action': 'handoff',
         'assignee': handoff_arguments[0]
@@ -634,7 +652,7 @@ def show_component_value(context, nodes):
 
 def send_carousel_value(context, name, source):
     carousel, _ = _script.get_component(context, ComponentType.CAROUSEL, name)
-    send_carousel = {'action': 'send_carousel'}
+    send_carousel = {'action': 'send_static_carousel'}
     send_carousel.update(carousel)
 
     if 'card_content' in carousel:
@@ -647,7 +665,10 @@ def send_carousel_value(context, name, source):
                 name
             )
 
-        send_carousel.update({'content_source': source})
+        send_carousel.update({
+            'action': 'send_dynamic_carousel',
+            'content_source': source
+        })
 
     elif source:
         raise StaticCarouselWithSource(

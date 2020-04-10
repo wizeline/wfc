@@ -1,6 +1,10 @@
 import json
 
-from wfc.errors import CompilationError
+from wfc.errors import (
+    CompilationError,
+    ErrorContext,
+    WaitInputWithQuickReplies
+)
 from wfc.output import rules
 from wfc.schema import SchemaValidator
 from wfc.types import ComponentType
@@ -8,25 +12,67 @@ from wfc.types import ComponentType
 _script = None
 
 
-def handoff_value(context, nodes):
+def quick_replies_value(context, nodes):
+    replies, fallback = nodes[2]
+
+    entities = []
+    expect = {}
+    the_replies = []
+
+    for text, entity in replies:
+        if text is not None:
+            the_replies.append(text)
+        if entity is not None:
+            entities.append(entity[1:])  # <@entity> becomes <entity>
+
+    quick_replies = {
+        'replies': the_replies
+    }
+
+    if entities:
+        expect['fallback'] = fallback
+        expect['entities'] = entities
+
+    return quick_replies, expect
+
+
+def bot_waits_value(context, nodes):
     """
-    'HANDOFF_ACTION HANDOFF_ARGUMENT+'
-
-    Note: script version 2.1 only accepts one argument: assignee, so the other
-    arguments are ignored
+    wait IDENTIFIER KEEP_CONTEXT? QUICK_REPLIES?
     """
-    handoff = rules.handoff_value(context, nodes)
+    # wait_input action does not support quick replies but it supports
+    # expecting entities. So we admit quick replies from the grammar but only
+    # keep the expect and context switching features.
+    _, variable, context_switch, replies = nodes
 
-    if 'user_info' in handoff:
-        handoff.pop('user_info')
+    value = {
+        'action': 'wait_input',
+        'var_name': variable
+    }
 
-    return handoff
+    if replies:
+        quick_replies, expect = replies
+
+        if quick_replies['replies']:
+            raise WaitInputWithQuickReplies(ErrorContext(
+                _script.get_current_file(),
+                context
+            ))
+
+        if expect:
+            value['expect'] = expect
+
+    if context_switch:
+        value['can_switch_context'] = False
+
+    return value
 
 
 def build_actions():
     actions = rules.build_actions()
     actions.update({
-        'HANDOFF_ACTION': handoff_value
+        'BOT_WAITS': bot_waits_value,
+        'QUICK_REPLIES': quick_replies_value
     })
     return actions
 
@@ -78,7 +124,7 @@ def get_script():
     _script.perform_sanity_checks()
     pass
     script = {
-        'version': '2.1.0',
+        'version': '2.2.0',
         'flows': rules.build_flows(),
     }
 

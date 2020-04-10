@@ -20,7 +20,7 @@ class TestModules(CompilerTestCase):
         assert rc == 0, 'Compilation should pass: rc=[{}]'.format(rc)
 
         with self.open_tmpin() as compiled_script:
-            expected = self.load_json_script('root-210.json')
+            expected = self.load_json_script('root-220.json')
             compiled = json.load(compiled_script)
             self._prune_action_ids(compiled)
             self.assertDictEqual(expected, compiled)

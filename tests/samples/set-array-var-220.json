@@ -1,0 +1,46 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "hola",
+      "actions": [
+        {
+          "set_var": {
+            "var_name": "name",
+            "value": [
+              "Max Power"
+            ]
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "nameAndAge",
+            "value": [
+              "Max Power",
+              36
+            ]
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "height",
+            "value": {
+              "feets": 5,
+              "inches": 7
+            }
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "nameAgeAndHeight",
+            "value": [
+              "Max Poser",
+              36,
+              "$height"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

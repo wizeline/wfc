@@ -1,7 +1,15 @@
-__author__ = 'wizeline'
+__author__ = 'Wizeline'
 __name__ = 'wfc'
-__version__ = '1.9.0'
+__version__ = '2.0.0'
 
 
 def get_version():
     return __version__
+
+
+def get_name():
+    return __name__
+
+
+def get_author():
+    return __author__

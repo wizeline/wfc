@@ -1,0 +1,20 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "subscriptions",
+      "actions": [
+        {
+          "subscribe_feed": {
+            "feed": "feed_name"
+          }
+        },
+        {
+          "unsubscribe_feed": {
+            "feed": "other_feed_name"
+          }
+        }
+      ]
+    }
+  ]
+}

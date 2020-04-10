@@ -1,0 +1,21 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "onboarding",
+      "actions": [
+        {
+          "wait_input": {
+            "var_name": "input",
+            "can_switch_context": false
+          }
+        },
+        {
+          "send_text": {
+            "text": "You just said '{{$input}}'"
+          }
+        }
+      ]
+    }
+  ]
+}

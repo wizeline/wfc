@@ -1,5 +1,5 @@
 {
-  "version": "2.1.0",
+  "version": "2.2.0",
   "flows": [
     {
       "name": "onboarding",
@@ -22,7 +22,10 @@
         },
         {
           "handoff": {
-            "assignee": "$market_id"
+            "assignee": "$market_id",
+            "user_info": {
+              "user": "$user_name"
+            }
           }
         }
       ]

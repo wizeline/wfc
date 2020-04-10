@@ -1,0 +1,36 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "hola",
+      "actions": [
+        {
+          "set_var": {
+            "var_name": "nulo",
+            "value": null
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "nada",
+            "value": {}
+          }
+        },
+        {
+          "set_var": {
+            "var_name": "persona",
+            "value": {
+              "name": "Max Power",
+              "age": 36
+            }
+          }
+        },
+        {
+          "send_text": {
+            "text": "My name is {{$persona.name}}, and I'm {{$persona.age}} years old"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "version": "2.2.0",
+  "flows": [
+    {
+      "name": "main",
+      "actions": [
+        {
+          "send_menu": {
+            "buttons": [
+              {
+                "type": "postback",
+                "label": "Object",
+                "payload": {
+                  "args": "$object"
+                }
+              },
+              {
+                "type": "postback",
+                "label": "String",
+                "payload": {
+                  "args": "String"
+                }
+              },
+              {
+                "type": "postback",
+                "label": "Integer",
+                "payload": {
+                  "args": 666
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
