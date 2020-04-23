@@ -85,6 +85,7 @@
                 { "$ref": "#/definitions/callIntegration" },
                 { "$ref": "#/definitions/openFlow" },
                 { "$ref": "#/definitions/setVar" },
+                { "$ref": "#/definitions/storeData" },
                 { "$ref": "#/definitions/sendMenu" },
                 { "$ref": "#/definitions/sendDynamicCarousel" },
                 { "$ref": "#/definitions/sendStaticCarousel" },
@@ -366,6 +367,34 @@
       "required": ["set_var"],
       "additionalProperties": false
     },
+    "storeData": {
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/id"
+        },
+        "store_data": {
+          "type": "object",
+          "properties": {
+            "condition": {
+              "$ref": "#/definitions/expression"
+            },
+            "data_name": {
+              "type": "string",
+              "minLength": 1,
+              "data": {
+                "type": "object"
+              },
+              "required": ["data"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["data_name"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["store_data"],
+      "additionalProperties": false
+    },
     "changeFlow": {
       "properties": {
         "id": {
@@ -510,7 +539,7 @@
               "$ref": "#/definitions/expression"
             },
             "assignee": {
-              "type": "string",
+              "type": "object",
               "minLength": 1
             },
             "user_info": {

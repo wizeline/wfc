@@ -540,6 +540,19 @@ def handoff_value(context, nodes):
         'assignee': handoff_arguments[0]
     }
 
+def store_data_value(context, nodes):
+    """
+    SET_DATA: 'data' OBJECT '=' E;
+    """
+    _, object_, _, exp = nodes
+
+    store_data = {
+        'action': 'store_data',
+         object_: get_expression_value(exp)
+    }
+
+    return store_data
+
 
 def call_function_value(context, nodes):
     """
@@ -565,6 +578,28 @@ def call_function_value(context, nodes):
 
     return value
 
+def call_function_data(context, nodes):
+    """
+    CALL_FUNCTION: 'call' IDENTIFIER PERIOD IDENTIFIER PARAMETERS? AS_DATA;
+    """
+    _, integration, _, fname, params, as_data = nodes
+
+    value = {
+        'action': 'call_integration',
+        'integration': integration,
+        'function': fname,
+        'function_params': params
+    }
+
+    if as_data is not None:
+        _, data_name = as_data
+        store_data_action = {
+            'action': ':store_data',
+            data_name: f'${integration}.{fname}',
+        }
+        return [value, store_data_action]
+
+    return value
 
 def attribute_value(_, nodes):
     """
@@ -834,6 +869,7 @@ def build_actions() -> dict:
         'BUTTON_DEFINITION': button_definition_value,
         'BUTTON_WITH_PAYLOAD': button_with_payload,
         'CALL_FUNCTION': call_function_value,
+        'CALL_FUNCTION_DATA': call_function_data,
         'CARD': card_value,
         'CARD_BODY': card_body_value,
         'CAROUSEL': define_carousel_value,
@@ -880,6 +916,7 @@ def build_actions() -> dict:
         'REPLY_BODY': reply_body_value,
         'SET_ARRAY': set_var_value,
         'SET_VAR': set_var_value,
+        'STORE_DATA': store_data_value,
         'SHOW_COMPONENT': show_component_value,
         'SINGLE_ACTION': single_action_value,
         'STRING': string_value,
