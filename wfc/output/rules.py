@@ -540,15 +540,17 @@ def handoff_value(context, nodes):
         'assignee': handoff_arguments[0]
     }
 
+
 def store_data_value(context, nodes):
     """
     SET_DATA: 'data' OBJECT '=' E;
     """
-    _, object_, _, exp = nodes
+    _, data_name, _, exp = nodes
 
     store_data = {
         'action': 'store_data',
-         object_: get_expression_value(exp)
+        'data_name': data_name,
+        'data': get_expression_value(exp)
     }
 
     return store_data
@@ -578,6 +580,7 @@ def call_function_value(context, nodes):
 
     return value
 
+
 def call_function_data(context, nodes):
     """
     CALL_FUNCTION: 'call' IDENTIFIER PERIOD IDENTIFIER PARAMETERS? AS_DATA;
@@ -600,6 +603,7 @@ def call_function_data(context, nodes):
         return [value, store_data_action]
 
     return value
+
 
 def attribute_value(_, nodes):
     """

@@ -150,9 +150,9 @@ class ComponentRedefinition(CompilationError):
 
 class CardTitleEmptyError(CompilationError):
     def _build_error_message(self):
-        return f'Card title should not be empty'
+        return 'Card title should not be empty'
 
 
 class WaitInputWithQuickReplies(CompilationError):
     def _build_error_message(self):
-        return f'Wait action does not support quick replies'
+        return 'Wait action does not support quick replies'

@@ -1,6 +1,6 @@
 __author__ = 'Wizeline'
 __name__ = 'wfc'
-__version__ = '2.0.0'
+__version__ = '2.1.0'
 
 
 def get_version():

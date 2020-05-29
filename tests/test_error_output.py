@@ -16,15 +16,19 @@ class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
     def tearDown(self):
         sys.stderr = self.stderr
 
-    def try_to_compile(self, *flows):
+    def try_to_compile_for_version(self, version, *flows):
         with open(self.output, 'w') as output:
             sys.stderr = output
             sys.argv = [
                 'wfc',
                 '-w', SAMPLES_HOME,
+                '-v', version,
                 ' '.join(flows)
             ]
             cli.main()
+
+    def try_to_compile(self, *flows):
+        self.try_to_compile_for_version('2.2.0', *flows)
 
     def load_output(self):
         with open(self.output) as output:
@@ -36,6 +40,14 @@ class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
 
     def run_test(self, error_file, *modules):
         self.try_to_compile(*modules)
+        with self.load_sample(error_file) as expected_error:
+            self.assertEquals(
+                expected_error.read(),
+                self.load_output()
+            )
+
+    def run_test_21(self, error_file, *modules):
+        self.try_to_compile_for_version('2.1.0', *modules)
         with self.load_sample(error_file) as expected_error:
             self.assertEquals(
                 expected_error.read(),
@@ -169,3 +181,6 @@ class TestErrorOutput(unittest.TestCase, mixins.SampleHandler):
     def test_handoff_without_arguments(self):
         self.run_test('handoff-without-arguments.err',
                       'handoff-without-arguments.flow')
+
+    def test_store_data_version_21(self):
+        self.run_test_21('data.err', 'data.flow')
