@@ -137,7 +137,7 @@ menu dynamicMenu '{{$dynamicMessageVariable}}'
 
 > If you define an empty menu, you must specify a variable holding the buttons
 > when display the menu: `show dynamicMenju using $buttonList`.
-> 
+>
 > This variable has to honor the shema for button lists
 
 #### Intent and Entity Definition
@@ -420,7 +420,7 @@ done
 
 Examples:
 ```
-if $identity equals "The Boss":
+if $identity equal "The Boss":
   say "Hey, you're the boss!"
 ```
 
@@ -470,7 +470,7 @@ done
 ```
 flow say_hi given #greeting do
   ask "What can I help you with?" as user_response
-  if $user_response equals 'show menu' change dialog menu
+  if $user_response equal 'show menu' change dialog menu
 done
 ```
 ```
